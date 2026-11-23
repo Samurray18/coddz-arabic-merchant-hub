@@ -88,6 +88,17 @@
   --color-accent-container: var(--accent-container);
   --color-on-accent-container: var(--on-accent-container);
   --color-surface-container-low: var(--surface-container-low);
+  --color-surface: var(--background);
+  --color-on-surface: var(--foreground);
+  --color-on-surface-variant: var(--muted-foreground);
+  --color-surface-container-lowest: var(--card);
+  --color-surface-container: var(--secondary);
+  --color-primary-container: #ADF2C3;
+  --color-on-primary-container: #002110;
+  --color-success-container: #C1FFD4;
+  --color-on-success-container: #002110;
+  --color-warning-container: #FFDCBA;
+  --color-on-warning-container: #2D1600;
   --font-arabic: "Cairo", "Tajawal", sans-serif;
   --font-latin: "Tajawal", system-ui, sans-serif;
   --font-display: "Cairo", sans-serif;
