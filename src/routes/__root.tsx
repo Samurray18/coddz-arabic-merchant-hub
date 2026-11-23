@@ -8,10 +8,14 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { supabase } from "../integrations/supabase/client";
+import { AuthContext, type AuthState } from "../lib/auth-context";
+import { LanguageProvider } from "../hooks/use-language";
+import type { User, Session } from "@supabase/supabase-js";
 
 function NotFoundComponent() {
   return (
@@ -81,11 +85,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "CODDZ" },
+      { name: "description", content: "Merchant hub for Algerian COD stores" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "CODDZ" },
+      { property: "og:description", content: "Merchant hub for Algerian COD stores" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -106,7 +110,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <head>
         <HeadContent />
       </head>
@@ -120,11 +124,98 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const [authState, setAuthState] = useState<AuthState>({
+    user: null,
+    session: null,
+    loading: true,
+    storeId: null,
+    isDemo: true,
+  });
+
+  const refreshStore = async (userId: string | null) => {
+    if (!userId) {
+      setAuthState((prev) => ({ ...prev, storeId: null, isDemo: true }));
+      return;
+    }
+    try {
+      const { data } = await supabase
+        .from("stores")
+        .select("id")
+        .eq("owner_id", userId)
+        .limit(1)
+        .maybeSingle();
+      setAuthState((prev) => ({
+        ...prev,
+        storeId: (data as { id?: string } | null)?.id ?? null,
+        isDemo: false,
+      }));
+    } catch {
+      setAuthState((prev) => ({ ...prev, storeId: null, isDemo: true }));
+    }
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      const session = data.session ?? null;
+      setAuthState((prev) => ({
+        ...prev,
+        user: session?.user ?? null,
+        session,
+        loading: false,
+        isDemo: !session,
+      }));
+      refreshStore(session?.user?.id ?? null);
+    });
+
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
+      if (
+        event === "INITIAL_SESSION" ||
+        event === "SIGNED_IN" ||
+        event === "SIGNED_OUT" ||
+        event === "TOKEN_REFRESHED" ||
+        event === "USER_UPDATED"
+      ) {
+        setAuthState((prev) => ({
+          ...prev,
+          user: session?.user ?? null,
+          session: session ?? null,
+          loading: false,
+          isDemo: !session,
+        }));
+        refreshStore(session?.user?.id ?? null);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.subscription.unsubscribe();
+    };
+  }, []);
+
+  const signOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    router.navigate({ to: "/", replace: true });
+  };
+
+  const value = {
+    ...authState,
+    signOut,
+    refreshStore: async () => refreshStore(authState.user?.id ?? null),
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <LanguageProvider>
+        <AuthContext.Provider value={value}>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </AuthContext.Provider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }
