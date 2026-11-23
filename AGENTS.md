@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application rules
+- Keep brand, localization, sample catalog, and validation in shared browser-safe modules so dashboard surfaces use consistent values.
+- Public demo pages use a shared React context with browser-persisted demo edits; never treat this demo state as authentication or tenant authorization.
+- The first phase opens the usable merchant dashboard at `/`; `/welcome` is the public marketing page, and separate `/orders` and `/products` pages share the dashboard shell.
+- Defer account and tenant persistence until the required profile decision is answered; do not present demo operations as connected merchant data.
