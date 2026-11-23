@@ -31,6 +31,6 @@ use the editor.
 
 ## Application rules
 - Keep brand, localization, sample catalog, and validation in shared browser-safe modules so dashboard surfaces use consistent values.
-- Public demo pages use a shared React context with browser-persisted demo edits; never treat this demo state as authentication or tenant authorization.
-- The first phase opens the usable merchant dashboard at `/`; `/welcome` is the public marketing page, and separate `/orders` and `/products` pages share the dashboard shell.
-- Defer account and tenant persistence until the required profile decision is answered; do not present demo operations as connected merchant data.
+- `/` is the public marketing landing page; `/dashboard`, `/orders`, and `/products` share the responsive dashboard shell, and `/auth` + `/reset-password` handle Supabase Auth.
+- Signed-in merchants read and write their own `stores`, `products`, and `orders` rows in Supabase under RLS; signed-out visitors browse the shared `store_id IS NULL` sample rows in an explicitly labeled demo mode backed by browser storage.
+- Keep a single filtered `onAuthStateChange` listener in `src/routes/__root.tsx` and use the 4-step sign-out teardown (`cancelQueries`, `clear`, `signOut`, `navigate(..., { replace: true })`).

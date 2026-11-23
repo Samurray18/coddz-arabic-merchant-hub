@@ -1,0 +1,18 @@
+REVOKE ALL ON FUNCTION public.setup_merchant() FROM PUBLIC, anon, authenticated;
+CREATE INDEX IF NOT EXISTS idx_orders_store_id ON public.orders(store_id);
+CREATE INDEX IF NOT EXISTS idx_products_store_id ON public.products(store_id);
+CREATE INDEX IF NOT EXISTS idx_user_roles_store_id ON public.user_roles(store_id);
+DROP POLICY IF EXISTS products_demo ON public.products;
+DROP POLICY IF EXISTS products_owner ON public.products;
+CREATE POLICY products_anon_demo ON public.products FOR SELECT TO anon USING (store_id IS NULL);
+CREATE POLICY products_auth_read ON public.products FOR SELECT TO authenticated USING (store_id IS NULL OR EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
+CREATE POLICY products_owner_insert ON public.products FOR INSERT TO authenticated WITH CHECK (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
+CREATE POLICY products_owner_update ON public.products FOR UPDATE TO authenticated USING (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid())) WITH CHECK (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
+CREATE POLICY products_owner_delete ON public.products FOR DELETE TO authenticated USING (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
+DROP POLICY IF EXISTS orders_demo ON public.orders;
+DROP POLICY IF EXISTS orders_owner ON public.orders;
+CREATE POLICY orders_anon_demo ON public.orders FOR SELECT TO anon USING (store_id IS NULL);
+CREATE POLICY orders_auth_read ON public.orders FOR SELECT TO authenticated USING (store_id IS NULL OR EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
+CREATE POLICY orders_owner_insert ON public.orders FOR INSERT TO authenticated WITH CHECK (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
+CREATE POLICY orders_owner_update ON public.orders FOR UPDATE TO authenticated USING (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid())) WITH CHECK (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
+CREATE POLICY orders_owner_delete ON public.orders FOR DELETE TO authenticated USING (EXISTS (SELECT 1 FROM public.stores s WHERE s.id = store_id AND s.owner_id = auth.uid()));
