@@ -293,6 +293,15 @@
     font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
   }
 
+  /* Hide Lovable badge */
+  #lovable-badge,
+  .lovable-badge,
+  [data-lovable-badge],
+  iframe[src*="lovable"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
   html[lang="ar"] body {
     font-family: var(--font-arabic);
   }
