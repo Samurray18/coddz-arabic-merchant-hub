@@ -147,7 +147,7 @@ export function SignupWizard() {
           );
         }
       }
-      navigate({ to: "/dashboard" });
+      window.location.href = "/dashboard";
     } catch (e: any) {
       const msg = e?.message ?? "";
       if (msg.toLowerCase().includes("already")) setError("هذا البريد الإلكتروني مستخدم بالفعل");
