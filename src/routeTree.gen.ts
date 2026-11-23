@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -50,6 +56,7 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard': typeof DashboardRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard': typeof DashboardRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard': typeof DashboardRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
@@ -75,13 +84,27 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/dashboard' | '/orders' | '/products' | '/reset-password'
+    | '/'
+    | '/auth'
+    | '/checkout'
+    | '/dashboard'
+    | '/orders'
+    | '/products'
+    | '/reset-password'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/orders' | '/products' | '/reset-password'
+  to:
+    | '/'
+    | '/auth'
+    | '/checkout'
+    | '/dashboard'
+    | '/orders'
+    | '/products'
+    | '/reset-password'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/checkout'
     | '/dashboard'
     | '/orders'
     | '/products'
@@ -91,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  CheckoutRoute: typeof CheckoutRoute
   DashboardRoute: typeof DashboardRoute
   OrdersRoute: typeof OrdersRoute
   ProductsRoute: typeof ProductsRoute
@@ -111,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -147,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  CheckoutRoute: CheckoutRoute,
   DashboardRoute: DashboardRoute,
   OrdersRoute: OrdersRoute,
   ProductsRoute: ProductsRoute,
