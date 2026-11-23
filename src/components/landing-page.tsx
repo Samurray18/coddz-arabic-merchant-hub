@@ -17,7 +17,7 @@ export function LandingPage(){
       <div className="flex items-center gap-gutter-sm">
         <a href="/dashboard" className="font-headline text-label-lg text-primary px-2 py-1.5 rounded-md hover:bg-surface-container-low transition-colors duration-state-change" data-design-text-token="label-lg">دخول التاجر</a>
         
-        <a href="/orders" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" className="inline-flex items-center justify-center rounded-md bg-primary text-on-primary px-4 py-2 font-headline text-label-md transition-colors duration-state-change ease-state-change hover:bg-success">
+        <a href="/signup" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" className="inline-flex items-center justify-center rounded-md bg-primary text-on-primary px-4 py-2 font-headline text-label-md transition-colors duration-state-change ease-state-change hover:bg-success">
           <span data-design-text-token="label-md">ابدأ مجانًا</span>
         </a>
       </div>
@@ -43,7 +43,7 @@ export function LandingPage(){
 
         <div className="flex flex-col gap-gutter-md">
           
-          <a href="/dashboard" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-5 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
+          <a href="/signup" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-5 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
             <span className="material-symbols-outlined text-[20px]" aria-hidden="true">rocket_launch</span>
             <span data-design-text-token="label-lg">أنشئ متجرك خلال دقيقتين</span>
           </a>
@@ -127,7 +127,7 @@ export function LandingPage(){
           <p className="font-body text-body-md text-primary-container" data-design-text-token="body-md">
             ابدأ بتجربة مجانية لـ 30 طلبًا أولًا بدون بطاقة بنكية.
           </p>
-          <a href="/dashboard" className="w-full inline-flex items-center justify-center rounded-md bg-accent text-on-accent py-3 px-4 font-headline text-label-lg">
+          <a href="/signup" className="w-full inline-flex items-center justify-center rounded-md bg-accent text-on-accent py-3 px-4 font-headline text-label-lg">
             <span data-design-text-token="label-lg">ابدأ التجربة المجانية الآن</span>
           </a>
         </article>
@@ -169,7 +169,7 @@ export function LandingPage(){
         <div className="flex items-center gap-gutter-md">
           <a href="/dashboard" className="font-headline text-label-lg text-primary px-3 py-2 rounded-md hover:bg-surface-container-low transition-colors duration-state-change" data-design-text-token="label-lg">دخول التاجر</a>
           
-          <a href="/orders" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" className="inline-flex items-center justify-center rounded-md bg-primary text-on-primary px-5 py-2.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
+          <a href="/signup" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" className="inline-flex items-center justify-center rounded-md bg-primary text-on-primary px-5 py-2.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
             <span data-design-text-token="label-lg">ابدأ مجانًا</span>
           </a>
         </div>
@@ -197,7 +197,7 @@ export function LandingPage(){
 
           <div className="flex items-center gap-gutter-md pt-2">
             
-            <a href="/dashboard" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" className="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-6 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
+            <a href="/signup" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" className="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-6 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
               <span className="material-symbols-outlined text-[20px]" aria-hidden="true">rocket_launch</span>
               <span data-design-text-token="label-lg">أنشئ متجرك خلال دقيقتين</span>
             </a>
@@ -306,7 +306,7 @@ export function LandingPage(){
                 ابدأ بتجربة مجانية لـ 30 طلبًا أولًا بدون بطاقة بنكية.
               </p>
             </div>
-            <a href="/dashboard" className="w-full inline-flex items-center justify-center rounded-md bg-accent text-on-accent py-3.5 px-5 font-headline text-label-lg">
+            <a href="/signup" className="w-full inline-flex items-center justify-center rounded-md bg-accent text-on-accent py-3.5 px-5 font-headline text-label-lg">
               <span data-design-text-token="label-lg">ابدأ التجربة المجانية الآن</span>
             </a>
           </article>
