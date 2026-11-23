@@ -1,0 +1,402 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جدول الطلبات — توصيل بلس</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary': '#2c6e49',
+        'on-primary': '#FFFFFF',
+        'primary-container': '#ADF2C3',
+        'on-primary-container': '#002110',
+        'accent': '#52b788',
+        'on-accent': '#002113',
+        'accent-container': '#BFFFDA',
+        'on-accent-container': '#002113',
+        'surface': '#FAFDF7',
+        'surface-container-lowest': '#FFFFFF',
+        'surface-container-low': '#EFF2EC',
+        'surface-container': '#E1E3DE',
+        'on-surface': '#191C19',
+        'on-surface-variant': '#404942',
+        'outline': '#707971',
+        'outline-variant': '#DBE5DB',
+        'success': '#286A46',
+        'on-success': '#FFFFFF',
+        'success-container': '#C1FFD4',
+        'on-success-container': '#002110',
+        'warning': '#8C5000',
+        'on-warning': '#FFFFFF',
+        'warning-container': '#FFDCBA',
+        'on-warning-container': '#2D1600',
+        'error': '#BA1A1A',
+        'on-error': '#FFFFFF',
+        'error-container': '#FFDAD6',
+        'on-error-container': '#410002',
+      },
+      borderRadius: {
+        'sm': '8px',
+        'DEFAULT': '12px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '12px',
+        'gutter-lg': '16px',
+        'gutter-xl': '24px',
+        'section': '32px',
+        'page-margin': '16px',
+      },
+      fontFamily: {
+        'display': ['"Cairo"', 'sans-serif'],
+        'headline': ['"Cairo"', 'sans-serif'],
+        'title': ['"Cairo"', 'sans-serif'],
+        'body': ['"Tajawal"', 'sans-serif'],
+        'label': ['"Tajawal"', 'sans-serif'],
+        'mono': ['"Red Hat Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '0px', fontWeight: '800' }],
+        'display-lg-mobile': ['28px', { lineHeight: '36px', letterSpacing: '0px', fontWeight: '800' }],
+        'headline-lg': ['34px', { lineHeight: '42px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-lg-mobile': ['24px', { lineHeight: '32px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '700' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-sm': ['11px', { lineHeight: '14px', letterSpacing: '0px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '120ms',
+        'surface-enter': '220ms',
+        'surface-exit': '150ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+        'surface-exit': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+        'surface-exit': 'cubic-bezier(0.3, 0, 1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&amp;family=Tajawal:wght@400;500;700&amp;family=Red+Hat+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased">
+  <div class="min-h-[884px] flex flex-col max-w-md mx-auto bg-surface" data-stitch-vh="min-h-[884px]===min-h-screen">
+
+    <!-- Shared Merchant App Header -->
+    <header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-page-margin py-3 flex items-center justify-between gap-gutter-md">
+      <div class="flex items-center gap-gutter-sm">
+        <div class="w-9 h-9 rounded-md bg-primary text-on-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">متجر النخيل</span>
+          <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">توصيل بلس • 16 الجزائر</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-gutter-sm">
+        <!-- COMPONENT: button-icon -->
+        <button data-component-id="button-icon" data-component-type="button" data-component-variant="icon" type="button" aria-label="الإشعارات" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant transition-colors duration-state-change ease-state-change hover:bg-surface-container-low">
+          <span class="material-symbols-outlined text-[20px]">notifications</span>
+          <span class="w-2 h-2 rounded-full bg-accent absolute top-2 right-2"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Orders Table Content -->
+    <main class="flex-1 flex flex-col gap-gutter-lg px-page-margin py-5 pb-24">
+
+      <!-- Page Header -->
+      <div class="flex items-center justify-between gap-gutter-md">
+        <div>
+          <h1 class="font-headline text-headline-lg-mobile text-on-surface" data-design-text-token="headline-lg-mobile">سجل الطلبات</h1>
+          <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">142 طلبًا هذا الشهر • متابعة الدفع عند الاستلام</p>
+        </div>
+        <!-- COMPONENT: button-secondary -->
+        <button data-component-id="button-secondary" data-component-type="button" data-component-variant="secondary" type="button" class="inline-flex items-center justify-center gap-1.5 rounded-md bg-surface-container-lowest text-primary border border-outline-variant px-3 py-2 font-headline text-label-md transition-colors duration-state-change hover:bg-surface-container-low shrink-0">
+          <span class="material-symbols-outlined text-[18px]" aria-hidden="true">tune</span>
+          <span class="font-body text-label-md" data-design-text-token="label-md">الولاية</span>
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <!-- COMPONENT: input-field-icon -->
+      <label data-component-id="input-field-icon" data-component-type="input-field" data-component-variant="with-icon" class="flex flex-col gap-1.5 w-full">
+        <span class="sr-only font-body text-label-md" data-design-text-token="label-md">ابحث برقم الطلب أو الهاتف</span>
+        <div class="relative flex items-center">
+          <span class="absolute right-3.5 text-outline pointer-events-none flex items-center" aria-hidden="true">
+            <span class="material-symbols-outlined text-[20px]">search</span>
+          </span>
+          <input id="order-search" type="search" placeholder="ابحث برقم الطلب، اسم الزبون، أو الهاتف..." class="w-full rounded-md border border-outline-variant bg-surface-container-lowest pr-10 pl-3.5 py-2.5 font-body text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-accent focus:outline-none">
+        </div>
+      </label>
+
+      <!-- Status Filter Chips -->
+      <div class="flex items-center gap-gutter-sm overflow-x-auto pb-1" role="tablist" aria-label="تصفية حسب الحالة">
+        <button type="button" data-filter="all" class="filter-chip rounded-full bg-accent-container text-on-accent-container border border-accent px-3.5 py-1.5 font-body text-label-md shrink-0">
+          <span data-design-text-token="label-md">الكل (6)</span>
+        </button>
+        <button type="button" data-filter="pending" class="filter-chip rounded-full bg-surface-container-lowest text-on-surface-variant border border-outline-variant px-3.5 py-1.5 font-body text-label-md shrink-0 hover:bg-surface-container-low">
+          <span data-design-text-token="label-md">قيد التأكيد</span>
+        </button>
+        <button type="button" data-filter="transit" class="filter-chip rounded-full bg-surface-container-lowest text-on-surface-variant border border-outline-variant px-3.5 py-1.5 font-body text-label-md shrink-0 hover:bg-surface-container-low">
+          <span data-design-text-token="label-md">قيد التوصيل</span>
+        </button>
+        <button type="button" data-filter="delivered" class="filter-chip rounded-full bg-surface-container-lowest text-on-surface-variant border border-outline-variant px-3.5 py-1.5 font-body text-label-md shrink-0 hover:bg-surface-container-low">
+          <span data-design-text-token="label-md">تم التسليم</span>
+        </button>
+        <button type="button" data-filter="returned" class="filter-chip rounded-full bg-surface-container-lowest text-on-surface-variant border border-outline-variant px-3.5 py-1.5 font-body text-label-md shrink-0 hover:bg-surface-container-low">
+          <span data-design-text-token="label-md">مرتجع</span>
+        </button>
+      </div>
+
+      <!-- Orders Data Table -->
+      <!-- COMPONENT: table-interactive -->
+      <div data-component-id="table-interactive" data-component-type="table" data-component-variant="interactive" class="w-full overflow-x-auto rounded-lg border border-outline-variant bg-surface-container-lowest shadow-sm">
+        <table class="w-full text-right border-collapse min-w-[540px]">
+          <thead class="bg-surface-container-low border-b border-outline-variant">
+            <tr>
+              <th scope="col" aria-sort="none" class="py-3 px-3 font-body text-label-md text-on-surface-variant">
+                <span data-design-text-token="label-md">الطلب</span>
+              </th>
+              <th scope="col" aria-sort="none" class="py-3 px-3 font-body text-label-md text-on-surface-variant">
+                <span data-design-text-token="label-md">الزبون</span>
+              </th>
+              <th scope="col" aria-sort="ascending" class="py-3 px-3 font-body text-label-md text-primary">
+                <span data-design-text-token="label-md">الولاية</span>
+              </th>
+              <th scope="col" aria-sort="none" class="py-3 px-3 font-body text-label-md text-on-surface-variant">
+                <span data-design-text-token="label-md">المبلغ</span>
+              </th>
+              <th scope="col" aria-sort="none" class="py-3 px-3 font-body text-label-md text-on-surface-variant">
+                <span data-design-text-token="label-md">الحالة</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody" class="divide-y divide-outline-variant">
+            <tr data-status="pending" class="order-row transition-colors duration-state-change hover:bg-surface-container-low">
+              <td class="py-3 px-3 font-mono text-mono-md text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="mono-md">#DZ-8492</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="font-body text-body-md text-on-surface" data-design-text-token="body-md">أمين بن علي</span>
+                  <span class="font-mono text-label-sm text-on-surface-variant tabular-nums" dir="ltr" data-design-text-token="label-sm">0551 42 89 10</span>
+                </div>
+              </td>
+              <td class="py-3 px-3 font-body text-body-md text-on-surface whitespace-nowrap">
+                <span data-design-text-token="body-md">16 - الجزائر</span>
+              </td>
+              <td class="py-3 px-3 font-headline text-label-lg text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="label-lg">5,100 دج</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <span class="inline-flex items-center rounded-full bg-warning-container text-on-warning-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">قيد التأكيد</span>
+              </td>
+            </tr>
+
+            <tr data-status="delivered" class="order-row transition-colors duration-state-change hover:bg-surface-container-low">
+              <td class="py-3 px-3 font-mono text-mono-md text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="mono-md">#DZ-8491</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="font-body text-body-md text-on-surface" data-design-text-token="body-md">سارة منصوري</span>
+                  <span class="font-mono text-label-sm text-on-surface-variant tabular-nums" dir="ltr" data-design-text-token="label-sm">0662 19 04 77</span>
+                </div>
+              </td>
+              <td class="py-3 px-3 font-body text-body-md text-on-surface whitespace-nowrap">
+                <span data-design-text-token="body-md">31 - وهران</span>
+              </td>
+              <td class="py-3 px-3 font-headline text-label-lg text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="label-lg">4,200 دج</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <span class="inline-flex items-center rounded-full bg-success-container text-on-success-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">تم التسليم</span>
+              </td>
+            </tr>
+
+            <tr data-status="transit" class="order-row transition-colors duration-state-change hover:bg-surface-container-low">
+              <td class="py-3 px-3 font-mono text-mono-md text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="mono-md">#DZ-8490</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="font-body text-body-md text-on-surface" data-design-text-token="body-md">ياسين قاسمي</span>
+                  <span class="font-mono text-label-sm text-on-surface-variant tabular-nums" dir="ltr" data-design-text-token="label-sm">0770 83 55 21</span>
+                </div>
+              </td>
+              <td class="py-3 px-3 font-body text-body-md text-on-surface whitespace-nowrap">
+                <span data-design-text-token="body-md">25 - قسنطينة</span>
+              </td>
+              <td class="py-3 px-3 font-headline text-label-lg text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="label-lg">6,450 دج</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <span class="inline-flex items-center rounded-full bg-primary-container text-on-primary-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">قيد التوصيل</span>
+              </td>
+            </tr>
+
+            <tr data-status="delivered" class="order-row transition-colors duration-state-change hover:bg-surface-container-low">
+              <td class="py-3 px-3 font-mono text-mono-md text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="mono-md">#DZ-8489</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="font-body text-body-md text-on-surface" data-design-text-token="body-md">نور الهدى بوزيد</span>
+                  <span class="font-mono text-label-sm text-on-surface-variant tabular-nums" dir="ltr" data-design-text-token="label-sm">0549 30 12 64</span>
+                </div>
+              </td>
+              <td class="py-3 px-3 font-body text-body-md text-on-surface whitespace-nowrap">
+                <span data-design-text-token="body-md">19 - سطيف</span>
+              </td>
+              <td class="py-3 px-3 font-headline text-label-lg text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="label-lg">3,600 دج</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <span class="inline-flex items-center rounded-full bg-success-container text-on-success-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">تم التسليم</span>
+              </td>
+            </tr>
+
+            <tr data-status="returned" class="order-row transition-colors duration-state-change hover:bg-surface-container-low">
+              <td class="py-3 px-3 font-mono text-mono-md text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="mono-md">#DZ-8488</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="font-body text-body-md text-on-surface" data-design-text-token="body-md">كريم زروقي</span>
+                  <span class="font-mono text-label-sm text-on-surface-variant tabular-nums" dir="ltr" data-design-text-token="label-sm">0698 71 44 09</span>
+                </div>
+              </td>
+              <td class="py-3 px-3 font-body text-body-md text-on-surface whitespace-nowrap">
+                <span data-design-text-token="body-md">09 - البليدة</span>
+              </td>
+              <td class="py-3 px-3 font-headline text-label-lg text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="label-lg">2,900 دج</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <span class="inline-flex items-center rounded-full bg-error-container text-on-error-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">مرتجع</span>
+              </td>
+            </tr>
+
+            <tr data-status="transit" class="order-row transition-colors duration-state-change hover:bg-surface-container-low">
+              <td class="py-3 px-3 font-mono text-mono-md text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="mono-md">#DZ-8487</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="font-body text-body-md text-on-surface" data-design-text-token="body-md">مريم حداد</span>
+                  <span class="font-mono text-label-sm text-on-surface-variant tabular-nums" dir="ltr" data-design-text-token="label-sm">0791 25 60 33</span>
+                </div>
+              </td>
+              <td class="py-3 px-3 font-body text-body-md text-on-surface whitespace-nowrap">
+                <span data-design-text-token="body-md">06 - بجاية</span>
+              </td>
+              <td class="py-3 px-3 font-headline text-label-lg text-on-surface tabular-nums whitespace-nowrap">
+                <span data-design-text-token="label-lg">5,350 دج</span>
+              </td>
+              <td class="py-3 px-3 whitespace-nowrap">
+                <span class="inline-flex items-center rounded-full bg-primary-container text-on-primary-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">قيد التوصيل</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Summary -->
+      <div class="flex items-center justify-between px-1">
+        <span class="font-body text-label-md text-on-surface-variant tabular-nums" data-design-text-token="label-md">عرض 1–6 من أصل 142 طلبًا</span>
+        <div class="flex items-center gap-gutter-sm">
+          <button type="button" disabled class="rounded-md border border-outline-variant bg-surface-container-low px-3 py-1.5 font-body text-label-md text-on-surface-variant">
+            <span data-design-text-token="label-md">السابق</span>
+          </button>
+          <button type="button" class="rounded-md border border-outline-variant bg-surface-container-lowest px-3 py-1.5 font-body text-label-md text-primary hover:bg-surface-container-low">
+            <span data-design-text-token="label-md">التالي</span>
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Shared Bottom Navigation Bar -->
+    <nav aria-label="التنقل الرئيسي" class="fixed bottom-0 inset-x-0 z-30 max-w-md mx-auto bg-surface-container-lowest border-t border-outline-variant px-2 py-2 grid grid-cols-4 gap-1">
+      <a href="../dashboard/MerchantDashboard.html" class="flex flex-col items-center justify-center gap-1 py-1.5 rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-state-change">
+        <span class="material-symbols-outlined text-[22px]">dashboard</span>
+        <span class="font-body text-label-sm" data-design-text-token="label-sm">الرئيسية</span>
+      </a>
+      <a href="../orders-table/OrdersTable.html" aria-current="page" class="flex flex-col items-center justify-center gap-1 py-1.5 rounded-md bg-accent-container text-on-accent-container">
+        <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: &#39;FILL&#39; 1;">receipt_long</span>
+        <span class="font-headline text-label-sm" data-design-text-token="label-sm">الطلبات</span>
+      </a>
+      <a href="../cod-checkout/CodCheckout.html" class="flex flex-col items-center justify-center gap-1 py-1.5 rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-state-change">
+        <span class="material-symbols-outlined text-[22px]">shopping_cart_checkout</span>
+        <span class="font-body text-label-sm" data-design-text-token="label-sm">نموذج الدفع</span>
+      </a>
+      <a href="../landing-page/LandingPage.html" class="flex flex-col items-center justify-center gap-1 py-1.5 rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-state-change">
+        <span class="material-symbols-outlined text-[22px]">storefront</span>
+        <span class="font-body text-label-sm" data-design-text-token="label-sm">المتجر</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <script>
+    (function () {
+      const chips = document.querySelectorAll('.filter-chip');
+      const rows = document.querySelectorAll('.order-row');
+      const searchInput = document.getElementById('order-search');
+      let currentFilter = 'all';
+
+      function applyFilters() {
+        const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
+        rows.forEach((row) => {
+          const status = row.getAttribute('data-status');
+          const text = row.textContent.toLowerCase();
+          const matchStatus = currentFilter === 'all' || status === currentFilter;
+          const matchSearch = !q || text.includes(q);
+          row.classList.toggle('hidden', !(matchStatus && matchSearch));
+        });
+      }
+
+      chips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          currentFilter = chip.getAttribute('data-filter');
+          chips.forEach((c) => {
+            c.className = 'filter-chip rounded-full bg-surface-container-lowest text-on-surface-variant border border-outline-variant px-3.5 py-1.5 font-body text-label-md shrink-0 hover:bg-surface-container-low';
+          });
+          chip.className = 'filter-chip rounded-full bg-accent-container text-on-accent-container border border-accent px-3.5 py-1.5 font-body text-label-md shrink-0';
+          applyFilters();
+        });
+      });
+
+      if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+      }
+    })();
+  </script>
+
+
+</body></html>

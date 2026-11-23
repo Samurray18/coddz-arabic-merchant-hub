@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم التاجر — توصيل بلس</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary': '#2c6e49',
+        'on-primary': '#FFFFFF',
+        'primary-container': '#ADF2C3',
+        'on-primary-container': '#002110',
+        'accent': '#52b788',
+        'on-accent': '#002113',
+        'accent-container': '#BFFFDA',
+        'on-accent-container': '#002113',
+        'surface': '#FAFDF7',
+        'surface-container-lowest': '#FFFFFF',
+        'surface-container-low': '#EFF2EC',
+        'surface-container': '#E1E3DE',
+        'on-surface': '#191C19',
+        'on-surface-variant': '#404942',
+        'outline': '#707971',
+        'outline-variant': '#DBE5DB',
+        'success': '#286A46',
+        'on-success': '#FFFFFF',
+        'success-container': '#C1FFD4',
+        'on-success-container': '#002110',
+        'warning': '#8C5000',
+        'on-warning': '#FFFFFF',
+        'warning-container': '#FFDCBA',
+        'on-warning-container': '#2D1600',
+        'error': '#BA1A1A',
+        'on-error': '#FFFFFF',
+        'error-container': '#FFDAD6',
+        'on-error-container': '#410002',
+      },
+      borderRadius: {
+        'sm': '8px',
+        'DEFAULT': '12px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '12px',
+        'gutter-lg': '16px',
+        'gutter-xl': '24px',
+        'section': '32px',
+        'page-margin': '16px',
+      },
+      fontFamily: {
+        'display': ['"Cairo"', 'sans-serif'],
+        'headline': ['"Cairo"', 'sans-serif'],
+        'title': ['"Cairo"', 'sans-serif'],
+        'body': ['"Tajawal"', 'sans-serif'],
+        'label': ['"Tajawal"', 'sans-serif'],
+        'mono': ['"Red Hat Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '0px', fontWeight: '800' }],
+        'display-lg-mobile': ['28px', { lineHeight: '36px', letterSpacing: '0px', fontWeight: '800' }],
+        'headline-lg': ['34px', { lineHeight: '42px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-lg-mobile': ['24px', { lineHeight: '32px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '700' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-sm': ['11px', { lineHeight: '14px', letterSpacing: '0px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '120ms',
+        'surface-enter': '220ms',
+        'surface-exit': '150ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+        'surface-exit': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+        'surface-exit': 'cubic-bezier(0.3, 0, 1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&amp;family=Tajawal:wght@400;500;700&amp;family=Red+Hat+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased overflow-x-hidden">
+  <div class="min-h-[1024px] w-full max-w-[1280px] mx-auto grid grid-cols-[240px_1fr] bg-surface overflow-x-hidden" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Shared Desktop Sidebar -->
+    <aside class="min-h-[1024px] bg-surface-container-lowest border-l border-outline-variant p-5 flex flex-col justify-between" data-stitch-vh="min-h-[1024px]===min-h-screen">
+      <div class="flex flex-col gap-gutter-xl">
+        <div class="flex items-center gap-gutter-sm px-2">
+          <div class="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[22px]">local_shipping</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">متجر النخيل</span>
+            <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">توصيل بلس • 16 الجزائر</span>
+          </div>
+        </div>
+
+        <nav aria-label="التنقل الرئيسي" class="flex flex-col gap-gutter-xs">
+          <a href="../dashboard-desktop/MerchantDashboardDesktop.html" aria-current="page" class="flex items-center gap-gutter-md px-3.5 py-2.5 rounded-md bg-accent-container text-on-accent-container">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &#39;FILL&#39; 1;">dashboard</span>
+            <span class="font-headline text-label-lg" data-design-text-token="label-lg">الرئيسية</span>
+          </a>
+          <a href="../orders-table-desktop/OrdersTableDesktop.html" class="flex items-center gap-gutter-md px-3.5 py-2.5 rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-state-change">
+            <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">الطلبات</span>
+          </a>
+          <a href="../cod-checkout-desktop/CodCheckoutDesktop.html" class="flex items-center gap-gutter-md px-3.5 py-2.5 rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-state-change">
+            <span class="material-symbols-outlined text-[20px]">shopping_cart_checkout</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">نموذج الدفع</span>
+          </a>
+          <a href="../landing-page-desktop/LandingPageDesktop.html" class="flex items-center gap-gutter-md px-3.5 py-2.5 rounded-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-state-change">
+            <span class="material-symbols-outlined text-[20px]">storefront</span>
+            <span class="font-body text-body-md" data-design-text-token="body-md">المتجر</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="rounded-lg bg-surface-container-low border border-outline-variant p-3 flex items-center gap-gutter-sm">
+        <span class="w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center font-headline text-label-md shrink-0" data-design-text-token="label-md">ن</span>
+        <div class="flex flex-col min-w-0">
+          <span class="font-headline text-label-md text-on-surface" data-design-text-token="label-md">يوسف الجزائري</span>
+          <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">حساب تاجر موثق</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="flex flex-col min-w-0">
+      <!-- Shared Desktop Top Bar -->
+      <header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-6 py-4 flex items-center justify-between gap-gutter-md">
+        <div>
+          <h1 class="font-headline text-headline-lg text-on-surface" data-design-text-token="headline-lg">ملخص اليوم</h1>
+          <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">الإثنين 23 نوفمبر • أداء المتجر</p>
+        </div>
+        <div class="flex items-center gap-gutter-md">
+          <!-- COMPONENT: button-icon -->
+          <button data-component-id="button-icon" data-component-type="button" data-component-variant="icon" type="button" aria-label="الإشعارات" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant transition-colors duration-state-change ease-state-change hover:bg-surface-container-low">
+            <span class="material-symbols-outlined text-[20px]">notifications</span>
+            <span class="w-2 h-2 rounded-full bg-accent absolute top-2 right-2"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="flex-1 w-full px-6 py-6 flex flex-col gap-gutter-xl">
+
+        <!-- Action Row -->
+        <div class="flex items-center justify-end">
+          <!-- COMPONENT: button-with-icon -->
+          <a href="../cod-checkout-desktop/CodCheckoutDesktop.html" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" class="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-5 py-2.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">add_circle</span>
+            <span data-design-text-token="label-lg">طلب جديد</span>
+          </a>
+        </div>
+
+        <!-- 4-Column KPI Grid -->
+        <section class="grid grid-cols-4 gap-gutter-lg items-stretch">
+          <!-- COMPONENT: card-elevated -->
+          <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full rounded-lg bg-surface-container-lowest border border-outline-variant p-5 shadow-sm flex flex-col justify-between gap-3">
+            <header class="flex items-center justify-between gap-2">
+              <h2 class="font-body text-label-md text-on-surface-variant" data-design-text-token="label-md">المبيعات</h2>
+              <span class="w-9 h-9 rounded-md bg-accent-container text-on-accent-container flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[20px]">payments</span>
+              </span>
+            </header>
+            <div class="flex flex-col gap-1">
+              <p class="font-headline text-headline-md text-on-surface tabular-nums" data-design-text-token="headline-md">482,500 دج</p>
+              <span class="font-body text-label-sm text-primary" data-design-text-token="label-sm">+14% هذا الأسبوع</span>
+            </div>
+          </article>
+
+          <!-- COMPONENT: card-elevated -->
+          <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full rounded-lg bg-surface-container-lowest border border-outline-variant p-5 shadow-sm flex flex-col justify-between gap-3">
+            <header class="flex items-center justify-between gap-2">
+              <h2 class="font-body text-label-md text-on-surface-variant" data-design-text-token="label-md">قيد التأكيد</h2>
+              <span class="w-9 h-9 rounded-md bg-warning-container text-on-warning-container flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[20px]">call</span>
+              </span>
+            </header>
+            <div class="flex flex-col gap-1">
+              <p class="font-headline text-headline-md text-on-surface tabular-nums" data-design-text-token="headline-md">19 طلبًا</p>
+              <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">بانتظار الاتصال</span>
+            </div>
+          </article>
+
+          <!-- COMPONENT: card-elevated -->
+          <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full rounded-lg bg-surface-container-lowest border border-outline-variant p-5 shadow-sm flex flex-col justify-between gap-3">
+            <header class="flex items-center justify-between gap-2">
+              <h2 class="font-body text-label-md text-on-surface-variant" data-design-text-token="label-md">قيد التوصيل</h2>
+              <span class="w-9 h-9 rounded-md bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+              </span>
+            </header>
+            <div class="flex flex-col gap-1">
+              <p class="font-headline text-headline-md text-on-surface tabular-nums" data-design-text-token="headline-md">47 طردًا</p>
+              <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">في 22 ولاية</span>
+            </div>
+          </article>
+
+          <!-- COMPONENT: card-elevated -->
+          <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="h-full rounded-lg bg-surface-container-lowest border border-outline-variant p-5 shadow-sm flex flex-col justify-between gap-3">
+            <header class="flex items-center justify-between gap-2">
+              <h2 class="font-body text-label-md text-on-surface-variant" data-design-text-token="label-md">نسبة التسليم</h2>
+              <span class="w-9 h-9 rounded-md bg-success-container text-on-success-container flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[20px]">task_alt</span>
+              </span>
+            </header>
+            <div class="flex flex-col gap-1">
+              <p class="font-headline text-headline-md text-on-surface tabular-nums" data-design-text-token="headline-md">88.4%</p>
+              <span class="font-body text-label-sm text-primary" data-design-text-token="label-sm">مرتجع 11.6%</span>
+            </div>
+          </article>
+        </section>
+
+        <!-- 2-Column Main Split -->
+        <section class="grid grid-cols-12 gap-gutter-xl items-start">
+          <!-- Orders Needing Confirmation -->
+          <div class="col-span-7 flex flex-col gap-gutter-md">
+            <div class="flex items-center justify-between">
+              <h2 class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">طلبات بانتظار التأكيد</h2>
+              <a href="../orders-table-desktop/OrdersTableDesktop.html" class="font-headline text-label-md text-primary" data-design-text-token="label-md">عرض الكل</a>
+            </div>
+
+            <!-- COMPONENT: card-action -->
+            <article data-component-id="card-action" data-component-type="card" data-component-variant="action" class="w-full rounded-lg bg-surface-container-lowest border border-outline-variant p-5 shadow-sm flex flex-col gap-3">
+              <header class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-mono-md text-on-surface" data-design-text-token="mono-md">#DZ-8492</span>
+                  <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">منذ 12 دقيقة</span>
+                </div>
+                <span class="rounded-full bg-warning-container text-on-warning-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">قيد التأكيد</span>
+              </header>
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <h3 class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">أمين بن علي</h3>
+                  <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">16 - الجزائر (باب الزوار) • ساعة ذكية</p>
+                </div>
+                <span class="font-headline text-title-md text-primary tabular-nums shrink-0" data-design-text-token="title-md">5,100 دج</span>
+              </div>
+              <footer class="flex items-center gap-2 pt-2 border-t border-outline-variant">
+                <button type="button" class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-md bg-primary text-on-primary py-2 px-3 font-headline text-label-md hover:bg-success transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">check_circle</span>
+                  <span data-design-text-token="label-md">تأكيد وإرسال</span>
+                </button>
+                <button type="button" class="inline-flex items-center justify-center gap-1 rounded-md bg-surface-container-low text-on-surface py-2 px-4 font-headline text-label-md hover:bg-surface-container transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">call</span>
+                  <span data-design-text-token="label-md">اتصال</span>
+                </button>
+              </footer>
+            </article>
+
+            <!-- COMPONENT: card-action -->
+            <article data-component-id="card-action" data-component-type="card" data-component-variant="action" class="w-full rounded-lg bg-surface-container-lowest border border-outline-variant p-5 shadow-sm flex flex-col gap-3">
+              <header class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-mono-md text-on-surface" data-design-text-token="mono-md">#DZ-8491</span>
+                  <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">منذ 35 دقيقة</span>
+                </div>
+                <span class="rounded-full bg-warning-container text-on-warning-container px-2.5 py-0.5 font-body text-label-sm" data-design-text-token="label-sm">محاولة ثانية</span>
+              </header>
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <h3 class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">خديجة مرابط</h3>
+                  <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">31 - وهران (السانية) • سماعات لاسلكية</p>
+                </div>
+                <span class="font-headline text-title-md text-primary tabular-nums shrink-0" data-design-text-token="title-md">3,850 دج</span>
+              </div>
+              <footer class="flex items-center gap-2 pt-2 border-t border-outline-variant">
+                <button type="button" class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-md bg-primary text-on-primary py-2 px-3 font-headline text-label-md hover:bg-success transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">check_circle</span>
+                  <span data-design-text-token="label-md">تأكيد وإرسال</span>
+                </button>
+                <button type="button" class="inline-flex items-center justify-center gap-1 rounded-md bg-surface-container-low text-on-surface py-2 px-4 font-headline text-label-md hover:bg-surface-container transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">call</span>
+                  <span data-design-text-token="label-md">اتصال</span>
+                </button>
+              </footer>
+            </article>
+          </div>
+
+          <!-- COD Collection Progress Card -->
+          <div class="col-span-5 flex flex-col gap-gutter-md">
+            <h2 class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">التحصيل المالي</h2>
+            <section class="rounded-lg bg-surface-container-lowest border border-outline-variant p-5 shadow-sm flex flex-col gap-gutter-md">
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <h3 class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">رصيد التحصيل القادم</h3>
+                  <p class="font-body text-label-md text-on-surface-variant text-balance" data-design-text-token="label-md">التحويل يوم الخميس عبر CCP</p>
+                </div>
+                <span class="font-headline text-headline-md text-primary tabular-nums shrink-0" data-design-text-token="headline-md">126,400 دج</span>
+              </div>
+              <div class="w-full h-3 rounded-full bg-surface-container-low overflow-hidden">
+                <div class="h-full w-3/4 rounded-full bg-accent"></div>
+              </div>
+              <div class="flex items-center justify-between font-body text-label-sm text-on-surface-variant">
+                <span data-design-text-token="label-sm">تم تسليم 31 طلبًا</span>
+                <span class="tabular-nums" data-design-text-token="label-sm">75% مؤكد للتحويل</span>
+              </div>
+            </section>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+  </div>
+
+
+</body></html>

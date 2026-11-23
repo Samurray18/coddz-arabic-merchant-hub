@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الطلب — الدفع عند الاستلام</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary': '#2c6e49',
+        'on-primary': '#FFFFFF',
+        'primary-container': '#ADF2C3',
+        'on-primary-container': '#002110',
+        'accent': '#52b788',
+        'on-accent': '#002113',
+        'accent-container': '#BFFFDA',
+        'on-accent-container': '#002113',
+        'surface': '#FAFDF7',
+        'surface-container-lowest': '#FFFFFF',
+        'surface-container-low': '#EFF2EC',
+        'surface-container': '#E1E3DE',
+        'on-surface': '#191C19',
+        'on-surface-variant': '#404942',
+        'outline': '#707971',
+        'outline-variant': '#DBE5DB',
+        'success': '#286A46',
+        'on-success': '#FFFFFF',
+        'success-container': '#C1FFD4',
+        'on-success-container': '#002110',
+        'warning': '#8C5000',
+        'on-warning': '#FFFFFF',
+        'warning-container': '#FFDCBA',
+        'on-warning-container': '#2D1600',
+        'error': '#BA1A1A',
+        'on-error': '#FFFFFF',
+        'error-container': '#FFDAD6',
+        'on-error-container': '#410002',
+      },
+      borderRadius: {
+        'sm': '8px',
+        'DEFAULT': '12px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '12px',
+        'gutter-lg': '16px',
+        'gutter-xl': '24px',
+        'section': '32px',
+        'page-margin': '16px',
+      },
+      fontFamily: {
+        'display': ['"Cairo"', 'sans-serif'],
+        'headline': ['"Cairo"', 'sans-serif'],
+        'title': ['"Cairo"', 'sans-serif'],
+        'body': ['"Tajawal"', 'sans-serif'],
+        'label': ['"Tajawal"', 'sans-serif'],
+        'mono': ['"Red Hat Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '0px', fontWeight: '800' }],
+        'display-lg-mobile': ['28px', { lineHeight: '36px', letterSpacing: '0px', fontWeight: '800' }],
+        'headline-lg': ['34px', { lineHeight: '42px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-lg-mobile': ['24px', { lineHeight: '32px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '700' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-sm': ['11px', { lineHeight: '14px', letterSpacing: '0px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '120ms',
+        'surface-enter': '220ms',
+        'surface-exit': '150ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+        'surface-exit': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+        'surface-exit': 'cubic-bezier(0.3, 0, 1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&amp;family=Tajawal:wght@400;500;700&amp;family=Red+Hat+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased">
+  <div class="min-h-[884px] flex flex-col max-w-md mx-auto bg-surface" data-stitch-vh="min-h-[884px]===min-h-screen">
+
+    <!-- Contextual Task-Flow Header -->
+    <header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-page-margin py-3 flex items-center justify-between gap-gutter-md">
+      <div class="flex items-center gap-gutter-sm">
+        <!-- COMPONENT: button-icon -->
+        <a href="../landing-page/LandingPage.html" data-component-id="button-icon" data-component-type="button" data-component-variant="icon" aria-label="العودة" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant transition-colors duration-state-change ease-state-change hover:bg-surface-container-low">
+          <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+        </a>
+        <div>
+          <h1 class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">إتمام الطلب</h1>
+          <p class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">متجر النخيل • طلب سريع</p>
+        </div>
+      </div>
+
+      <div class="inline-flex items-center gap-1 rounded-full bg-accent-container text-on-accent-container px-2.5 py-1">
+        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">payments</span>
+        <span class="font-body text-label-sm" data-design-text-token="label-sm">دفع عند الاستلام</span>
+      </div>
+    </header>
+
+    <!-- Main Checkout Form -->
+    <main class="flex-1 flex flex-col gap-gutter-xl px-page-margin py-5 pb-36">
+
+      <!-- Product Summary Card -->
+      <!-- COMPONENT: card-elevated -->
+      <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="w-full rounded-lg bg-surface-container-lowest border border-outline-variant p-4 shadow-sm flex items-center gap-gutter-md">
+        <img src="/images/checkout-product.png" alt="ساعة ذكية رياضية مقاومة للماء" class="w-20 h-20 rounded-md object-cover border border-outline-variant shrink-0">
+        <div class="flex-1 flex flex-col gap-1">
+          <h2 class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">ساعة ذكية رياضية Pro</h2>
+          <p class="font-body text-label-md text-on-surface-variant" data-design-text-token="label-md">اللون: أسود مطفي • ضمان سنة</p>
+          <div class="flex items-center justify-between pt-1">
+            <span class="font-headline text-title-md text-primary tabular-nums" data-design-text-token="title-md">4,500 دج</span>
+            <div class="inline-flex items-center gap-2 rounded-md border border-outline-variant bg-surface-container-low px-2 py-1">
+              <button type="button" id="qty-minus" aria-label="إنقاص الكمية" class="w-6 h-6 flex items-center justify-center rounded-sm text-on-surface hover:bg-surface-container font-headline text-label-lg">-</button>
+              <span id="qty-val" class="font-headline text-label-lg text-on-surface tabular-nums px-1" data-design-text-token="label-lg">1</span>
+              <button type="button" id="qty-plus" aria-label="زيادة الكمية" class="w-6 h-6 flex items-center justify-center rounded-sm text-on-surface hover:bg-surface-container font-headline text-label-lg">+</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Buyer Information Section -->
+      <section class="flex flex-col gap-gutter-md">
+        <h2 class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">معلومات المستلم</h2>
+
+        <!-- COMPONENT: input-field-text -->
+        <label data-component-id="input-field-text" data-component-type="input-field" data-component-variant="text" class="flex flex-col gap-1.5 w-full">
+          <span class="font-body text-label-md text-on-surface" data-design-text-token="label-md">الاسم الكامل</span>
+          <input type="text" placeholder="مثال: أمين بن علي" class="w-full rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-body text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-accent focus:outline-none">
+        </label>
+
+        <!-- COMPONENT: input-field-icon -->
+        <label data-component-id="input-field-icon" data-component-type="input-field" data-component-variant="with-icon" class="flex flex-col gap-1.5 w-full">
+          <span class="font-body text-label-md text-on-surface" data-design-text-token="label-md">رقم الهاتف</span>
+          <div class="relative flex items-center">
+            <span class="absolute right-3.5 text-outline pointer-events-none flex items-center" aria-hidden="true">
+              <span class="material-symbols-outlined text-[20px]">call</span>
+            </span>
+            <input type="tel" placeholder="0551 42 89 10" inputmode="numeric" dir="ltr" class="w-full rounded-md border border-outline-variant bg-surface-container-lowest pr-10 pl-3.5 py-2.5 font-mono text-mono-md text-on-surface text-right placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-accent focus:outline-none">
+          </div>
+          <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">سيتصل بك الموزع قبل التوصيل</span>
+        </label>
+
+        <div class="grid grid-cols-2 gap-gutter-md">
+          <label class="flex flex-col gap-1.5 w-full">
+            <span class="font-body text-label-md text-on-surface" data-design-text-token="label-md">الولاية</span>
+            <select class="w-full rounded-md border border-outline-variant bg-surface-container-lowest px-3 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:ring-2 focus:ring-accent focus:outline-none">
+              <option value="16">16 - الجزائر</option>
+              <option value="31">31 - وهران</option>
+              <option value="25">25 - قسنطينة</option>
+              <option value="19">19 - سطيف</option>
+              <option value="09">09 - البليدة</option>
+              <option value="06">06 - بجاية</option>
+            </select>
+          </label>
+
+          <label class="flex flex-col gap-1.5 w-full">
+            <span class="font-body text-label-md text-on-surface" data-design-text-token="label-md">البلدية</span>
+            <input type="text" placeholder="باب الزوار" class="w-full rounded-md border border-outline-variant bg-surface-container-lowest px-3 py-2.5 font-body text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-accent focus:outline-none">
+          </label>
+        </div>
+
+        <!-- COMPONENT: input-field-text -->
+        <label data-component-id="input-field-text" data-component-type="input-field" data-component-variant="text" class="flex flex-col gap-1.5 w-full">
+          <span class="font-body text-label-md text-on-surface" data-design-text-token="label-md">العنوان التفصيلي</span>
+          <input type="text" placeholder="الحي، رقم العمارة أو معلم قريب" class="w-full rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-body text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:ring-2 focus:ring-accent focus:outline-none">
+        </label>
+      </section>
+
+      <!-- Delivery Method Selector -->
+      <section class="flex flex-col gap-gutter-md">
+        <h2 class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">طريقة التوصيل</h2>
+
+        <!-- COMPONENT: card-interactive-selected -->
+        <div role="button" tabindex="0" data-delivery="home" data-fee="600" data-component-id="card-interactive-selected" data-component-type="card" data-component-variant="interactive-selected" class="delivery-option w-full rounded-lg bg-accent-container border-2 border-primary p-4 flex flex-col gap-1.5 cursor-pointer transition-colors duration-state-change">
+          <header class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[20px] text-primary" aria-hidden="true">home</span>
+              <h3 class="font-headline text-title-md text-on-accent-container" data-design-text-token="title-md">توصيل للمنزل</h3>
+            </div>
+            <span class="font-headline text-label-lg text-primary tabular-nums" data-design-text-token="label-lg">600 دج</span>
+          </header>
+          <p class="font-body text-body-md text-on-accent-container" data-design-text-token="body-md">يصلك المندوب إلى باب المنزل خلال 24–48 ساعة.</p>
+        </div>
+
+        <!-- COMPONENT: card-interactive-2 -->
+        <div role="button" tabindex="0" data-delivery="desk" data-fee="350" data-component-id="card-interactive-2" data-component-type="card" data-component-variant="interactive" class="delivery-option w-full rounded-lg bg-surface-container-lowest border border-outline-variant p-4 flex flex-col gap-1.5 cursor-pointer transition-colors duration-state-change hover:border-primary">
+          <header class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-[20px] text-on-surface-variant" aria-hidden="true">store</span>
+              <h3 class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">استلام من المكتب (Stop Desk)</h3>
+            </div>
+            <span class="font-headline text-label-lg text-primary tabular-nums" data-design-text-token="label-lg">350 دج</span>
+          </header>
+          <p class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">استلم طلبك في أي وقت من مكتب التوصيل في ولايتك.</p>
+        </div>
+      </section>
+
+      <!-- Cost Breakdown -->
+      <section class="rounded-lg bg-surface-container-low border border-outline-variant p-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between font-body text-body-md text-on-surface-variant">
+          <span data-design-text-token="body-md">سعر المنتج</span>
+          <span id="subtotal-text" class="tabular-nums" data-design-text-token="body-md">4,500 دج</span>
+        </div>
+        <div class="flex items-center justify-between font-body text-body-md text-on-surface-variant">
+          <span data-design-text-token="body-md">رسوم التوصيل</span>
+          <span id="shipping-text" class="tabular-nums" data-design-text-token="body-md">600 دج</span>
+        </div>
+        <div class="border-t border-outline-variant pt-2 flex items-center justify-between">
+          <span class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">المبلغ الإجمالي عند الاستلام</span>
+          <span id="total-text" class="font-headline text-headline-md text-primary tabular-nums" data-design-text-token="headline-md">5,100 دج</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sticky Bottom Checkout Dock -->
+    <div class="fixed bottom-0 inset-x-0 z-30 max-w-md mx-auto bg-surface-container-lowest border-t border-outline-variant px-page-margin py-3.5 shadow-lg flex flex-col gap-2">
+      <!-- COMPONENT: button-primary -->
+      <button id="confirm-order-btn" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" type="button" class="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-5 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success active:scale-[0.98]">
+        <span class="material-symbols-outlined text-[20px]" aria-hidden="true">verified_user</span>
+        <span id="cta-label" data-design-text-token="label-lg">تأكيد الطلب الآن — 5,100 دج</span>
+      </button>
+      <p class="font-body text-label-sm text-on-surface-variant text-center" data-design-text-token="label-sm">
+        لا يُطلب منك أي دفع مسبق • ادفع نقدًا بعد فحص طلبك
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      const unitPrice = 4500;
+      let qty = 1;
+      let fee = 600;
+
+      const qtyVal = document.getElementById('qty-val');
+      const subtotalText = document.getElementById('subtotal-text');
+      const shippingText = document.getElementById('shipping-text');
+      const totalText = document.getElementById('total-text');
+      const ctaLabel = document.getElementById('cta-label');
+      const deliveryOptions = document.querySelectorAll('.delivery-option');
+
+      function formatDzd(num) {
+        return num.toLocaleString('en-US') + ' دج';
+      }
+
+      function updateTotals() {
+        const sub = unitPrice * qty;
+        const total = sub + fee;
+        qtyVal.textContent = qty;
+        subtotalText.textContent = formatDzd(sub);
+        shippingText.textContent = formatDzd(fee);
+        totalText.textContent = formatDzd(total);
+        ctaLabel.textContent = 'تأكيد الطلب الآن — ' + formatDzd(total);
+      }
+
+      document.getElementById('qty-plus').addEventListener('click', () => {
+        qty += 1;
+        updateTotals();
+      });
+
+      document.getElementById('qty-minus').addEventListener('click', () => {
+        if (qty > 1) {
+          qty -= 1;
+          updateTotals();
+        }
+      });
+
+      deliveryOptions.forEach((opt) => {
+        opt.addEventListener('click', () => {
+          fee = parseInt(opt.getAttribute('data-fee'), 10);
+          deliveryOptions.forEach((o) => {
+            o.className = 'delivery-option w-full rounded-lg bg-surface-container-lowest border border-outline-variant p-4 flex flex-col gap-1.5 cursor-pointer transition-colors duration-state-change hover:border-primary';
+          });
+          opt.className = 'delivery-option w-full rounded-lg bg-accent-container border-2 border-primary p-4 flex flex-col gap-1.5 cursor-pointer transition-colors duration-state-change';
+          updateTotals();
+        });
+      });
+
+      document.getElementById('confirm-order-btn').addEventListener('click', () => {
+        ctaLabel.textContent = 'تم استلام طلبك بنجاح!';
+      });
+    })();
+  </script>
+
+
+</body></html>

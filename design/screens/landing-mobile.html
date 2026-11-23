@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الصفحة الرئيسية — توصيل بلس</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary': '#2c6e49',
+        'on-primary': '#FFFFFF',
+        'primary-container': '#ADF2C3',
+        'on-primary-container': '#002110',
+        'accent': '#52b788',
+        'on-accent': '#002113',
+        'accent-container': '#BFFFDA',
+        'on-accent-container': '#002113',
+        'surface': '#FAFDF7',
+        'surface-container-lowest': '#FFFFFF',
+        'surface-container-low': '#EFF2EC',
+        'surface-container': '#E1E3DE',
+        'on-surface': '#191C19',
+        'on-surface-variant': '#404942',
+        'outline': '#707971',
+        'outline-variant': '#DBE5DB',
+        'success': '#286A46',
+        'on-success': '#FFFFFF',
+        'success-container': '#C1FFD4',
+        'on-success-container': '#002110',
+        'warning': '#8C5000',
+        'on-warning': '#FFFFFF',
+        'warning-container': '#FFDCBA',
+        'on-warning-container': '#2D1600',
+        'error': '#BA1A1A',
+        'on-error': '#FFFFFF',
+        'error-container': '#FFDAD6',
+        'on-error-container': '#410002',
+      },
+      borderRadius: {
+        'sm': '8px',
+        'DEFAULT': '12px',
+        'md': '12px',
+        'lg': '16px',
+        'xl': '24px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '12px',
+        'gutter-lg': '16px',
+        'gutter-xl': '24px',
+        'section': '32px',
+        'page-margin': '16px',
+      },
+      fontFamily: {
+        'display': ['"Cairo"', 'sans-serif'],
+        'headline': ['"Cairo"', 'sans-serif'],
+        'title': ['"Cairo"', 'sans-serif'],
+        'body': ['"Tajawal"', 'sans-serif'],
+        'label': ['"Tajawal"', 'sans-serif'],
+        'mono': ['"Red Hat Mono"', 'monospace'],
+      },
+      fontSize: {
+        'display-lg': ['40px', { lineHeight: '48px', letterSpacing: '0px', fontWeight: '800' }],
+        'display-lg-mobile': ['28px', { lineHeight: '36px', letterSpacing: '0px', fontWeight: '800' }],
+        'headline-lg': ['34px', { lineHeight: '42px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-lg-mobile': ['24px', { lineHeight: '32px', letterSpacing: '0px', fontWeight: '700' }],
+        'headline-md': ['20px', { lineHeight: '28px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-lg': ['18px', { lineHeight: '26px', letterSpacing: '0px', fontWeight: '700' }],
+        'title-md': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '700' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '22px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0px', fontWeight: '700' }],
+        'label-sm': ['11px', { lineHeight: '14px', letterSpacing: '0px', fontWeight: '500' }],
+        'mono-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '120ms',
+        'surface-enter': '220ms',
+        'surface-exit': '150ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+        'surface-exit': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+        'surface-exit': 'cubic-bezier(0.3, 0, 1, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&amp;family=Tajawal:wght@400;500;700&amp;family=Red+Hat+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>.material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons { display: inline-block; width: 1em; height: 1em; line-height: 1 !important; box-sizing: content-box; overflow: hidden; white-space: nowrap; direction: ltr; vertical-align: middle; }</style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased">
+  <div class="min-h-[884px] flex flex-col max-w-md mx-auto bg-surface" data-stitch-vh="min-h-[884px]===min-h-screen">
+
+    <!-- Top Site Navigation -->
+    <header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-page-margin py-3 flex items-center justify-between gap-gutter-md">
+      <div class="flex items-center gap-gutter-sm">
+        <div class="w-9 h-9 rounded-md bg-primary text-on-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+        </div>
+        <span class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">توصيل بلس</span>
+      </div>
+      <div class="flex items-center gap-gutter-sm">
+        <a href="../dashboard/MerchantDashboard.html" class="font-headline text-label-lg text-primary px-2 py-1.5 rounded-md hover:bg-surface-container-low transition-colors duration-state-change" data-design-text-token="label-lg">دخول التاجر</a>
+        <!-- COMPONENT: button-primary -->
+        <a href="../cod-checkout/CodCheckout.html" data-component-id="button-primary" data-component-type="button" data-component-variant="primary" class="inline-flex items-center justify-center rounded-md bg-primary text-on-primary px-4 py-2 font-headline text-label-md transition-colors duration-state-change ease-state-change hover:bg-success">
+          <span data-design-text-token="label-md">ابدأ مجانًا</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col gap-section px-page-margin py-6">
+
+      <!-- Hero Section -->
+      <section class="flex flex-col gap-gutter-lg">
+        <div class="inline-flex self-start items-center gap-gutter-xs rounded-full bg-accent-container text-on-accent-container px-3 py-1">
+          <span class="material-symbols-outlined text-[16px]" aria-hidden="true">verified</span>
+          <span class="font-body text-label-md" data-design-text-token="label-md">منصة الدفع عند الاستلام في 58 ولاية</span>
+        </div>
+
+        <h1 class="font-display text-display-lg-mobile text-on-surface text-balance" data-design-text-token="display-lg-mobile">
+          ضاعف مبيعات متجرك مع الدفع عند الاستلام بكل سلاسة
+        </h1>
+
+        <p class="font-body text-body-lg text-on-surface-variant text-pretty" data-design-text-token="body-lg">
+          استقبل طلبات زبائنك عبر صفحة دفع سريعة، أكدها هاتفيًا، وتابع شحناتك وتحصيل أموالك بالدينار الجزائري من هاتفك.
+        </p>
+
+        <div class="flex flex-col gap-gutter-md">
+          <!-- COMPONENT: button-with-icon -->
+          <a href="../dashboard/MerchantDashboard.html" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" class="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-5 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">rocket_launch</span>
+            <span data-design-text-token="label-lg">أنشئ متجرك خلال دقيقتين</span>
+          </a>
+
+          <!-- COMPONENT: button-secondary -->
+          <a href="../cod-checkout/CodCheckout.html" data-component-id="button-secondary" data-component-type="button" data-component-variant="secondary" class="w-full inline-flex items-center justify-center gap-2 rounded-md bg-surface-container-lowest text-primary border border-outline-variant px-5 py-3 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-surface-container-low">
+            <span data-design-text-token="label-lg">جرّب نموذج الدفع عند الاستلام</span>
+          </a>
+        </div>
+
+        <div class="rounded-xl overflow-hidden border border-outline-variant bg-surface-container-lowest">
+          <img src="/images/hero-box-phone.png" alt="توصيل الطلبات والدفع عند الاستلام للتجار في الجزائر" class="w-full h-52 object-cover">
+        </div>
+      </section>
+
+      <!-- Trust Metrics Band -->
+      <section class="grid grid-cols-3 gap-gutter-md">
+        <div class="rounded-lg bg-surface-container-lowest border border-outline-variant p-3 flex flex-col gap-1 text-center">
+          <span class="font-headline text-headline-md text-primary tabular-nums" data-design-text-token="headline-md">58</span>
+          <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">ولاية مغطاة</span>
+        </div>
+        <div class="rounded-lg bg-surface-container-lowest border border-outline-variant p-3 flex flex-col gap-1 text-center">
+          <span class="font-headline text-headline-md text-primary tabular-nums" data-design-text-token="headline-md">94%</span>
+          <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">نسبة التأكيد</span>
+        </div>
+        <div class="rounded-lg bg-surface-container-lowest border border-outline-variant p-3 flex flex-col gap-1 text-center">
+          <span class="font-headline text-headline-md text-primary tabular-nums" data-design-text-token="headline-md">24h</span>
+          <span class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">تحويل الأرباح</span>
+        </div>
+      </section>
+
+      <!-- Core Features -->
+      <section class="flex flex-col gap-gutter-md">
+        <h2 class="font-headline text-headline-lg-mobile text-on-surface" data-design-text-token="headline-lg-mobile">
+          كل ما يحتاجه التاجر الجزائري
+        </h2>
+
+        <!-- COMPONENT: card-elevated -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="w-full rounded-lg bg-surface-container-lowest border border-outline-variant p-4 shadow-sm flex flex-col gap-3">
+          <header class="flex items-center justify-between gap-2">
+            <div>
+              <h3 class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">صفحة دفع سريعة بصفحة واحدة</h3>
+              <p class="font-body text-label-md text-on-surface-variant" data-design-text-token="label-md">مخصصة للهاتف بدون تعقيد</p>
+            </div>
+            <span class="w-10 h-10 rounded-md bg-accent-container text-on-accent-container flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+            </span>
+          </header>
+          <div>
+            <p class="font-body text-body-md text-on-surface-variant text-pretty" data-design-text-token="body-md">
+              يطلب الزبون برقم هاتفه وولايته فقط مع حساب تلقائي لسعر التوصيل للمنزل أو المكتب.
+            </p>
+          </div>
+        </article>
+
+        <!-- COMPONENT: card-elevated -->
+        <article data-component-id="card-elevated" data-component-type="card" data-component-variant="elevated" class="w-full rounded-lg bg-surface-container-lowest border border-outline-variant p-4 shadow-sm flex flex-col gap-3">
+          <header class="flex items-center justify-between gap-2">
+            <div>
+              <h3 class="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">ربط مباشر مع شركات التوصيل</h3>
+              <p class="font-body text-label-md text-on-surface-variant" data-design-text-token="label-md">تتبع لحظي لكل طرد</p>
+            </div>
+            <span class="w-10 h-10 rounded-md bg-primary-container text-on-primary-container flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[20px]">sync_alt</span>
+            </span>
+          </header>
+          <div>
+            <p class="font-body text-body-md text-on-surface-variant text-pretty" data-design-text-token="body-md">
+              أرسل الطلبات المؤكدة بنقرة واحدة إلى ياليدين، زيد إكسبرس، أو نورد ويست وتابع المرتجعات.
+            </p>
+          </div>
+        </article>
+
+        <!-- Highlight Conversion Card -->
+        <article class="rounded-xl bg-primary text-on-primary p-5 flex flex-col gap-gutter-md">
+          <div class="flex items-center justify-between">
+            <span class="rounded-full bg-accent text-on-accent px-3 py-1 font-body text-label-sm" data-design-text-token="label-sm">الباقة الاحترافية</span>
+            <span class="font-headline text-headline-md tabular-nums" data-design-text-token="headline-md">2,900 دج / شهر</span>
+          </div>
+          <h3 class="font-headline text-title-lg" data-design-text-token="title-lg">طلبات غير محدودة وبدون عمولة على المبيعات</h3>
+          <p class="font-body text-body-md text-primary-container" data-design-text-token="body-md">
+            ابدأ بتجربة مجانية لـ 30 طلبًا أولًا بدون بطاقة بنكية.
+          </p>
+          <a href="../dashboard/MerchantDashboard.html" class="w-full inline-flex items-center justify-center rounded-md bg-accent text-on-accent py-3 px-4 font-headline text-label-lg">
+            <span data-design-text-token="label-lg">ابدأ التجربة المجانية الآن</span>
+          </a>
+        </article>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-outline-variant bg-surface-container-low px-page-margin py-6 flex flex-col gap-gutter-sm text-center">
+      <div class="flex items-center justify-center gap-gutter-sm">
+        <span class="font-headline text-title-md text-on-surface" data-design-text-token="title-md">توصيل بلس</span>
+        <span class="text-on-surface-variant">•</span>
+        <span class="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">الجزائر العاصمة</span>
+      </div>
+      <p class="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">جميع الحقوق محفوظة © 2026 منصة توصيل بلس</p>
+    </footer>
+
+  </div>
+
+
+</body></html>
