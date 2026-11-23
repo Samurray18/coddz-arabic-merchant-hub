@@ -61,7 +61,7 @@ function ResetPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{t.auth.resetTitle}</CardTitle>
+          <CardTitle className="font-headline">{t.auth.resetTitle}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>

@@ -75,7 +75,7 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{mode === "signin" ? t.auth.signInTitle : t.auth.signUpTitle}</CardTitle>
+          <CardTitle className="font-headline">{mode === "signin" ? t.auth.signInTitle : t.auth.signUpTitle}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {isDemo && (

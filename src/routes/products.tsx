@@ -94,7 +94,7 @@ function ProductsPage() {
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold">{t.products.title}</h1>
+            <h1 className="font-headline text-2xl font-bold text-on-surface">{t.products.title}</h1>
             <p className="text-sm text-muted-foreground">{t.products.subtitle}</p>
           </div>
           <Button onClick={openNew}>
