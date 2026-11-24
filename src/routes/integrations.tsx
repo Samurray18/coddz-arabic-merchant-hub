@@ -42,6 +42,22 @@ function IntegrationsPage() {
     },
   });
 
+  const { data: shipments = [] } = useQuery({
+    queryKey: ["shipments", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("shipments")
+        .select("carrier")
+        .eq("store_id", storeId!);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const shipmentCount = (name: string) =>
+    (shipments as any[]).filter((s) => String(s.carrier).toLowerCase() === name.toLowerCase()).length;
+
   const isConnected = (name: string) => connected.includes(name.toLowerCase()) || connected.includes(name);
 
   return (

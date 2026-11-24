@@ -27,8 +27,31 @@ function AnalyticsPage() {
   const returnRate = orders.length ? (returned.length / orders.length) * 100 : 0;
   const avgOrder = orders.length ? revenue / orders.length : 0;
 
-  // Monthly revenue (last 6 months) — bucket by created_at month
+  // Real month-over-month changes
   const now = new Date();
+  const thisMonthKey = `${now.getFullYear()}-${now.getMonth()}`;
+  const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const prevMonthKey = `${prevMonthDate.getFullYear()}-${prevMonthDate.getMonth()}`;
+  const inMonth = (o: any, key: string) => {
+    const c = o.created_at ? new Date(o.created_at) : new Date(o.date);
+    return `${c.getFullYear()}-${c.getMonth()}` === key;
+  };
+  const thisMonthOrders = orders.filter((o) => inMonth(o, thisMonthKey));
+  const prevMonthOrders = orders.filter((o) => inMonth(o, prevMonthKey));
+  const thisMonthRevenue = thisMonthOrders.reduce((s, o) => s + o.amount, 0);
+  const prevMonthRevenue = prevMonthOrders.reduce((s, o) => s + o.amount, 0);
+  const revenueChange =
+    prevMonthRevenue > 0 ? ((thisMonthRevenue - prevMonthRevenue) / prevMonthRevenue) * 100 : 0;
+  const thisMonthDelivery = thisMonthOrders.length
+    ? (thisMonthOrders.filter((o) => o.status === "delivered").length / thisMonthOrders.length) * 100
+    : 0;
+  const prevMonthDelivery = prevMonthOrders.length
+    ? (prevMonthOrders.filter((o) => o.status === "delivered").length / prevMonthOrders.length) * 100
+    : 0;
+  const deliveryChange = thisMonthDelivery - prevMonthDelivery;
+  const wilayaCount = new Set(orders.map((o) => o.wilaya).filter(Boolean)).size;
+
+  // Monthly revenue (last 6 months) — bucket by created_at month
   const monthly = Array.from({ length: 6 }, (_, i) => {
     const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
     const key = `${d.getFullYear()}-${d.getMonth()}`;
@@ -69,13 +92,17 @@ function AnalyticsPage() {
         <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-2 lg:grid-cols-4 items-stretch">
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">صافي المداخيل (الشهر)</span>
-            <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(revenue)}</span>
-            <span className="font-body text-label-sm tabular-nums text-success">+14.2% مقارنة بالشهر الماضي</span>
+            <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(thisMonthRevenue || revenue)}</span>
+            <span className={`font-body text-label-sm tabular-nums ${revenueChange >= 0 ? "text-success" : "text-error"}`}>
+              {revenueChange >= 0 ? "+" : ""}{revenueChange.toFixed(1)}% مقارنة بالشهر الماضي
+            </span>
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">نسبة التسليم الناجح</span>
             <span className="font-headline text-headline-md tabular-nums text-on-surface">{deliveryRate.toFixed(1)}%</span>
-            <span className="font-body text-label-sm tabular-nums text-success">+2.1% تحسن</span>
+            <span className={`font-body text-label-sm tabular-nums ${deliveryChange >= 0 ? "text-success" : "text-error"}`}>
+              {deliveryChange >= 0 ? "+" : ""}{deliveryChange.toFixed(1)}% تحسن
+            </span>
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">نسبة المرتجعات</span>
@@ -85,7 +112,7 @@ function AnalyticsPage() {
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">متوسط قيمة الطلب</span>
             <span className="font-headline text-headline-md tabular-nums text-on-surface">{formatDA(avgOrder)}</span>
-            <span className="font-body text-label-sm tabular-nums text-on-surface-variant">عبر {new Set(orders.map((o) => o.wilaya)).size || 58} ولاية</span>
+            <span className="font-body text-label-sm tabular-nums text-on-surface-variant">عبر {wilayaCount || 0} ولاية</span>
           </article>
         </section>
 

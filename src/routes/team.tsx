@@ -24,7 +24,7 @@ interface Member {
   phone: string;
   status: "active" | "pending";
   tone: "primary" | "accent" | "warning" | "primary-container";
-  metric?: string;
+  metric?: string | undefined;
 }
 
 const ROLE_LABEL: Record<string, string> = {
@@ -53,7 +53,28 @@ function TeamPage() {
     },
   });
 
+  const { data: orders = [] } = useQuery({
+    queryKey: ["orders", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("orders")
+        .select("assigned_to, status")
+        .eq("store_id", storeId!);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const confirmationsByUser = new Map<string, number>();
+  for (const o of orders as any[]) {
+    if (o.assigned_to && (o.status === "confirmed" || o.status === "shipped" || o.status === "delivered")) {
+      confirmationsByUser.set(o.assigned_to, (confirmationsByUser.get(o.assigned_to) ?? 0) + 1);
+    }
+  }
+
   const members: Member[] = [];
+  const ownerConfirmations = user?.id ? (confirmationsByUser.get(user.id) ?? 0) : 0;
   members.push({
     id: "owner",
     name: user?.email?.split("@")[0] ?? "المدير",
@@ -61,6 +82,7 @@ function TeamPage() {
     phone: user?.email ?? "",
     status: "active",
     tone: "primary",
+    metric: ownerConfirmations > 0 ? `${ownerConfirmations} تأكيد` : undefined,
   });
   for (const invite of invites as any[]) {
     members.push({
@@ -173,8 +195,8 @@ function TeamPage() {
                   <span className="font-mono text-mono-md tabular-nums text-on-surface-variant" dir="ltr">{m.phone}</span>
                 </div>
               </div>
-              {m.role === "تأكيد الطلبات" && m.status === "active" ? (
-                <span className="font-headline text-label-md tabular-nums text-primary">0 تأكيد اليوم</span>
+              {m.metric ? (
+                <span className="font-headline text-label-md tabular-nums text-primary">{m.metric} اليوم</span>
               ) : (
                 <span className={`rounded-full px-3 py-1 font-body text-label-sm ${statusBadge(m)}`}>{statusLabel(m)}</span>
               )}
