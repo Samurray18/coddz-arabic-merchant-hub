@@ -8,6 +8,8 @@ export interface AuthState {
   storeId: string | null;
   storeName: string | null;
   storeWilaya: string | null;
+  onboardingCompleted: boolean;
+  onboardingStep: number;
 }
 
 export interface AuthContextValue extends AuthState {

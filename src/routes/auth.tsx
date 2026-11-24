@@ -16,7 +16,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const { t, lang } = useLanguage();
-  const { user } = useAuth();
+  const { user, onboardingCompleted } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,15 +26,15 @@ function AuthPage() {
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
 
   useEffect(() => {
-    if (user) navigate({ to: "/dashboard" });
-  }, [user, navigate]);
+    if (user) navigate({ to: onboardingCompleted ? "/dashboard" : "/onboarding" });
+  }, [user, onboardingCompleted, navigate]);
 
   const handleSignIn = async () => {
     setLoading(true);
     setError("");
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       const msg = error.message.toLowerCase();
       if (msg.includes("invalid")) setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
       else if (msg.includes("email not confirmed")) setError("يرجى تأكيد بريدك الإلكتروني أولاً");
@@ -42,7 +42,21 @@ function AuthPage() {
       else setError(error.message);
       return;
     }
-    navigate({ to: "/dashboard" });
+    // refresh store to get onboarding status
+    const { data: userData } = await supabase.auth.getUser();
+    const userId = userData.user?.id;
+    let completed = false;
+    if (userId) {
+      const { data: store } = await supabase
+        .from("stores")
+        .select("onboarding_completed")
+        .eq("owner_id", userId)
+        .limit(1)
+        .maybeSingle();
+      completed = (store as any)?.onboarding_completed ?? false;
+    }
+    setLoading(false);
+    navigate({ to: completed ? "/dashboard" : "/onboarding" });
   };
 
   return (

@@ -570,26 +570,47 @@ export type Database = {
       }
       stores: {
         Row: {
+          business_type: string | null
           created_at: string
           id: string
+          monthly_orders: number | null
           name: string
+          onboarding_completed: boolean
+          onboarding_step: number
           owner_id: string
+          phone: string | null
+          sales_channels: string[] | null
+          team_size: number | null
           updated_at: string
           wilaya: string | null
         }
         Insert: {
+          business_type?: string | null
           created_at?: string
           id?: string
+          monthly_orders?: number | null
           name?: string
+          onboarding_completed?: boolean
+          onboarding_step?: number
           owner_id: string
+          phone?: string | null
+          sales_channels?: string[] | null
+          team_size?: number | null
           updated_at?: string
           wilaya?: string | null
         }
         Update: {
+          business_type?: string | null
           created_at?: string
           id?: string
+          monthly_orders?: number | null
           name?: string
+          onboarding_completed?: boolean
+          onboarding_step?: number
           owner_id?: string
+          phone?: string | null
+          sales_channels?: string[] | null
+          team_size?: number | null
           updated_at?: string
           wilaya?: string | null
         }

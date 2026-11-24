@@ -1,11 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
+import { useAuth } from "@/lib/auth-context";
 import { useOrders, useProducts, useUpdateOrderStatus } from "@/hooks/use-data";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
 import { buildWhatsAppLink, formatDA, STATUS_BADGE_CLASS, type OrderStatus } from "@/lib/coddz";
+import { Check } from "lucide-react";
 import type { Order } from "@/lib/domain";
+import { useState } from "react";
 
 export const Route = createFileRoute("/dashboard")({
   component: () => (
@@ -97,6 +102,113 @@ function PendingOrderCard({ order }: { order: Order }) {
   );
 }
 
+function WelcomeChecklist() {
+  const { storeId } = useAuth();
+  const { data: products = [] } = useProducts();
+  const { data: orders = [] } = useOrders();
+  const { data: carriers = [] } = useQuery({
+    queryKey: ["store_carriers", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("store_delivery_companies")
+        .select("company")
+        .eq("store_id", storeId!);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const { data: roles = [] } = useQuery({
+    queryKey: ["user_roles", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("user_roles")
+        .select("id")
+        .eq("store_id", storeId!);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const [dismissed, setDismissed] = useState(() => {
+    try {
+      return localStorage.getItem("welcome_checklist_dismissed") === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  const tasks = [
+    { key: "product", label: "أضف منتجك الأول", done: products.length > 0, to: "/products" },
+    { key: "carrier", label: "ربط شركة توصيل", done: carriers.length > 0, to: "/integrations" },
+    { key: "order", label: "أنشئ طلبك الأول", done: orders.length > 0, to: "/orders" },
+    { key: "team", label: "دعوة فريقك", done: (roles as any[]).length > 1, to: "/team" },
+  ];
+  const doneCount = tasks.filter((t) => t.done).length;
+  const allDone = doneCount === tasks.length;
+
+  if (dismissed || allDone) return null;
+
+  return (
+    <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
+      <div className="flex items-center justify-between gap-gutter-md">
+        <div>
+          <h2 className="font-headline text-title-lg text-on-surface">قائمة الترحيب</h2>
+          <p className="font-body text-body-md text-on-surface-variant">
+            أكمل هذه المهام للبدء ({doneCount}/{tasks.length})
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setDismissed(true);
+            try {
+              localStorage.setItem("welcome_checklist_dismissed", "1");
+            } catch {}
+          }}
+          className="text-on-surface-variant hover:text-on-surface"
+          aria-label="إغلاق"
+        >
+          <span className="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-surface-container-low">
+        <div
+          className="h-full rounded-full bg-accent transition-all"
+          style={{ width: `${(doneCount / tasks.length) * 100}%` }}
+        />
+      </div>
+      <ul className="mt-4 flex flex-col gap-gutter-sm">
+        {tasks.map((task) => (
+          <li key={task.key} className="flex items-center justify-between gap-gutter-md">
+            <div className="flex items-center gap-gutter-sm">
+              <span
+                className={`flex h-6 w-6 items-center justify-center rounded-full ${
+                  task.done ? "bg-accent-container text-on-accent-container" : "bg-surface-container-low text-on-surface-variant"
+                }`}
+              >
+                {task.done ? <Check className="h-4 w-4" /> : <span className="h-2 w-2 rounded-full bg-current" />}
+              </span>
+              <span className={`font-body text-body-md ${task.done ? "text-on-surface-variant line-through" : "text-on-surface"}`}>
+                {task.label}
+              </span>
+            </div>
+            {!task.done && (
+              <Link
+                to={task.to}
+                className="rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success"
+              >
+                ابدأ
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function DashboardPage() {
   const { t } = useLanguage();
   const { data: orders = [], isLoading } = useOrders();
@@ -116,6 +228,7 @@ function DashboardPage() {
   return (
     <DashboardShell>
       <div className="flex flex-col gap-gutter-xl">
+        <WelcomeChecklist />
         <div className="flex items-center justify-between gap-gutter-md">
           <div>
             <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">

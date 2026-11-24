@@ -26,7 +26,7 @@ export function SignupWizard() {
   const { user, refreshStore } = useAuth();
 
   useEffect(() => {
-    if (user) navigate({ to: "/dashboard" });
+    if (user) navigate({ to: "/onboarding" });
   }, [user, navigate]);
   const [step, setStep] = useState(1);
   const [showPw, setShowPw] = useState(false);
@@ -154,7 +154,7 @@ export function SignupWizard() {
         }
       }
       await refreshStore();
-      navigate({ to: "/dashboard" });
+      navigate({ to: "/onboarding" });
     } catch (e: any) {
       const msg = e?.message ?? "";
       if (msg.toLowerCase().includes("already")) setError("هذا البريد الإلكتروني مستخدم بالفعل");

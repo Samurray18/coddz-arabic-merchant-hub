@@ -18,6 +18,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -70,6 +71,11 @@ const InventoryRoute = InventoryRouteImport.update({
   path: '/inventory',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrdersRoute = OrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/delivery': typeof DeliveryRoute
   '/integrations': typeof IntegrationsRoute
   '/inventory': typeof InventoryRoute
+  '/onboarding': typeof OnboardingRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/delivery': typeof DeliveryRoute
   '/integrations': typeof IntegrationsRoute
   '/inventory': typeof InventoryRoute
+  '/onboarding': typeof OnboardingRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/delivery': typeof DeliveryRoute
   '/integrations': typeof IntegrationsRoute
   '/inventory': typeof InventoryRoute
+  '/onboarding': typeof OnboardingRoute
   '/orders': typeof OrdersRoute
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/integrations'
     | '/inventory'
+    | '/onboarding'
     | '/orders'
     | '/products'
     | '/reset-password'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/integrations'
     | '/inventory'
+    | '/onboarding'
     | '/orders'
     | '/products'
     | '/reset-password'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/integrations'
     | '/inventory'
+    | '/onboarding'
     | '/orders'
     | '/products'
     | '/reset-password'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   DeliveryRoute: typeof DeliveryRoute
   IntegrationsRoute: typeof IntegrationsRoute
   InventoryRoute: typeof InventoryRoute
+  OnboardingRoute: typeof OnboardingRoute
   OrdersRoute: typeof OrdersRoute
   ProductsRoute: typeof ProductsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -290,6 +303,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/orders': {
       id: '/orders'
       path: '/orders'
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeliveryRoute: DeliveryRoute,
   IntegrationsRoute: IntegrationsRoute,
   InventoryRoute: InventoryRoute,
+  OnboardingRoute: OnboardingRoute,
   OrdersRoute: OrdersRoute,
   ProductsRoute: ProductsRoute,
   ResetPasswordRoute: ResetPasswordRoute,

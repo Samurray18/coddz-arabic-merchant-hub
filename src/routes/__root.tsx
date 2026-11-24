@@ -143,11 +143,13 @@ function RootComponent() {
     storeId: null,
     storeName: null,
     storeWilaya: null,
+    onboardingCompleted: false,
+    onboardingStep: 0,
   });
 
   const refreshStore = async (userId: string | null) => {
     if (!userId) {
-      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null }));
+      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null, onboardingCompleted: false, onboardingStep: 0 }));
       return;
     }
     try {
@@ -155,11 +157,17 @@ function RootComponent() {
       const user = sessionData.session?.user ?? null;
       const { data } = await supabase
         .from("stores")
-        .select("id, name, wilaya")
+        .select("id, name, wilaya, onboarding_completed, onboarding_step")
         .eq("owner_id", userId)
         .limit(1)
         .maybeSingle();
-      const store = data as { id?: string; name?: string | null; wilaya?: string | null } | null;
+      const store = data as {
+        id?: string;
+        name?: string | null;
+        wilaya?: string | null;
+        onboarding_completed?: boolean | null;
+        onboarding_step?: number | null;
+      } | null;
       const storeId = store?.id ?? null;
       // Backfill from signup metadata if needed
       if (storeId && user) {
@@ -189,9 +197,11 @@ function RootComponent() {
         storeId,
         storeName: store?.name ?? null,
         storeWilaya: store?.wilaya ?? null,
+        onboardingCompleted: store?.onboarding_completed ?? false,
+        onboardingStep: store?.onboarding_step ?? 0,
       }));
     } catch {
-      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null }));
+      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null, onboardingCompleted: false, onboardingStep: 0 }));
     }
   };
 
@@ -244,6 +254,8 @@ function RootComponent() {
       storeId: null,
       storeName: null,
       storeWilaya: null,
+      onboardingCompleted: false,
+      onboardingStep: 0,
     });
     router.navigate({ to: "/", replace: true });
   };
