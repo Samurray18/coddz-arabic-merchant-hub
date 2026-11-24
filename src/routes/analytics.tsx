@@ -110,7 +110,7 @@ function AnalyticsPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-6 items-end gap-gutter-md pt-4" style={{ height: "13rem" }}>
+              <div className="grid grid-cols-3 items-end gap-gutter-md pt-4 lg:grid-cols-6" style={{ height: "13rem" }}>
                 {monthly.map((m, i) => {
                   const height = maxMonthly ? Math.round((m.value / maxMonthly) * 100) : 0;
                   const isLast = i === monthly.length - 1;

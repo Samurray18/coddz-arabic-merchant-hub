@@ -50,7 +50,7 @@ function DeliveryPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-8 items-end gap-gutter-md pt-4" style={{ height: "9rem" }}>
+          <div className="grid grid-cols-4 items-end gap-gutter-md pt-4 sm:grid-cols-8" style={{ height: "9rem" }}>
             {RATES.map((r) => (
               <div key={r.name} className="flex h-full flex-col items-center justify-end gap-2">
                 <span className="font-mono text-label-sm tabular-nums text-on-surface-variant">{r.rate}%</span>

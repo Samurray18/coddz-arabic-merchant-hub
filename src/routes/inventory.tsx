@@ -141,8 +141,8 @@ function InventoryPage() {
             لا توجد منتجات
           </div>
         ) : (
-          <section className="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
-            <table className="w-full table-fixed border-collapse text-right">
+          <section className="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
+            <table className="min-w-[720px] w-full table-fixed border-collapse text-right">
               <thead>
                 <tr className="border-b border-outline-variant bg-surface-container-low">
                   <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">رمز SKU</th>
