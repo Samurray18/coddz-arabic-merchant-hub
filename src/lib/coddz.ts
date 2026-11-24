@@ -4,7 +4,8 @@ import earbudsAsset from "@/assets/earbuds.asset.json";
 import shoesAsset from "@/assets/shoes.asset.json";
 import watchAsset from "@/assets/watch.asset.json";
 
-export const BRAND_NAME = "CODDZ";
+export const BRAND_NAME = "COD YOU";
+export const BRAND_NAME_AR = "كود يو";
 
 export type Lang = "ar" | "fr" | "en";
 

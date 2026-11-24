@@ -1,4 +1,4 @@
-# Coddz Arabic Merchant Hub
+# COD YOU
 
 Implement exactly the screenshot and nothing else
 

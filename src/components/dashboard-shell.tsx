@@ -17,7 +17,7 @@ const NAV = [
   { to: "/dashboard", icon: "dashboard", key: "dashboard", label: "لوحة التحكم" },
   { to: "/orders", icon: "receipt_long", key: "orders", label: "الطلبات" },
   { to: "/confirmation", icon: "task_alt", key: "confirmation", label: "التأكيد", soon: true },
-  { to: "/delivery", icon: "local_shipping", key: "delivery", label: "التوصيل", soon: true },
+  { to: "/delivery", icon: "monitoring", key: "delivery", label: "التوصيل", soon: true },
   { to: "/inventory", icon: "inventory_2", key: "inventory", label: "المخزون", soon: true },
   { to: "/analytics", icon: "analytics", key: "analytics", label: "الإحصائيات", soon: true },
   { to: "/team", icon: "group", key: "team", label: "الفريق", soon: true },
@@ -72,7 +72,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
         <div className="flex flex-col gap-6">
           <div className="flex items-center gap-2 px-2">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-on-primary">
-              <span className="material-symbols-outlined text-[22px]">local_shipping</span>
+              <span className="material-symbols-outlined text-[22px]">monitoring</span>
             </div>
             <div className="flex flex-col">
               <span className="font-headline text-title-md text-on-surface">{BRAND_NAME}</span>
@@ -111,7 +111,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
             <SheetContent side={lang === "ar" ? "right" : "left"} className="w-64">
               <div className="mb-4 flex items-center gap-2">
                 <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-on-primary">
-                  <span className="material-symbols-outlined">local_shipping</span>
+                  <span className="material-symbols-outlined">monitoring</span>
                 </div>
                 <span className="font-headline text-title-md">{BRAND_NAME}</span>
               </div>

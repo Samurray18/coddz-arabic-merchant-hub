@@ -11,7 +11,7 @@ export function LandingPage(){
     <header className="sticky top-0 z-30 bg-surface border-b border-outline-variant px-page-margin py-3 flex items-center justify-between gap-gutter-md">
       <div className="flex items-center gap-gutter-sm">
         <div className="w-9 h-9 rounded-md bg-primary text-on-primary flex items-center justify-center">
-          <span className="material-symbols-outlined text-[20px]">local_shipping</span>
+          <span className="material-symbols-outlined text-[20px]">monitoring</span>
         </div>
         <span className="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">{BRAND_NAME}</span>
       </div>
@@ -156,7 +156,7 @@ export function LandingPage(){
       <div className="max-w-6xl mx-auto px-gutter-xl py-4 flex items-center justify-between gap-gutter-lg">
         <div className="flex items-center gap-gutter-sm">
           <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
-            <span className="material-symbols-outlined text-[22px]">local_shipping</span>
+            <span className="material-symbols-outlined text-[22px]">monitoring</span>
           </div>
           <span className="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">{BRAND_NAME}</span>
         </div>

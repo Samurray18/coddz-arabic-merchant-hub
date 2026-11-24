@@ -186,7 +186,7 @@ export function SignupWizard() {
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
             <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-[22px]">local_shipping</span>
+              <span className="material-symbols-outlined text-[22px]">monitoring</span>
             </div>
             <span className="font-headline text-title-lg text-on-surface">{BRAND_NAME}</span>
           </div>

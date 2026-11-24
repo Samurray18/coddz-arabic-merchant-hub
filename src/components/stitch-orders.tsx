@@ -11,7 +11,7 @@ export function StitchOrders(){
     <header className="sticky top-0 z-30 bg-surface border-b border-outline-variant px-page-margin py-3 flex items-center justify-between gap-gutter-md">
       <div className="flex items-center gap-gutter-sm">
         <div className="w-9 h-9 rounded-md bg-primary text-on-primary flex items-center justify-center">
-          <span className="material-symbols-outlined text-[20px]">local_shipping</span>
+          <span className="material-symbols-outlined text-[20px]">monitoring</span>
         </div>
         <div className="flex flex-col">
           <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">متجر النخيل</span>
@@ -272,7 +272,7 @@ export function StitchOrders(){
       <div className="flex flex-col gap-gutter-xl">
         <div className="flex items-center gap-gutter-sm px-2">
           <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center shrink-0">
-            <span className="material-symbols-outlined text-[22px]">local_shipping</span>
+            <span className="material-symbols-outlined text-[22px]">monitoring</span>
           </div>
           <div className="flex flex-col">
             <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">متجر النخيل</span>

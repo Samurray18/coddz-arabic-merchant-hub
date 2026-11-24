@@ -86,14 +86,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: BRAND_NAME },
-      { name: "description", content: "Merchant hub for Algerian COD stores" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: BRAND_NAME },
-      { property: "og:description", content: "Merchant hub for Algerian COD stores" },
+      { title: "COD YOU | مدير الدفع عند الاستلام للتجار في الجزائر" },
+      { name: "description", content: "COD YOU | مدير الدفع عند الاستلام للتجار في الجزائر" },
+      { property: "og:title", content: "COD YOU | مدير الدفع عند الاستلام للتجار في الجزائر" },
+      { property: "og:description", content: "COD YOU | مدير الدفع عند الاستلام للتجار في الجزائر" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
