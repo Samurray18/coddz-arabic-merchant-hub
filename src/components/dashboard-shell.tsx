@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLanguage } from "@/hooks/use-language";
@@ -13,9 +14,15 @@ import {
 } from "@/components/ui/select";
 
 const NAV = [
-  { to: "/dashboard", icon: "dashboard", key: "dashboard" },
-  { to: "/orders", icon: "receipt_long", key: "orders" },
-  { to: "/products", icon: "inventory_2", key: "products" },
+  { to: "/dashboard", icon: "dashboard", key: "dashboard", label: "لوحة التحكم" },
+  { to: "/orders", icon: "receipt_long", key: "orders", label: "الطلبات" },
+  { to: "/confirmation", icon: "task_alt", key: "confirmation", label: "التأكيد", soon: true },
+  { to: "/delivery", icon: "local_shipping", key: "delivery", label: "التوصيل", soon: true },
+  { to: "/inventory", icon: "inventory_2", key: "inventory", label: "المخزون", soon: true },
+  { to: "/analytics", icon: "analytics", key: "analytics", label: "الإحصائيات", soon: true },
+  { to: "/team", icon: "group", key: "team", label: "الفريق", soon: true },
+  { to: "/integrations", icon: "hub", key: "integrations", label: "الربط", soon: true },
+  { to: "/settings", icon: "settings", key: "settings", label: "الإعدادات", soon: true },
 ] as const;
 
 export function DashboardShell({ children }: { children?: React.ReactNode }) {
@@ -45,7 +52,12 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
           className="flex items-center gap-3 rounded-md px-3.5 py-2.5 text-on-surface-variant transition-colors duration-150 hover:bg-surface-container-low [&.active]:bg-accent-container [&.active]:text-on-accent-container"
         >
           <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
-          <span className="font-body text-body-md">{labelFor(item.key)}</span>
+          <span className="font-body text-body-md">{item.label}
+            {"soon" in item && item.soon && (
+              <span className="ms-auto rounded-full bg-surface-container-low px-2 py-0.5 font-body text-label-sm text-on-surface-variant">
+                قريبًا
+              </span>
+            )}</span>
         </Link>
       ))}
     </nav>
@@ -63,7 +75,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
               <span className="material-symbols-outlined text-[22px]">local_shipping</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-headline text-title-md text-on-surface">CODDZ</span>
+              <span className="font-headline text-title-md text-on-surface">{BRAND_NAME}</span>
               <span className="font-body text-label-sm text-on-surface-variant">
                 {t.nav.demoMode}
               </span>
@@ -101,12 +113,12 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
                 <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-on-primary">
                   <span className="material-symbols-outlined">local_shipping</span>
                 </div>
-                <span className="font-headline text-title-md">CODDZ</span>
+                <span className="font-headline text-title-md">{BRAND_NAME}</span>
               </div>
               <NavLinks onClick={() => setOpen(false)} />
             </SheetContent>
           </Sheet>
-          <span className="font-headline text-title-md">CODDZ</span>
+          <span className="font-headline text-title-md">{BRAND_NAME}</span>
           <div className="ms-auto flex items-center gap-2">
             <Select value={lang} onValueChange={(v) => setLang(v as "ar" | "fr" | "en")}>
               <SelectTrigger className="h-9 w-[110px]">
@@ -127,7 +139,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
         {/* Desktop top bar */}
         <header className="hidden items-center justify-between gap-4 border-b border-border bg-surface px-6 py-4 md:flex">
           <div>
-            <h1 className="font-headline text-headline-lg text-on-surface">CODDZ</h1>
+            <h1 className="font-headline text-headline-lg text-on-surface">{BRAND_NAME}</h1>
             <p className="font-body text-body-md text-on-surface-variant">{t.nav.dashboard}</p>
           </div>
           <div className="flex items-center gap-3">

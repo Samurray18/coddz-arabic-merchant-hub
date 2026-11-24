@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
@@ -16,7 +17,7 @@ import type { Product } from "@/lib/domain";
 
 export const Route = createFileRoute("/products")({
   component: ProductsPage,
-  head: () => ({ meta: [{ title: "Products — CODDZ" }] }),
+  head: () => ({ meta: [{ title: `Products — ${BRAND_NAME}` }] }),
 });
 
 function ProductsPage() {

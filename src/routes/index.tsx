@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { createFileRoute } from "@tanstack/react-router";
 import { LandingPage } from "@/components/landing-page";
 
@@ -5,7 +6,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "توصيل بلس — منصة COD للتجار" },
+      { title: "{BRAND_NAME} — منصة COD للتجار" },
       { name: "description", content: "توصيل الطلبات والدفع عند الاستلام للتجار في الجزائر" },
     ],
   }),

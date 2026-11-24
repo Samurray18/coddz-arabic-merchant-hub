@@ -25,15 +25,18 @@ export const ORDER_STATUSES: readonly OrderStatus[] = [
   "canceled",
 ] as const;
 
-export const CARRIERS = [
-  "Yalidine",
-  "ZR Express",
-  "Noest",
-  "Maystro Delivery",
-  "Procolis",
-  "Ecotrack",
-  "Guepex",
+export const CARRIER_OPTIONS = [
+  { key: "yalidine", name: "Yalidine" },
+  { key: "zrexpress", name: "ZR Express" },
+  { key: "dhd", name: "DHD" },
+  { key: "noest", name: "Noest" },
+  { key: "maystro", name: "Maystro Delivery" },
+  { key: "procolis", name: "Procolis" },
+  { key: "ecotrack", name: "Ecotrack" },
+  { key: "guepex", name: "Guepex" },
 ] as const;
+
+export const CARRIERS = CARRIER_OPTIONS.map((c) => c.name) as unknown as readonly string[];
 
 export const PRODUCT_IMAGES = {
   watch: watchAsset.url,

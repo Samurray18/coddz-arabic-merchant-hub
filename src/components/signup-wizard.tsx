@@ -1,24 +1,15 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
+import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { WILAYAS } from "@/lib/coddz";
+import { WILAYAS, CARRIER_OPTIONS } from "@/lib/coddz";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, Eye, EyeOff, ChevronLeft, ChevronRight } from "lucide-react";
-
-const CARRIERS = [
-  { key: "yalidine", name: "Yalidine" },
-  { key: "zrexpress", name: "ZR Express" },
-  { key: "dhd", name: "DHD" },
-  { key: "noest", name: "Noest" },
-  { key: "maystro", name: "Maystro Delivery" },
-  { key: "procolis", name: "Procolis" },
-  { key: "ecotrack", name: "Ecotrack" },
-  { key: "guepex", name: "Guepex" },
-];
 
 const LOGO_EXT: Record<string, string> = {
   yalidine: "png",
@@ -32,6 +23,7 @@ const LOGO_EXT: Record<string, string> = {
 export function SignupWizard() {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { refreshStore } = useAuth();
   const [step, setStep] = useState(1);
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -118,7 +110,14 @@ export function SignupWizard() {
         email: form.email,
         password: form.password,
         options: {
-          data: { first_name: form.firstName, last_name: form.lastName, display_name: `${form.firstName} ${form.lastName}` },
+          data: {
+            first_name: form.firstName,
+            last_name: form.lastName,
+            display_name: `${form.firstName} ${form.lastName}`,
+            store_name: form.storeName,
+            wilaya: form.wilaya,
+            carriers: form.carriers,
+          },
         },
       });
       if (se) throw se;
@@ -130,24 +129,28 @@ export function SignupWizard() {
         return;
       }
       // update store created by trigger
-      const { data: store } = await supabase
+      const { data: store, error: storeErr } = await supabase
         .from("stores")
         .select("id")
         .eq("owner_id", user.id)
         .limit(1)
         .maybeSingle();
+      if (storeErr) throw storeErr;
       if (store) {
-        await supabase
+        const { error: upErr } = await supabase
           .from("stores")
           .update({ name: form.storeName, wilaya: form.wilaya } as any)
           .eq("id", (store as any).id);
+        if (upErr) throw upErr;
         if (form.carriers.length) {
-          await (supabase as any).from("store_delivery_companies").insert(
-            form.carriers.map((c) => ({ store_id: (store as any).id, company: c }))
-          );
+          const { error: insErr } = await (supabase as any)
+            .from("store_delivery_companies")
+            .insert(form.carriers.map((c) => ({ store_id: (store as any).id, company: c })));
+          if (insErr) throw insErr;
         }
       }
-      window.location.href = "/dashboard";
+      await refreshStore();
+      navigate({ to: "/dashboard" });
     } catch (e: any) {
       const msg = e?.message ?? "";
       if (msg.toLowerCase().includes("already")) setError("هذا البريد الإلكتروني مستخدم بالفعل");
@@ -185,10 +188,9 @@ export function SignupWizard() {
             <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
               <span className="material-symbols-outlined text-[22px]">local_shipping</span>
             </div>
-            <span className="font-headline text-title-lg text-on-surface">توصيل بلس</span>
+            <span className="font-headline text-title-lg text-on-surface">{BRAND_NAME}</span>
           </div>
           <CardTitle className="font-headline text-headline-md text-on-surface">إنشاء متجرك</CardTitle>
-          {/* Progress */}
           <div className="flex items-center justify-center gap-2">
             {[1, 2, 3, 4].map((n) => (
               <div key={n} className="flex items-center gap-2">
@@ -308,7 +310,7 @@ export function SignupWizard() {
             <div className="space-y-3">
               <p className="text-sm text-on-surface-variant">اختر شركات التوصيل (اختياري)</p>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                {CARRIERS.map((c) => {
+                {CARRIER_OPTIONS.map((c) => {
                   const ext = LOGO_EXT[c.key];
                   const selected = form.carriers.includes(c.key);
                   return (

@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { Link } from "@tanstack/react-router";
 
 export function StitchOrders(){
@@ -14,7 +15,7 @@ export function StitchOrders(){
         </div>
         <div className="flex flex-col">
           <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">متجر النخيل</span>
-          <span className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">توصيل بلس • 16 الجزائر</span>
+          <span className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">{BRAND_NAME} • 16 الجزائر</span>
         </div>
       </div>
       <div className="flex items-center gap-gutter-sm">
@@ -275,7 +276,7 @@ export function StitchOrders(){
           </div>
           <div className="flex flex-col">
             <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">متجر النخيل</span>
-            <span className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">توصيل بلس • 16 الجزائر</span>
+            <span className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">{BRAND_NAME} • 16 الجزائر</span>
           </div>
         </div>
 

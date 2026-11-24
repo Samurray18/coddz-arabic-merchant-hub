@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { Link } from "@tanstack/react-router";
 
 export function LandingPage(){
@@ -12,7 +13,7 @@ export function LandingPage(){
         <div className="w-9 h-9 rounded-md bg-primary text-on-primary flex items-center justify-center">
           <span className="material-symbols-outlined text-[20px]">local_shipping</span>
         </div>
-        <span className="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">توصيل بلس</span>
+        <span className="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">{BRAND_NAME}</span>
       </div>
       <div className="flex items-center gap-gutter-sm">
         <a href="/dashboard" className="font-headline text-label-lg text-primary px-2 py-1.5 rounded-md hover:bg-surface-container-low transition-colors duration-state-change" data-design-text-token="label-lg">دخول التاجر</a>
@@ -38,14 +39,14 @@ export function LandingPage(){
         </h1>
 
         <p className="font-body text-body-lg text-on-surface-variant text-pretty" data-design-text-token="body-lg">
-          استقبل طلبات زبائنك عبر صفحة دفع سريعة، أكدها هاتفيًا، وتابع شحناتك وتحصيل أموالك بالدينار الجزائري من هاتفك.
+          تتبع الطلبات، إدارة فريق التأكيد، ربط شركات التوصيل، المخزون وتحليل الأرباح — كل ذلك من مكان واحد.
         </p>
 
         <div className="flex flex-col gap-gutter-md">
           
           <a href="/signup" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-5 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
             <span className="material-symbols-outlined text-[20px]" aria-hidden="true">rocket_launch</span>
-            <span data-design-text-token="label-lg">أنشئ متجرك خلال دقيقتين</span>
+            <span data-design-text-token="label-lg"></span>
           </a>
 
           
@@ -138,11 +139,11 @@ export function LandingPage(){
     
     <footer className="border-t border-outline-variant bg-surface-container-low px-page-margin py-6 flex flex-col gap-gutter-sm text-center">
       <div className="flex items-center justify-center gap-gutter-sm">
-        <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">توصيل بلس</span>
+        <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">{BRAND_NAME}</span>
         <span className="text-on-surface-variant">•</span>
         <span className="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">الجزائر العاصمة</span>
       </div>
-      <p className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">جميع الحقوق محفوظة © 2026 منصة توصيل بلس</p>
+      <p className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">جميع الحقوق محفوظة © 2026 منصة {BRAND_NAME}</p>
     </footer>
 
   </div>
@@ -157,7 +158,7 @@ export function LandingPage(){
           <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
             <span className="material-symbols-outlined text-[22px]">local_shipping</span>
           </div>
-          <span className="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">توصيل بلس</span>
+          <span className="font-headline text-title-lg text-on-surface" data-design-text-token="title-lg">{BRAND_NAME}</span>
         </div>
 
         <nav aria-label="روابط الموقع" className="flex items-center gap-gutter-xl">
@@ -192,14 +193,14 @@ export function LandingPage(){
           </h1>
 
           <p className="font-body text-body-lg text-on-surface-variant text-pretty max-w-prose" data-design-text-token="body-lg">
-            استقبل طلبات زبائنك عبر صفحة دفع سريعة، أكدها هاتفيًا، وتابع شحناتك وتحصيل أموالك بالدينار الجزائري من لوحة تحكم واحدة.
+            تتبع الطلبات، إدارة فريق التأكيد، ربط شركات التوصيل، المخزون وتحليل الأرباح — كل ذلك من مكان واحد.
           </p>
 
           <div className="flex items-center gap-gutter-md pt-2">
             
             <a href="/signup" data-component-id="button-with-icon" data-component-type="button" data-component-variant="with-icon" className="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-on-primary px-6 py-3.5 font-headline text-label-lg transition-colors duration-state-change ease-state-change hover:bg-success">
               <span className="material-symbols-outlined text-[20px]" aria-hidden="true">rocket_launch</span>
-              <span data-design-text-token="label-lg">أنشئ متجرك خلال دقيقتين</span>
+              <span data-design-text-token="label-lg"></span>
             </a>
 
             
@@ -319,11 +320,11 @@ export function LandingPage(){
     <footer className="border-t border-outline-variant bg-surface-container-low">
       <div className="max-w-6xl mx-auto px-gutter-xl py-6 flex items-center justify-between">
         <div className="flex items-center gap-gutter-sm">
-          <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">توصيل بلس</span>
+          <span className="font-headline text-title-md text-on-surface" data-design-text-token="title-md">{BRAND_NAME}</span>
           <span className="text-on-surface-variant">•</span>
           <span className="font-body text-body-md text-on-surface-variant" data-design-text-token="body-md">الجزائر العاصمة</span>
         </div>
-        <p className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">جميع الحقوق محفوظة © 2026 منصة توصيل بلس</p>
+        <p className="font-body text-label-sm text-on-surface-variant" data-design-text-token="label-sm">جميع الحقوق محفوظة © 2026 منصة {BRAND_NAME}</p>
       </div>
     </footer>
 

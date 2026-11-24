@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/hooks/use-language";
@@ -9,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/reset-password")({
   component: ResetPasswordPage,
-  head: () => ({ meta: [{ title: "Reset password — CODDZ" }] }),
+  head: () => ({ meta: [{ title: `Reset password — ${BRAND_NAME}` }] }),
 });
 
 function ResetPasswordPage() {

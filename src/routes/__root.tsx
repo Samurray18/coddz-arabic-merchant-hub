@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -85,10 +86,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CODDZ" },
+      { title: BRAND_NAME },
       { name: "description", content: "Merchant hub for Algerian COD stores" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "CODDZ" },
+      { property: "og:title", content: BRAND_NAME },
       { property: "og:description", content: "Merchant hub for Algerian COD stores" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -149,15 +150,37 @@ function RootComponent() {
       return;
     }
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const user = sessionData.session?.user ?? null;
       const { data } = await supabase
         .from("stores")
-        .select("id")
+        .select("id, wilaya")
         .eq("owner_id", userId)
         .limit(1)
         .maybeSingle();
+      const storeId = (data as { id?: string; wilaya?: string | null } | null)?.id ?? null;
+      // Backfill from signup metadata if needed
+      if (storeId && user) {
+        const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+        const storeName = meta["store_name"] ? String(meta["store_name"]) : null;
+        const wilaya = meta["wilaya"] ? String(meta["wilaya"]) : null;
+        const carriers = Array.isArray(meta["carriers"]) ? (meta["carriers"] as string[]) : [];
+        const currentWilaya = (data as { wilaya?: string | null } | null)?.wilaya ?? null;
+        if ((!currentWilaya && wilaya) || storeName) {
+          await supabase.from("stores").update({ name: storeName ?? undefined, wilaya: wilaya ?? undefined } as any).eq("id", storeId);
+        }
+        if (carriers.length) {
+          const { data: existing } = await (supabase as any).from("store_delivery_companies").select("company").eq("store_id", storeId);
+          const existingSet = new Set((existing ?? []).map((r: any) => r.company));
+          const toInsert = carriers.filter((c) => !existingSet.has(c)).map((c) => ({ store_id: storeId, company: c }));
+          if (toInsert.length) {
+            await (supabase as any).from("store_delivery_companies").insert(toInsert);
+          }
+        }
+      }
       setAuthState((prev) => ({
         ...prev,
-        storeId: (data as { id?: string } | null)?.id ?? null,
+        storeId,
         isDemo: false,
       }));
     } catch {

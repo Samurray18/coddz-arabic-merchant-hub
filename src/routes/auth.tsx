@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/coddz";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLanguage } from "@/hooks/use-language";
@@ -10,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
-  head: () => ({ meta: [{ title: "Auth — CODDZ" }] }),
+  head: () => ({ meta: [{ title: `Auth — ${BRAND_NAME}` }] }),
 });
 
 function AuthPage() {
