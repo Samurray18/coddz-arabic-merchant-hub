@@ -673,7 +673,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      current_store_role: { Args: { _store_id: string }; Returns: string }
       get_dashboard_stats: {
         Args: { _from?: string; _store_id: string; _to?: string }
         Returns: {
@@ -687,11 +686,6 @@ export type Database = {
           total_orders: number
         }[]
       }
-      has_store_role: {
-        Args: { _roles: string[]; _store_id: string }
-        Returns: boolean
-      }
-      is_store_member: { Args: { _store_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
