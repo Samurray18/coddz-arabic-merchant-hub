@@ -48,23 +48,37 @@ export function rowToProduct(row: { id: string; store_id: string | null; payload
   return result;
 }
 
-export function rowToOrder(row: { id: string; store_id: string | null; payload: unknown; created_at: string }): Order {
+export function rowToOrder(row: {
+  id: string;
+  store_id: string | null;
+  payload: unknown;
+  created_at: string;
+  number?: string | null;
+  customer_name?: string | null;
+  total?: number | string | null;
+  phone?: string | null;
+  carrier?: string | null;
+  status?: string | null;
+  notes?: string | null;
+}): Order {
   const p = (row.payload ?? {}) as Record<string, unknown>;
+  const dateValue = row.created_at || String(p["date"] ?? "");
   const result: Order = {
     id: row.id,
     store_id: row.store_id,
-    number: String(p["number"] ?? ""),
-    name: String(p["name"] ?? ""),
-    phone: String(p["phone"] ?? ""),
+    number: String(row.number ?? p["number"] ?? ""),
+    name: String(row.customer_name ?? p["name"] ?? ""),
+    phone: String(row.phone ?? p["phone"] ?? ""),
     wilaya: String(p["wilaya"] ?? ""),
     product: String(p["product"] ?? ""),
-    amount: Number(p["amount"] ?? 0),
-    status: (p["status"] as OrderStatus) ?? "new",
-    carrier: String(p["carrier"] ?? ""),
-    date: String(p["date"] ?? new Date().toISOString().slice(0, 10)),
+    amount: Number(row.total ?? p["amount"] ?? 0),
+    status: (row.status as OrderStatus) ?? (p["status"] as OrderStatus) ?? "new",
+    carrier: String(row.carrier ?? p["carrier"] ?? ""),
+    date: String(p["date"] || dateValue.slice(0, 10) || new Date().toISOString().slice(0, 10)),
     created_at: row.created_at,
   };
-  if (p["notes"]) result.notes = String(p["notes"]);
+  const notes = row.notes ?? p["notes"];
+  if (notes) result.notes = String(notes);
   return result;
 }
 

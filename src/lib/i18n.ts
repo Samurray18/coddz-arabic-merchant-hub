@@ -14,9 +14,20 @@ export interface TranslationBundle {
     signOut: string;
     startFree: string;
     landing: string;
-    demoMode: string;
-    demoBanner: string;
-    saveYourStore: string;
+    home: string;
+    confirmation: string;
+    delivery: string;
+    inventory: string;
+    analytics: string;
+    team: string;
+    integrations: string;
+    settings: string;
+    live: string;
+    reconnecting: string;
+    offline: string;
+    comingSoon: string;
+    comingSoonSub: string;
+    yourStore: string;
   };
   hero: {
     eyebrow: string;
@@ -49,9 +60,12 @@ export interface TranslationBundle {
     subtitle: string;
     todayOrders: string;
     revenue: string;
+    awaitingConfirmation: string;
+    inDelivery: string;
     confirmRate: string;
     deliveryRate: string;
     returnRate: string;
+    noData: string;
     chartTitle: string;
     day: string;
     week: string;
@@ -60,12 +74,12 @@ export interface TranslationBundle {
     recentOrders: string;
     viewAll: string;
     unitsSold: string;
-    loadSample: string;
   };
   orders: {
     title: string;
     subtitle: string;
     newOrder: string;
+    confirmAndSend: string;
     searchPlaceholder: string;
     allStatuses: string;
     allWilayas: string;
@@ -155,19 +169,30 @@ const ar: TranslationBundle = {
     products: "المنتجات",
     overview: "نظرة عامة",
     signIn: "تسجيل الدخول",
-    signOut: "خروج",
+    signOut: "تسجيل الخروج",
     startFree: "ابدأ مجاناً",
     landing: "الصفحة الرئيسية",
-    demoMode: "وضع تجريبي",
-    demoBanner: "تتصفح حالياً بيانات تجريبية — سجّل دخولك لحفظ متجرك وطلباتك بشكل دائم.",
-    saveYourStore: "أنشئ متجرك",
+    home: "الرئيسية",
+    confirmation: "التأكيد",
+    delivery: "التوصيل",
+    inventory: "المخزون",
+    analytics: "الإحصائيات",
+    team: "الفريق",
+    integrations: "الربط",
+    settings: "الإعدادات",
+    live: "مباشر",
+    reconnecting: "إعادة الاتصال",
+    offline: "غير متصل",
+    comingSoon: "قريبًا",
+    comingSoonSub: "هذه الصفحة قيد التطوير. سنضيفها قريبًا.",
+    yourStore: "متجرك",
   },
   hero: {
     eyebrow: "مصمم خصيصاً للتجارة الإلكترونية في الجزائر",
     title: "أدر متجرك وطلبات الدفع عند الاستلام من مكان واحد",
     subtitle: "من إنشاء صفحة المنتج إلى تأكيد الطلبات، الربط مع شركات التوصيل في 58 ولاية، تتبع المرتجعات وحساب أرباحك الصافية بالدينار الجزائري.",
     ctaPrimary: "ابدأ مجاناً",
-    ctaSecondary: "جرّب لوحة التحكم",
+    ctaSecondary: "كيف يعمل",
     statOrders: "تأكيد أسرع للطلبات",
     statWilayas: "ولاية مغطاة",
     statCarriers: "شركات توصيل جزائرية",
@@ -200,9 +225,12 @@ const ar: TranslationBundle = {
     subtitle: "ملخص أداء متجرك اليومي ونسب التأكيد والتوصيل",
     todayOrders: "طلبات اليوم",
     revenue: "المبيعات",
+    awaitingConfirmation: "بانتظار التأكيد",
+    inDelivery: "قيد التوصيل",
     confirmRate: "نسبة التأكيد",
     deliveryRate: "نسبة التوصيل",
     returnRate: "نسبة المرتجعات",
+    noData: "لا توجد بيانات بعد. أضف طلبًا أو منتجًا للبدء.",
     chartTitle: "تطور الطلبات والمبيعات",
     day: "يومي",
     week: "أسبوعي",
@@ -211,12 +239,12 @@ const ar: TranslationBundle = {
     recentOrders: "أحدث الطلبات",
     viewAll: "عرض الكل",
     unitsSold: "طلب",
-    loadSample: "استيراد بيانات تجريبية لمتجري",
   },
   orders: {
     title: "إدارة الطلبات",
     subtitle: "تأكيد الطلبات، التصفية حسب الولاية وشركة التوصيل، والتواصل السريع",
     newOrder: "طلب جديد",
+    confirmAndSend: "تأكيد وإرسال",
     searchPlaceholder: "ابحث بالاسم، الهاتف أو رقم الطلب...",
     allStatuses: "كل الحالات",
     allWilayas: "كل الولايات",
@@ -309,16 +337,27 @@ const fr: TranslationBundle = {
     signOut: "Déconnexion",
     startFree: "Commencer gratuitement",
     landing: "Accueil",
-    demoMode: "Mode démo",
-    demoBanner: "Vous explorez des données démo — connectez-vous pour enregistrer votre boutique.",
-    saveYourStore: "Créer ma boutique",
+    home: "Accueil",
+    confirmation: "Confirmation",
+    delivery: "Livraison",
+    inventory: "Stock",
+    analytics: "Statistiques",
+    team: "Équipe",
+    integrations: "Intégrations",
+    settings: "Paramètres",
+    live: "En direct",
+    reconnecting: "Reconnexion",
+    offline: "Hors ligne",
+    comingSoon: "Bientôt",
+    comingSoonSub: "Cette page est en cours de développement. Elle arrivera bientôt.",
+    yourStore: "Votre boutique",
   },
   hero: {
     eyebrow: "Conçu pour l’e-commerce COD en Algérie",
     title: "Gérez votre boutique et vos commandes COD au même endroit",
     subtitle: "Pages produits, confirmation d’appels, expédition dans les 58 wilayas, suivi des retours et marge nette en Dinar Algérien.",
     ctaPrimary: "Commencer gratuitement",
-    ctaSecondary: "Essayer le tableau de bord",
+    ctaSecondary: "Comment ça marche",
     statOrders: "Confirmation plus rapide",
     statWilayas: "Wilayas couvertes",
     statCarriers: "Transporteurs algériens",
@@ -351,9 +390,12 @@ const fr: TranslationBundle = {
     subtitle: "Suivez vos commandes du jour, revenus et taux de livraison",
     todayOrders: "Commandes du jour",
     revenue: "Chiffre d’affaires",
+    awaitingConfirmation: "En attente de confirmation",
+    inDelivery: "En cours de livraison",
     confirmRate: "Taux de confirmation",
     deliveryRate: "Taux de livraison",
     returnRate: "Taux de retour",
+    noData: "Aucune donnée pour le moment. Ajoutez une commande ou un produit.",
     chartTitle: "Évolution des commandes et revenus",
     day: "Jour",
     week: "Semaine",
@@ -362,12 +404,12 @@ const fr: TranslationBundle = {
     recentOrders: "Dernières commandes",
     viewAll: "Voir tout",
     unitsSold: "cmd",
-    loadSample: "Importer des données d’exemple",
   },
   orders: {
     title: "Commandes",
     subtitle: "Confirmez, filtrez par wilaya ou transporteur et suivez chaque colis",
     newOrder: "Nouvelle commande",
+    confirmAndSend: "Confirmer et envoyer",
     searchPlaceholder: "Rechercher par nom, téléphone ou n°...",
     allStatuses: "Tous les statuts",
     allWilayas: "Toutes les wilayas",
@@ -460,16 +502,27 @@ const en: TranslationBundle = {
     signOut: "Sign out",
     startFree: "Start free",
     landing: "Home",
-    demoMode: "Demo mode",
-    demoBanner: "Exploring sample Algerian data — sign in to save your own store.",
-    saveYourStore: "Create your store",
+    home: "Home",
+    confirmation: "Confirmation",
+    delivery: "Delivery",
+    inventory: "Inventory",
+    analytics: "Analytics",
+    team: "Team",
+    integrations: "Integrations",
+    settings: "Settings",
+    live: "Live",
+    reconnecting: "Reconnecting",
+    offline: "Offline",
+    comingSoon: "Coming soon",
+    comingSoonSub: "This page is under development. It will be available soon.",
+    yourStore: "Your store",
   },
   hero: {
     eyebrow: "Built for Algerian Cash-on-Delivery merchants",
     title: "Run your entire COD store from one workspace",
     subtitle: "Product pages, fast order confirmation, 58-wilaya carrier shipping, return tracking, and real profit metrics in Algerian Dinars.",
     ctaPrimary: "Start free",
-    ctaSecondary: "Explore live dashboard",
+    ctaSecondary: "How it works",
     statOrders: "Faster order confirmation",
     statWilayas: "Wilayas covered",
     statCarriers: "Algerian carriers",
@@ -502,9 +555,12 @@ const en: TranslationBundle = {
     subtitle: "Daily orders, revenue in DA, confirmation and delivery performance",
     todayOrders: "Today's orders",
     revenue: "Revenue",
+    awaitingConfirmation: "Awaiting confirmation",
+    inDelivery: "In delivery",
     confirmRate: "Confirmation rate",
     deliveryRate: "Delivery rate",
     returnRate: "Return rate",
+    noData: "No data yet. Add an order or product to get started.",
     chartTitle: "Orders & revenue trend",
     day: "Day",
     week: "Week",
@@ -513,12 +569,12 @@ const en: TranslationBundle = {
     recentOrders: "Recent orders",
     viewAll: "View all",
     unitsSold: "orders",
-    loadSample: "Import sample Algerian data",
   },
   orders: {
     title: "Orders",
     subtitle: "Confirm calls, filter by wilaya or carrier, and update delivery status",
     newOrder: "New order",
+    confirmAndSend: "Confirm and send",
     searchPlaceholder: "Search by name, phone, or order #...",
     allStatuses: "All statuses",
     allWilayas: "All wilayas",

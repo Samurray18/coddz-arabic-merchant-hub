@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { RequireAuth } from "@/components/require-auth";
 import { ComingSoon } from "@/components/coming-soon";
 
 export const Route = createFileRoute("/inventory")({
-  component: () => <ComingSoon title="المخزون" />,
+  component: () => <RequireAuth><ComingSoon title="المخزون" /></RequireAuth>,
 });

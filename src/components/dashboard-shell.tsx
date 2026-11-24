@@ -1,177 +1,262 @@
-import { BRAND_NAME } from "@/lib/coddz";
-import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useRealtime } from "@/components/realtime-provider";
+import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
 
 const NAV = [
-  { to: "/dashboard", icon: "dashboard", key: "dashboard", label: "لوحة التحكم" },
-  { to: "/orders", icon: "receipt_long", key: "orders", label: "الطلبات" },
-  { to: "/confirmation", icon: "task_alt", key: "confirmation", label: "التأكيد", soon: true },
-  { to: "/delivery", icon: "monitoring", key: "delivery", label: "التوصيل", soon: true },
-  { to: "/inventory", icon: "inventory_2", key: "inventory", label: "المخزون", soon: true },
-  { to: "/analytics", icon: "analytics", key: "analytics", label: "الإحصائيات", soon: true },
-  { to: "/team", icon: "group", key: "team", label: "الفريق", soon: true },
-  { to: "/integrations", icon: "hub", key: "integrations", label: "الربط", soon: true },
-  { to: "/settings", icon: "settings", key: "settings", label: "الإعدادات", soon: true },
+  { to: "/dashboard", icon: "dashboard", labelKey: "home", mobile: true },
+  { to: "/orders", icon: "receipt_long", labelKey: "orders", mobile: true },
+  { to: "/products", icon: "inventory_2", labelKey: "products", mobile: true },
+  { to: "/confirmation", icon: "task_alt", labelKey: "confirmation", soon: true, mobile: true },
+  { to: "/delivery", icon: "monitoring", labelKey: "delivery", soon: true },
+  { to: "/inventory", icon: "inventory_2", labelKey: "inventory", soon: true },
+  { to: "/analytics", icon: "analytics", labelKey: "analytics", soon: true },
+  { to: "/team", icon: "group", labelKey: "team", soon: true },
+  { to: "/integrations", icon: "hub", labelKey: "integrations", soon: true },
+  { to: "/settings", icon: "settings", labelKey: "settings", soon: true },
 ] as const;
+
+type NavItem = (typeof NAV)[number];
 
 export function DashboardShell({ children }: { children?: React.ReactNode }) {
   const { t, lang, setLang } = useLanguage();
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const { user, signOut, storeName, storeWilaya } = useAuth();
+  const { status } = useRealtime();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
+  const displayName = storeName || t.nav.yourStore;
+  const displayWilaya = storeWilaya || brand;
+
+  const labelFor = (item: NavItem) => t.nav[item.labelKey];
+
+  const liveLabel =
+    status === "live" ? t.nav.live : status === "reconnecting" ? t.nav.reconnecting : t.nav.offline;
+  const dotClass =
+    status === "live" ? "bg-accent" : status === "reconnecting" ? "bg-warning" : "bg-outline";
 
   const handleSignOut = async () => {
+    setUserMenuOpen(false);
+    setMenuOpen(false);
     await signOut();
-    navigate({ to: "/", replace: true });
   };
 
-  const labelFor = (key: string) => {
-    if (key === "dashboard") return t.nav.dashboard;
-    if (key === "orders") return t.nav.orders;
-    return t.nav.products;
-  };
-
-  const NavLinks = ({ onClick }: { onClick?: () => void }) => (
-    <nav className="flex flex-col gap-1">
+  const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (
+    <nav aria-label={t.nav.home} className="flex flex-col gap-gutter-xs">
       {NAV.map((item) => (
         <Link
           key={item.to}
           to={item.to}
-          onClick={onClick}
-          className="flex items-center gap-3 rounded-md px-3.5 py-2.5 text-on-surface-variant transition-colors duration-150 hover:bg-surface-container-low [&.active]:bg-accent-container [&.active]:text-on-accent-container"
+          onClick={onNavigate}
+          className="flex items-center gap-gutter-md rounded-md px-3.5 py-2.5 text-on-surface-variant transition-colors duration-state-change hover:bg-surface-container-low"
+          activeProps={{ className: "bg-accent-container text-on-accent-container font-headline text-label-lg" }}
         >
           <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
-          <span className="font-body text-body-md">{item.label}
-            {"soon" in item && item.soon && (
-              <span className="ms-auto rounded-full bg-surface-container-low px-2 py-0.5 font-body text-label-sm text-on-surface-variant">
-                قريبًا
-              </span>
-            )}</span>
+          <span className="font-body text-body-md">{labelFor(item)}</span>
+          {"soon" in item && item.soon && (
+            <span className="ms-auto rounded-full bg-surface-container-low px-2 py-0.5 font-body text-label-sm text-on-surface-variant">
+              {t.nav.comingSoon}
+            </span>
+          )}
         </Link>
       ))}
     </nav>
   );
 
-  const userInitial = (user?.email?.[0] ?? "م").toUpperCase();
+  const LiveBadge = ({ compact = false }: { compact?: boolean }) => (
+    <span
+      className={`inline-flex items-center gap-1 rounded-full bg-surface-container-low px-2.5 py-1 font-body text-label-sm text-on-surface-variant ${compact ? "hidden sm:inline-flex" : ""}`}
+    >
+      <span className={`h-2 w-2 rounded-full ${dotClass}`} />
+      {liveLabel}
+    </span>
+  );
+
+  const LanguageSelect = () => (
+    <select
+      value={lang}
+      onChange={(event) => setLang(event.target.value as "ar" | "fr" | "en")}
+      aria-label="Language"
+      className="rounded-md border border-outline-variant bg-surface-container-lowest px-2 py-1.5 font-body text-label-md text-on-surface focus:border-primary focus:outline-none"
+    >
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="en">English</option>
+    </select>
+  );
+
+  const UserCard = ({ onNavigate }: { onNavigate?: () => void }) => (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setUserMenuOpen((open) => !open)}
+        className="flex w-full items-center gap-gutter-sm rounded-lg border border-outline-variant bg-surface-container-low p-3 text-start"
+      >
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-headline text-label-md text-on-primary">
+          {(user?.email?.[0] ?? "م").toUpperCase()}
+        </span>
+        <span className="flex min-w-0 flex-col">
+          <span className="truncate font-headline text-label-md text-on-surface">{user?.email ?? t.nav.yourStore}</span>
+          <span className="font-body text-label-sm text-on-surface-variant">{brand}</span>
+        </span>
+        <span className="material-symbols-outlined ms-auto text-[18px] text-on-surface-variant">
+          {userMenuOpen ? "expand_less" : "expand_more"}
+        </span>
+      </button>
+      {userMenuOpen && (
+        <button
+          type="button"
+          onClick={() => {
+            onNavigate?.();
+            void handleSignOut();
+          }}
+          className="absolute bottom-full start-0 mb-2 flex w-full items-center gap-2 rounded-md border border-outline-variant bg-surface-container-lowest px-3 py-2 font-body text-body-md text-on-surface shadow-md transition-colors hover:bg-surface-container-low"
+        >
+          <span className="material-symbols-outlined text-[18px]">logout</span>
+          {t.nav.signOut}
+        </button>
+      )}
+    </div>
+  );
 
   return (
-    <div className="flex min-h-screen bg-surface text-on-surface">
-      {/* Desktop sidebar */}
-      <aside className="hidden min-h-screen w-60 flex-col justify-between border-l border-border bg-card p-5 md:flex">
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center gap-2 px-2">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-on-primary">
-              <span className="material-symbols-outlined text-[22px]">monitoring</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-headline text-title-md text-on-surface">{BRAND_NAME}</span>
-              <span className="font-body text-label-sm text-on-surface-variant">
-                {t.nav.demoMode}
-              </span>
-            </div>
-          </div>
-          <NavLinks />
-        </div>
-
-        <div className="rounded-lg border border-border bg-surface-container-low p-3 flex items-center gap-2">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-headline text-label-md text-on-primary">
-            {userInitial}
-          </span>
-          <div className="flex min-w-0 flex-col">
-            <span className="truncate font-headline text-label-md text-on-surface">
-              {user?.email ?? "زائر"}
-            </span>
-            <span className="font-body text-label-sm text-on-surface-variant">
-              {t.nav.dashboard}
-            </span>
-          </div>
-        </div>
-      </aside>
-
-      <div className="flex flex-1 flex-col min-w-0">
-        {/* Mobile top bar */}
-        <header className="flex items-center gap-3 border-b border-border bg-surface px-4 py-3 backdrop-blur md:hidden">
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <span className="material-symbols-outlined">menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side={lang === "ar" ? "right" : "left"} className="w-64">
-              <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-on-primary">
-                  <span className="material-symbols-outlined">monitoring</span>
-                </div>
-                <span className="font-headline text-title-md">{BRAND_NAME}</span>
+    <div className="min-h-screen bg-surface font-body text-on-surface">
+      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)]">
+        {/* Desktop sidebar */}
+        <aside className="hidden min-h-screen flex-col justify-between border-l border-outline-variant bg-surface-container-lowest p-5 lg:flex">
+          <div className="flex flex-col gap-gutter-xl">
+            <div className="flex items-center gap-gutter-sm px-2">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-on-primary">
+                <span className="material-symbols-outlined text-[22px]">monitoring</span>
               </div>
-              <NavLinks onClick={() => setOpen(false)} />
-            </SheetContent>
-          </Sheet>
-          <span className="font-headline text-title-md">{BRAND_NAME}</span>
-          <div className="ms-auto flex items-center gap-2">
-            <Select value={lang} onValueChange={(v) => setLang(v as "ar" | "fr" | "en")}>
-              <SelectTrigger className="h-9 w-[110px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ar">العربية</SelectItem>
-                <SelectItem value="fr">Français</SelectItem>
-                <SelectItem value="en">English</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="ghost" size="icon" onClick={handleSignOut}>
-              <span className="material-symbols-outlined">logout</span>
-            </Button>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate font-headline text-title-md text-on-surface">{displayName}</span>
+                <span className="truncate font-body text-label-sm text-on-surface-variant">
+                  {brand} • {displayWilaya}
+                </span>
+              </div>
+            </div>
+            <NavLinks />
           </div>
-        </header>
+          <UserCard />
+        </aside>
 
-        {/* Desktop top bar */}
-        <header className="hidden items-center justify-between gap-4 border-b border-border bg-surface px-6 py-4 md:flex">
-          <div>
-            <h1 className="font-headline text-headline-lg text-on-surface">{BRAND_NAME}</h1>
-            <p className="font-body text-body-md text-on-surface-variant">{t.nav.dashboard}</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Select value={lang} onValueChange={(v) => setLang(v as "ar" | "fr" | "en")}>
-              <SelectTrigger className="h-9 w-[120px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ar">العربية</SelectItem>
-                <SelectItem value="fr">Français</SelectItem>
-                <SelectItem value="en">English</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" size="sm" onClick={handleSignOut}>
-              <span className="material-symbols-outlined me-2 text-[18px]">logout</span>
-              {t.nav.signOut}
-            </Button>
-          </div>
-        </header>
+        <div className="flex min-w-0 flex-col">
+          {/* Mobile header */}
+          <header className="sticky top-0 z-30 flex items-center justify-between gap-gutter-md border-b border-outline-variant bg-surface px-page-margin py-3 lg:hidden">
+            <div className="flex items-center gap-gutter-sm">
+              <button
+                type="button"
+                onClick={() => setMenuOpen(true)}
+                aria-label="menu"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface"
+              >
+                <span className="material-symbols-outlined text-[20px]">menu</span>
+              </button>
+              <div className="flex min-w-0 flex-col">
+                <span className="truncate font-headline text-title-md text-on-surface">{displayName}</span>
+                <span className="truncate font-body text-label-sm text-on-surface-variant">
+                  {brand} • {displayWilaya}
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center gap-gutter-sm">
+              <LiveBadge compact />
+              <button
+                type="button"
+                onClick={() => void handleSignOut()}
+                aria-label={t.nav.signOut}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface"
+              >
+                <span className="material-symbols-outlined text-[20px]">logout</span>
+              </button>
+            </div>
+          </header>
 
-        <main className="flex-1 p-6 pb-24 md:pb-6">{children}</main>
+          {/* Desktop header */}
+          <header className="sticky top-0 z-30 hidden items-center justify-between gap-gutter-md border-b border-outline-variant bg-surface px-6 py-4 lg:flex">
+            <div className="min-w-0">
+              <h1 className="truncate font-headline text-headline-lg text-on-surface">{displayName}</h1>
+              <p className="font-body text-body-md text-on-surface-variant">
+                {brand} • {displayWilaya}
+              </p>
+            </div>
+            <div className="flex items-center gap-gutter-md">
+              <LiveBadge />
+              <LanguageSelect />
+              <button
+                type="button"
+                onClick={() => void handleSignOut()}
+                className="inline-flex items-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-primary transition-colors duration-state-change hover:bg-surface-container-low"
+              >
+                <span className="material-symbols-outlined text-[18px]">logout</span>
+                {t.nav.signOut}
+              </button>
+            </div>
+          </header>
+
+          <main className="flex-1 px-page-margin py-5 pb-24 lg:px-6 lg:py-6 lg:pb-6">{children}</main>
+        </div>
       </div>
 
       {/* Mobile bottom tab bar */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-surface-container-lowest border-t border-border px-2 py-2 grid grid-cols-4 gap-1">
-        {NAV.slice(0, 4).map((item) => (
-          <Link key={item.to} to={item.to} className="flex flex-col items-center gap-0.5 rounded-md py-1.5 text-on-surface-variant [&.active]:text-primary">
-            <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
-            <span className="font-body text-[10px]">{item.label}</span>
+      <nav className="fixed bottom-0 inset-x-0 z-30 mx-auto grid max-w-md grid-cols-4 gap-1 border-t border-outline-variant bg-surface-container-lowest px-2 py-2 lg:hidden">
+        {NAV.filter((item) => "mobile" in item && item.mobile).map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 text-on-surface-variant transition-colors duration-state-change hover:bg-surface-container-low"
+            activeProps={{ className: "bg-accent-container text-on-accent-container" }}
+          >
+            <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
+            <span className="font-headline text-label-sm">{labelFor(item)}</span>
           </Link>
         ))}
       </nav>
+
+      {/* Mobile navigation drawer */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <button
+            type="button"
+            aria-label="close"
+            onClick={() => setMenuOpen(false)}
+            className="absolute inset-0 bg-black/30"
+          />
+          <div
+            className={`absolute inset-y-0 flex w-72 max-w-[85%] flex-col justify-between gap-gutter-xl border-outline-variant bg-surface-container-lowest p-5 shadow-xl ${
+              lang === "ar" ? "right-0 border-l" : "left-0 border-r"
+            }`}
+          >
+            <div className="flex flex-col gap-gutter-xl">
+              <div className="flex items-center justify-between gap-gutter-sm">
+                <div className="flex items-center gap-gutter-sm">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-on-primary">
+                    <span className="material-symbols-outlined text-[20px]">monitoring</span>
+                  </div>
+                  <span className="font-headline text-title-md">{brand}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="close"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md text-on-surface-variant"
+                >
+                  <span className="material-symbols-outlined text-[20px]">close</span>
+                </button>
+              </div>
+              <NavLinks onNavigate={() => setMenuOpen(false)} />
+            </div>
+            <div className="flex flex-col gap-gutter-md">
+              <LanguageSelect />
+              <UserCard onNavigate={() => setMenuOpen(false)} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

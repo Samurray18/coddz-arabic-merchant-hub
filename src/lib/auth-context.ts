@@ -6,6 +6,8 @@ export interface AuthState {
   session: Session | null;
   loading: boolean;
   storeId: string | null;
+  storeName: string | null;
+  storeWilaya: string | null;
 }
 
 export interface AuthContextValue extends AuthState {

@@ -22,7 +22,7 @@ const COPY = {
     heroTitle: "تحكّم في طلباتك وأرباحك من لوحة واحدة",
     heroSub: "استقبل الطلبات من متجرك، أكّدها مع فريقك، أرسلها لشركة التوصيل، وتتبّع أرباحك الحقيقية بالدينار الجزائري.",
     cta1: "ابدأ مجانًا",
-    cta2: "شاهد لوحة التحكم",
+    howItWorks: "كيف يعمل",
     stats: ["تتبع لحظي للطلبات", "حساب تلقائي للأرباح", "58 ولاية في التسعيرة"],
     featuresTitle: "كل ما يحتاجه التاجر لإدارة نشاطه",
     features: [
@@ -55,7 +55,7 @@ const COPY = {
     heroTitle: "Contrôlez vos commandes et profits depuis un seul tableau",
     heroSub: "Recevez les commandes de votre boutique, confirmez-les avec votre équipe, envoyez-les au livreur et suivez vos vrais profits en dinars algériens.",
     cta1: "Commencer gratuitement",
-    cta2: "Voir le tableau de bord",
+    howItWorks: "Comment ça marche",
     stats: ["Suivi en temps réel", "Calcul automatique des profits", "58 wilayas tarifées"],
     featuresTitle: "Tout ce dont un marchand a besoin",
     features: [
@@ -88,7 +88,7 @@ const COPY = {
     heroTitle: "Control your orders and profits from one dashboard",
     heroSub: "Receive orders from your store, confirm them with your team, send to a carrier, and track real profits in Algerian dinars.",
     cta1: "Start free",
-    cta2: "View dashboard",
+    howItWorks: "How it works",
     stats: ["Real-time order tracking", "Automatic profit calculation", "58 wilayas priced"],
     featuresTitle: "Everything a merchant needs",
     features: [
@@ -167,9 +167,9 @@ export function LandingPage() {
               <Link to="/signup" className="inline-flex items-center justify-center rounded-md bg-primary text-on-primary px-6 py-3.5 font-headline text-label-lg transition-colors hover:bg-success">
                 {c.cta1}
               </Link>
-              <Link to="/dashboard" className="inline-flex items-center justify-center rounded-md bg-surface-container-lowest text-primary border border-outline-variant px-6 py-3.5 font-headline text-label-lg transition-colors hover:bg-surface-container-low">
-                {c.cta2}
-              </Link>
+              <a href="#how" className="inline-flex items-center justify-center rounded-md bg-surface-container-lowest text-primary border border-outline-variant px-6 py-3.5 font-headline text-label-lg transition-colors hover:bg-surface-container-low">
+                {c.howItWorks}
+              </a>
             </div>
           </div>
           <div className="rounded-xl overflow-hidden border border-outline-variant bg-surface-container-lowest shadow-sm">
@@ -205,7 +205,7 @@ export function LandingPage() {
         </section>
 
         {/* Steps */}
-        <section className="flex flex-col gap-gutter-lg">
+        <section id="how" className="flex flex-col gap-gutter-lg">
           <h2 className="font-headline text-headline-lg text-on-surface">{c.stepsTitle}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter-lg">
             {c.steps.map((s, i) => (

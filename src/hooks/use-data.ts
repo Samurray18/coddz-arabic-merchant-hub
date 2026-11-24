@@ -1,14 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { toast } from "sonner";
 import { rowToProduct, rowToOrder, productToPayload, orderToPayload, type Product, type Order } from "@/lib/domain";
+
+const ownOrderIds = new Set<string>();
+
+export function markOwnOrder(id: string) {
+  ownOrderIds.add(id);
+  if (ownOrderIds.size > 200) {
+    const oldest = ownOrderIds.values().next().value;
+    if (oldest) ownOrderIds.delete(oldest);
+  }
+}
+
+export function isOwnOrder(id: string) {
+  return ownOrderIds.has(id);
+}
 
 export function useProducts() {
   const { storeId } = useAuth();
-  const qc = useQueryClient();
-  const q = useQuery({
+  return useQuery({
     queryKey: ["products", storeId],
     enabled: !!storeId,
     queryFn: async (): Promise<Product[]> => {
@@ -18,30 +29,14 @@ export function useProducts() {
         .eq("store_id", storeId!)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []).map(rowToProduct);
+      return (data ?? []).map((row) => rowToProduct(row as any));
     },
   });
-
-  useEffect(() => {
-    if (!storeId) return;
-    const channel = supabase
-      .channel(`products-${storeId}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "products", filter: `store_id=eq.${storeId}` }, () => {
-        qc.invalidateQueries({ queryKey: ["products", storeId] });
-      })
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [storeId, qc]);
-
-  return q;
 }
 
 export function useOrders() {
   const { storeId } = useAuth();
-  const qc = useQueryClient();
-  const q = useQuery({
+  return useQuery({
     queryKey: ["orders", storeId],
     enabled: !!storeId,
     queryFn: async (): Promise<Order[]> => {
@@ -51,40 +46,14 @@ export function useOrders() {
         .eq("store_id", storeId!)
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []).map(rowToOrder);
+      return (data ?? []).map((row) => rowToOrder(row as any));
     },
   });
-
-  useEffect(() => {
-    if (!storeId) return;
-    const channel = supabase
-      .channel(`orders-${storeId}`)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders", filter: `store_id=eq.${storeId}` }, (payload) => {
-        qc.invalidateQueries({ queryKey: ["orders", storeId] });
-        toast("طلب جديد");
-      })
-      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders", filter: `store_id=eq.${storeId}` }, () => {
-        qc.invalidateQueries({ queryKey: ["orders", storeId] });
-      })
-      .on("postgres_changes", { event: "DELETE", schema: "public", table: "orders", filter: `store_id=eq.${storeId}` }, () => {
-        qc.invalidateQueries({ queryKey: ["orders", storeId] });
-      })
-      .subscribe((status) => {
-        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
-          qc.invalidateQueries({ queryKey: ["orders", storeId] });
-        }
-      });
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [storeId, qc]);
-
-  return q;
 }
 
 export function useSaveProduct() {
   const { storeId } = useAuth();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (product: Partial<Product> & { id?: string }) => {
       if (!storeId) throw new Error("No store");
@@ -92,8 +61,9 @@ export function useSaveProduct() {
       if (product.id) {
         const { error } = await supabase
           .from("products")
-          .update({ payload: payload as any, store_id: storeId })
-          .eq("id", product.id);
+          .update({ payload: payload as any })
+          .eq("id", product.id)
+          .eq("store_id", storeId);
         if (error) throw error;
       } else {
         const { error } = await supabase
@@ -103,60 +73,87 @@ export function useSaveProduct() {
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["products", storeId] });
     },
   });
 }
 
 export function useDeleteProduct() {
   const { storeId } = useAuth();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       if (!storeId) throw new Error("No store");
-      const { error } = await supabase.from("products").delete().eq("id", id);
+      const { error } = await supabase.from("products").delete().eq("id", id).eq("store_id", storeId);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["products"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products", storeId] }),
   });
 }
 
 export function useSaveOrder() {
   const { storeId } = useAuth();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (order: Partial<Order> & { id?: string }) => {
       if (!storeId) throw new Error("No store");
       const payload = orderToPayload(order);
+      const columns = {
+        status: order.status ?? "new",
+        phone: order.phone ?? null,
+        customer_name: order.name ?? null,
+        wilaya: order.wilaya ?? null,
+        total: Number(order.amount) || 0,
+        carrier: order.carrier ?? null,
+        notes: order.notes ?? null,
+        source: "manual",
+      };
       if (order.id) {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("orders")
-          .update({ payload: payload as any, store_id: storeId })
-          .eq("id", order.id);
+          .update({ payload: payload as any, ...columns })
+          .eq("id", order.id)
+          .eq("store_id", storeId);
         if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from("orders")
-          .insert({ payload: payload as any, store_id: storeId });
-        if (error) throw error;
+        return;
       }
+      const { data, error } = await (supabase as any)
+        .from("orders")
+        .insert({ payload: payload as any, store_id: storeId, ...columns })
+        .select("id")
+        .single();
+      if (error) throw error;
+      if (data?.id) markOwnOrder(String(data.id));
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
+    },
   });
 }
 
 export function useUpdateOrderStatus() {
   const { storeId } = useAuth();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: Order["status"] }) => {
       if (!storeId) throw new Error("No store");
-      const { data, error } = await supabase.from("orders").select("payload").eq("id", id).single();
+      const { data, error } = await supabase
+        .from("orders")
+        .select("payload")
+        .eq("id", id)
+        .eq("store_id", storeId)
+        .single();
       if (error) throw error;
-      const payload = { ...(data.payload as Record<string, unknown>), status };
-      const { error: uerr } = await supabase.from("orders").update({ payload: payload as any }).eq("id", id);
-      if (uerr) throw uerr;
+      const payload = { ...((data.payload as Record<string, unknown>) ?? {}), status };
+      const { error: updateError } = await (supabase as any)
+        .from("orders")
+        .update({ payload: payload as any, status })
+        .eq("id", id)
+        .eq("store_id", storeId);
+      if (updateError) throw updateError;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
+    },
   });
 }

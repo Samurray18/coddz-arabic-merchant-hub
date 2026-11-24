@@ -1,12 +1,12 @@
-import { BRAND_NAME } from "@/lib/coddz";
 import { createFileRoute } from "@tanstack/react-router";
-import { StitchCheckout } from "@/components/stitch-checkout";
+import { RequireAuth } from "@/components/require-auth";
+import { ComingSoon } from "@/components/coming-soon";
 
 export const Route = createFileRoute("/checkout")({
-  component: CheckoutPage,
-  head: () => ({ meta: [{ title: `Checkout — ${BRAND_NAME}` }] }),
+  component: () => (
+    <RequireAuth>
+      <ComingSoon title="نموذج الدفع" />
+    </RequireAuth>
+  ),
+  head: () => ({ meta: [{ title: "Checkout — COD YOU" }] }),
 });
-
-function CheckoutPage() {
-  return <StitchCheckout />;
-}

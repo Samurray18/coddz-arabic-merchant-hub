@@ -16,6 +16,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "../integrations/supabase/client";
 import { AuthContext, type AuthState } from "../lib/auth-context";
 import { LanguageProvider } from "../hooks/use-language";
+import { RealtimeProvider } from "@/components/realtime-provider";
+import { Toaster } from "@/components/ui/sonner";
 import type { User, Session } from "@supabase/supabase-js";
 
 function NotFoundComponent() {
@@ -139,11 +141,13 @@ function RootComponent() {
     session: null,
     loading: true,
     storeId: null,
+    storeName: null,
+    storeWilaya: null,
   });
 
   const refreshStore = async (userId: string | null) => {
     if (!userId) {
-      setAuthState((prev) => ({ ...prev, storeId: null }));
+      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null }));
       return;
     }
     try {
@@ -151,20 +155,25 @@ function RootComponent() {
       const user = sessionData.session?.user ?? null;
       const { data } = await supabase
         .from("stores")
-        .select("id, wilaya")
+        .select("id, name, wilaya")
         .eq("owner_id", userId)
         .limit(1)
         .maybeSingle();
-      const storeId = (data as { id?: string; wilaya?: string | null } | null)?.id ?? null;
+      const store = data as { id?: string; name?: string | null; wilaya?: string | null } | null;
+      const storeId = store?.id ?? null;
       // Backfill from signup metadata if needed
       if (storeId && user) {
         const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
         const storeName = meta["store_name"] ? String(meta["store_name"]) : null;
         const wilaya = meta["wilaya"] ? String(meta["wilaya"]) : null;
         const carriers = Array.isArray(meta["carriers"]) ? (meta["carriers"] as string[]) : [];
-        const currentWilaya = (data as { wilaya?: string | null } | null)?.wilaya ?? null;
-        if ((!currentWilaya && wilaya) || storeName) {
-          await supabase.from("stores").update({ name: storeName ?? undefined, wilaya: wilaya ?? undefined } as any).eq("id", storeId);
+        const currentWilaya = store?.wilaya ?? null;
+        const currentName = store?.name ?? null;
+        if ((!currentWilaya && wilaya) || (!currentName && storeName)) {
+          await supabase
+            .from("stores")
+            .update({ name: storeName ?? undefined, wilaya: wilaya ?? undefined } as any)
+            .eq("id", storeId);
         }
         if (carriers.length) {
           const { data: existing } = await (supabase as any).from("store_delivery_companies").select("company").eq("store_id", storeId);
@@ -178,9 +187,11 @@ function RootComponent() {
       setAuthState((prev) => ({
         ...prev,
         storeId,
+        storeName: store?.name ?? null,
+        storeWilaya: store?.wilaya ?? null,
       }));
     } catch {
-      setAuthState((prev) => ({ ...prev, storeId: null, isDemo: true }));
+      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null }));
     }
   };
 
@@ -226,6 +237,14 @@ function RootComponent() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
+    setAuthState({
+      user: null,
+      session: null,
+      loading: false,
+      storeId: null,
+      storeName: null,
+      storeWilaya: null,
+    });
     router.navigate({ to: "/", replace: true });
   };
 
@@ -239,8 +258,11 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <AuthContext.Provider value={value}>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          <RealtimeProvider>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <Toaster position="top-center" richColors />
+          </RealtimeProvider>
         </AuthContext.Provider>
       </LanguageProvider>
     </QueryClientProvider>
