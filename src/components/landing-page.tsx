@@ -119,7 +119,7 @@ const COPY = {
 };
 
 export function LandingPage() {
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
   const c = COPY[lang];
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
 
@@ -143,6 +143,9 @@ export function LandingPage() {
               <option value="fr">FR</option>
               <option value="en">EN</option>
             </select>
+            <Link to="/auth" className="font-headline text-label-lg text-primary px-3 py-2 rounded-md hover:bg-surface-container-low transition-colors">
+              {t.nav.signIn}
+            </Link>
             <Link to="/signup" className="inline-flex items-center justify-center rounded-md bg-primary text-on-primary px-5 py-2.5 font-headline text-label-lg transition-colors hover:bg-success">
               {c.cta1}
             </Link>

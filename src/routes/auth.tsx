@@ -1,9 +1,9 @@
-import { BRAND_NAME } from "@/lib/coddz";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/hooks/use-language";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { supabase } from "@/integrations/supabase/client";
+import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,21 +11,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
-  head: () => ({ meta: [{ title: `Auth — ${BRAND_NAME}` }] }),
+  head: () => ({ meta: [{ title: `Sign in — ${BRAND_NAME}` }] }),
 });
 
 function AuthPage() {
-  const { t } = useLanguage();
-  const { isDemo } = useAuth();
+  const { t, lang } = useLanguage();
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [storeName, setStoreName] = useState("");
+  const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
+
+  useEffect(() => {
+    if (user) navigate({ to: "/dashboard" });
+  }, [user, navigate]);
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -33,107 +35,62 @@ function AuthPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
-      setError(error.message);
+      const msg = error.message.toLowerCase();
+      if (msg.includes("invalid")) setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+      else if (msg.includes("email not confirmed")) setError("يرجى تأكيد بريدك الإلكتروني أولاً");
+      else if (msg.includes("too many")) setError("محاولات كثيرة، حاول لاحقًا");
+      else setError(error.message);
       return;
     }
     navigate({ to: "/dashboard" });
   };
 
-  const handleSignUp = async () => {
-    setLoading(true);
-    setError("");
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { display_name: displayName, store_name: storeName },
-        emailRedirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    setMessage(t.auth.checkEmail);
-  };
-
-  const handleForgot = async () => {
-    setLoading(true);
-    setError("");
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    setMessage(t.auth.resetSent);
-  };
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="font-headline">{mode === "signin" ? t.auth.signInTitle : t.auth.signUpTitle}</CardTitle>
+        <CardHeader className="text-center space-y-4">
+          <div className="flex items-center justify-center gap-2">
+            <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
+              <span className="material-symbols-outlined text-[22px]">monitoring</span>
+            </div>
+            <span className="font-display text-title-lg text-on-surface" style={{ fontWeight: 800 }}>{brand}</span>
+          </div>
+          <CardTitle className="font-headline text-headline-md text-on-surface">{t.auth.signInTitle}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {isDemo && (
-            <div className="rounded-md bg-amber-50 p-2 text-xs text-amber-900">
-              {t.nav.demoMode}
-            </div>
-          )}
-          {mode === "signup" && (
-            <>
-              <div>
-                <Label>{t.auth.displayName}</Label>
-                <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-              </div>
-              <div>
-                <Label>{t.auth.storeName}</Label>
-                <Input value={storeName} onChange={(e) => setStoreName(e.target.value)} />
-              </div>
-            </>
-          )}
           <div>
             <Label>{t.auth.email}</Label>
             <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
             <Label>{t.auth.password}</Label>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          {error && <div className="text-sm text-destructive">{error}</div>}
-          {message && <div className="text-sm text-primary">{message}</div>}
-          {mode === "signin" ? (
-            <>
-              <Button className="w-full" onClick={handleSignIn} disabled={loading}>
-                {t.auth.signInBtn}
-              </Button>
-              <button className="text-xs text-muted-foreground underline" onClick={handleForgot}>
-                {t.auth.forgotLink}
+            <div className="relative">
+              <Input
+                type={showPw ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPw((v) => !v)}
+                className="absolute end-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
+              >
+                <span className="material-symbols-outlined text-[20px]">{showPw ? "visibility_off" : "visibility"}</span>
               </button>
-            </>
-          ) : (
-            <Button className="w-full" onClick={handleSignUp} disabled={loading}>
-              {t.auth.signUpBtn}
-            </Button>
-          )}
-          <button
-            className="w-full text-xs text-muted-foreground underline"
-            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          >
-            {mode === "signin" ? t.auth.noAccount : t.auth.hasAccount}
-          </button>
-          {mode === "signin" && (
-            <button
-              className="w-full text-xs text-muted-foreground underline"
-              onClick={() => navigate({ to: "/reset-password" })}
-            >
-              {t.auth.forgotTitle}
-            </button>
-          )}
+            </div>
+          </div>
+          {error && <div className="text-sm text-error bg-error-container/40 rounded-md p-2">{error}</div>}
+          <Button className="w-full" onClick={handleSignIn} disabled={loading}>
+            {loading ? "..." : t.auth.signInBtn}
+          </Button>
+          <div className="flex items-center justify-between text-xs">
+            <Link to="/reset-password" className="text-on-surface-variant underline">
+              {t.auth.forgotLink}
+            </Link>
+            <Link to="/signup" className="text-primary underline">
+              {t.auth.noAccount}
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>

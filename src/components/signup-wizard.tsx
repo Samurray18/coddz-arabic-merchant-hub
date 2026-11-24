@@ -1,6 +1,6 @@
 import { BRAND_NAME } from "@/lib/coddz";
-import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,7 +23,11 @@ const LOGO_EXT: Record<string, string> = {
 export function SignupWizard() {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const { refreshStore } = useAuth();
+  const { user, refreshStore } = useAuth();
+
+  useEffect(() => {
+    if (user) navigate({ to: "/dashboard" });
+  }, [user, navigate]);
   const [step, setStep] = useState(1);
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -365,6 +369,10 @@ export function SignupWizard() {
           </div>
         </CardContent>
       </Card>
+      <p className="text-center text-sm text-on-surface-variant mt-4">
+        {t.auth.hasAccount}{" "}
+        <Link to="/auth" className="text-primary underline">{t.nav.signIn}</Link>
+      </p>
     </div>
   );
 }
