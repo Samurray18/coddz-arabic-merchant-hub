@@ -101,6 +101,16 @@
   --color-on-success-container: #002110;
   --color-warning-container: #FFDCBA;
   --color-on-warning-container: #2D1600;
+  --color-outline: #707971;
+  --color-outline-variant: #DBE5DB;
+  --color-success: #286A46;
+  --color-on-success: #FFFFFF;
+  --color-error: #BA1A1A;
+  --color-on-error: #FFFFFF;
+  --color-error-container: #FFDAD6;
+  --color-on-error-container: #410002;
+  --color-warning: #8C5000;
+  --color-on-warning: #FFFFFF;
   --font-arabic: "Cairo", "Tajawal", sans-serif;
   --font-latin: "Tajawal", system-ui, sans-serif;
   --font-display: "Cairo", sans-serif;
