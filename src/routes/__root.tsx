@@ -139,12 +139,11 @@ function RootComponent() {
     session: null,
     loading: true,
     storeId: null,
-    isDemo: true,
   });
 
   const refreshStore = async (userId: string | null) => {
     if (!userId) {
-      setAuthState((prev) => ({ ...prev, storeId: null, isDemo: true }));
+      setAuthState((prev) => ({ ...prev, storeId: null }));
       return;
     }
     try {
@@ -179,7 +178,6 @@ function RootComponent() {
       setAuthState((prev) => ({
         ...prev,
         storeId,
-        isDemo: false,
       }));
     } catch {
       setAuthState((prev) => ({ ...prev, storeId: null, isDemo: true }));
@@ -196,7 +194,6 @@ function RootComponent() {
         user: session?.user ?? null,
         session,
         loading: false,
-        isDemo: !session,
       }));
       refreshStore(session?.user?.id ?? null);
     });
@@ -214,7 +211,6 @@ function RootComponent() {
           user: session?.user ?? null,
           session: session ?? null,
           loading: false,
-          isDemo: !session,
         }));
         refreshStore(session?.user?.id ?? null);
       }

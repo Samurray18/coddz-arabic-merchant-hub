@@ -24,7 +24,7 @@ export type Database = {
           phone: string | null
           source: string
           status: string
-          store_id: string | null
+          store_id: string
           updated_at: string
         }
         Insert: {
@@ -66,7 +66,7 @@ export type Database = {
           created_at: string
           id: string
           payload: Json
-          store_id: string | null
+          store_id: string
           updated_at: string
         }
         Insert: {
