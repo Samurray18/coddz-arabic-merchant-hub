@@ -32,5 +32,5 @@ use the editor.
 ## Application rules
 - Keep brand, localization, sample catalog, and validation in shared browser-safe modules so dashboard surfaces use consistent values.
 - `/` is the public marketing landing page; `/dashboard`, `/orders`, and `/products` share the responsive dashboard shell, and `/auth` + `/reset-password` handle Supabase Auth.
-- Signed-in merchants read and write their own `stores`, `products`, and `orders` rows in Supabase under RLS; signed-out visitors browse the shared `store_id IS NULL` sample rows in an explicitly labeled demo mode backed by browser storage.
+- Store-scoped tables enforce role-based RLS (`owner`, `manager`, `agent`, `stock_keeper`) via `private.*` security-definer helpers so every store member can read store data, owners/managers manage all store tables, agents update only order confirmation/status/notes and log `order_events`, and stock keepers manage `products` and `stock_movements`.
 - Keep a single filtered `onAuthStateChange` listener in `src/routes/__root.tsx` and use the 4-step sign-out teardown (`cancelQueries`, `clear`, `signOut`, `navigate(..., { replace: true })`).
