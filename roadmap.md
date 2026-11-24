@@ -8,7 +8,7 @@
 - [x] Browser verification and rule tests
 
 # Schema synchronization
-- [ ] Confirm store wilaya and delivery-company owner-only access
-- [ ] Save signup store name and wilaya in the merchant trigger
-- [ ] Add and backfill order integration columns with external-order uniqueness
-- [ ] Regenerate types and verify the schema rules
+- [x] Confirm store wilaya and delivery-company owner-only access
+- [x] Save signup store name and wilaya in the merchant trigger
+- [x] Add and backfill order integration columns with external-order uniqueness
+- [x] Regenerate types and verify the schema rules

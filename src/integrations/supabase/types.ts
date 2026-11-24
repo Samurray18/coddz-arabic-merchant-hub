@@ -17,22 +17,37 @@ export type Database = {
       orders: {
         Row: {
           created_at: string
+          external_order_id: string | null
+          flags: Json
           id: string
           payload: Json
+          phone: string | null
+          source: string
+          status: string
           store_id: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
+          external_order_id?: string | null
+          flags?: Json
           id?: string
           payload?: Json
+          phone?: string | null
+          source?: string
+          status?: string
           store_id?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
+          external_order_id?: string | null
+          flags?: Json
           id?: string
           payload?: Json
+          phone?: string | null
+          source?: string
+          status?: string
           store_id?: string | null
           updated_at?: string
         }
