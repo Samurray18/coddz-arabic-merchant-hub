@@ -24,7 +24,7 @@ export type Database = {
           phone: string | null
           source: string
           status: string
-          store_id: string | null
+          store_id: string
           updated_at: string
         }
         Insert: {
@@ -36,7 +36,7 @@ export type Database = {
           phone?: string | null
           source?: string
           status?: string
-          store_id?: string | null
+          store_id: string
           updated_at?: string
         }
         Update: {
@@ -48,7 +48,7 @@ export type Database = {
           phone?: string | null
           source?: string
           status?: string
-          store_id?: string | null
+          store_id?: string
           updated_at?: string
         }
         Relationships: [
@@ -66,21 +66,21 @@ export type Database = {
           created_at: string
           id: string
           payload: Json
-          store_id: string | null
+          store_id: string
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: string
           payload?: Json
-          store_id?: string | null
+          store_id: string
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: string
           payload?: Json
-          store_id?: string | null
+          store_id?: string
           updated_at?: string
         }
         Relationships: [
