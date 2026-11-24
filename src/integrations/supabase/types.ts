@@ -105,6 +105,35 @@ export type Database = {
         }
         Relationships: []
       }
+      store_delivery_companies: {
+        Row: {
+          company: string
+          created_at: string
+          id: string
+          store_id: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          id?: string
+          store_id: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          id?: string
+          store_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_delivery_companies_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stores: {
         Row: {
           created_at: string
@@ -112,6 +141,7 @@ export type Database = {
           name: string
           owner_id: string
           updated_at: string
+          wilaya: string | null
         }
         Insert: {
           created_at?: string
@@ -119,6 +149,7 @@ export type Database = {
           name?: string
           owner_id: string
           updated_at?: string
+          wilaya?: string | null
         }
         Update: {
           created_at?: string
@@ -126,6 +157,7 @@ export type Database = {
           name?: string
           owner_id?: string
           updated_at?: string
+          wilaya?: string | null
         }
         Relationships: []
       }
