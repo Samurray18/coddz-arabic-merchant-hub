@@ -5,6 +5,7 @@ import {
   timingSafeEqual,
   verifyHmacBase64,
   computeFlags,
+  createOrder,
 } from "../../supabase/functions/_shared/helpers";
 
 describe("normalizePhone", () => {
@@ -147,5 +148,97 @@ describe("computeFlags", () => {
     expect(flags.blacklisted).toBe(true);
     expect(flags.duplicate).toBe(true);
     expect(flags.previous_returns).toBe(2);
+  });
+});
+
+describe("createOrder inserts", () => {
+  it("items carry store_id and no sku; events carry no payload", async () => {
+    const insertedItems: any[] = [];
+    const insertedEvents: any[] = [];
+    let deletedOrder = false;
+    const fakeClient: any = {
+      from: (table: string) => {
+        if (table === "blacklist") {
+          return { select: () => ({ eq: () => ({ eq: () => ({ limit: () => Promise.resolve({ data: [] }) }) }) }) };
+        }
+        if (table === "orders") {
+          const makeChain = (terminal: any) => {
+            const chain: any = {};
+            chain.eq = () => chain;
+            chain.in = () => chain;
+            chain.gte = () => Promise.resolve({ data: [], count: 0 });
+            chain.limit = () => ({ maybeSingle: () => Promise.resolve({ data: null }) });
+            chain.maybeSingle = () => Promise.resolve({ data: null });
+            return chain;
+          };
+          return {
+            select: (_cols?: any, opts?: any) => {
+              if (opts?.head) {
+                // previous_returns count
+                const chain: any = {};
+                chain.eq = () => chain;
+                return { ...chain, then: (cb: any) => cb({ count: 0, data: null }) };
+              }
+              return makeChain(null);
+            },
+            insert: (row: any) => ({
+              select: () => ({
+                single: () => Promise.resolve({ data: { id: "order-1", number: "DZ-1001", status: "new" }, error: null }),
+              }),
+            }),
+            delete: () => ({ eq: () => { deletedOrder = true; return Promise.resolve({}); } }),
+          };
+        }
+        if (table === "products") {
+          return {
+            select: () => ({
+              eq: () => Promise.resolve({ data: [{ id: "p1", name: "ساعة", sku: "SKU-1", cost: 3000 }] }),
+            }),
+          };
+        }
+        if (table === "order_items") {
+          return {
+            insert: (rows: any) => {
+              insertedItems.push(...(Array.isArray(rows) ? rows : [rows]));
+              return Promise.resolve({ error: null });
+            },
+          };
+        }
+        if (table === "order_events") {
+          return {
+            insert: (row: any) => {
+              insertedEvents.push(row);
+              return Promise.resolve({ error: null });
+            },
+          };
+        }
+        if (table === "intake_logs") {
+          return { insert: () => Promise.resolve({}) };
+        }
+        return { select: () => ({ eq: () => Promise.resolve({ data: [] }) }) };
+      },
+    };
+
+    const order = {
+      customer_name: "أحمد",
+      phone: "0551234567",
+      wilaya: "Alger",
+      delivery_type: "home" as const,
+      delivery_price: 500,
+      total: 5000,
+      items: [{ name: "ساعة", sku: "SKU-1", quantity: 1, price: 4500 }],
+    };
+
+    const result = await createOrder(fakeClient, "store-1", order, "api", "ext-1", {});
+    expect(result.order_id).toBe("order-1");
+    expect(insertedItems.length).toBe(1);
+    expect(insertedItems[0].store_id).toBe("store-1");
+    expect(insertedItems[0]).not.toHaveProperty("sku");
+    expect(insertedItems[0].cost).toBe(3000);
+    expect(insertedEvents.length).toBe(1);
+    expect(insertedEvents[0]).not.toHaveProperty("payload");
+    expect(insertedEvents[0].to_status).toBe("new");
+    expect(insertedEvents[0].note).toContain("source: api");
+    expect(deletedOrder).toBe(false);
   });
 });

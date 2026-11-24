@@ -324,38 +324,57 @@ export async function createOrder(
   // match items to products
   const items = order.items ?? [];
   if (items.length) {
-    // load products for store
     const { data: products } = await client
       .from("products")
-      .select("id, payload")
+      .select("id, name, sku, cost")
       .eq("store_id", storeId);
     const productList = Array.isArray(products) ? products : [];
     const findProduct = (it: any) => {
       if (it.sku) {
-        const bySku = productList.find((p: any) => (p.payload?.sku ?? p.payload?.["sku"]) === it.sku);
-        if (bySku) return bySku.id;
+        const bySku = productList.find(
+          (p: any) => String(p.sku ?? "").trim().toLowerCase() === String(it.sku).trim().toLowerCase(),
+        );
+        if (bySku) return bySku;
       }
-      const byName = productList.find((p: any) => (p.payload?.name ?? p.payload?.["name"]) === it.name);
-      return byName ? byName.id : null;
+      const byName = productList.find(
+        (p: any) => String(p.name ?? "").trim().toLowerCase() === String(it.name).trim().toLowerCase(),
+      );
+      return byName ?? null;
     };
-    const itemRows = items.map((it) => ({
-      order_id: orderId,
-      product_id: findProduct(it),
-      name: it.name,
-      sku: it.sku ?? null,
-      quantity: it.quantity,
-      price: it.price,
-    }));
-    await client.from("order_items").insert(itemRows);
+    const itemRows = items.map((it) => {
+      const prod = findProduct(it);
+      return {
+        order_id: orderId,
+        store_id: storeId,
+        product_id: prod ? prod.id : null,
+        name: it.name,
+        quantity: it.quantity,
+        price: it.price,
+        cost: prod ? Number(prod.cost ?? 0) : 0,
+      };
+    });
+    const { error: itemsErr } = await client.from("order_items").insert(itemRows);
+    if (itemsErr) {
+      // delete the order just created
+      await client.from("orders").delete().eq("id", orderId);
+      await logIntake(client, storeId, source, "rejected", itemsErr.message ?? String(itemsErr), rawPayload, null);
+      throw itemsErr;
+    }
   }
 
   // order_events
-  await client.from("order_events").insert({
+  const note = externalId ? `source: ${source} ${externalId}` : `source: ${source}`;
+  const { error: evErr } = await client.from("order_events").insert({
     order_id: orderId,
     store_id: storeId,
     type: "created",
-    payload: { source, external_id: externalId ?? null },
+    to_status: inserted.status ?? "new",
+    note,
   });
+  if (evErr) {
+    // log but keep the order
+    await logIntake(client, storeId, source, "accepted", evErr.message ?? String(evErr), rawPayload, orderId);
+  }
 
   return {
     order_id: orderId,
