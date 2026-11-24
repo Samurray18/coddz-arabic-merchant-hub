@@ -1,6 +1,7 @@
 import { BRAND_NAME } from "@/lib/coddz";
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/lib/auth-context";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { useLanguage } from "@/hooks/use-language";
 import { useProducts, useSaveProduct, useDeleteProduct } from "@/hooks/use-data";
@@ -22,6 +23,14 @@ export const Route = createFileRoute("/products")({
 
 function ProductsPage() {
   const { t } = useLanguage();
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/auth" });
+  }, [loading, user, navigate]);
+  if (loading || !user) {
+    return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-on-surface-variant">جارٍ التحميل...</div></div>;
+  }
   const { data: products = [], isLoading } = useProducts();
   const saveProduct = useSaveProduct();
   const deleteProduct = useDeleteProduct();

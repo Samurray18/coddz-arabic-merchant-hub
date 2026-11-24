@@ -27,7 +27,7 @@ const NAV = [
 
 export function DashboardShell({ children }: { children?: React.ReactNode }) {
   const { t, lang, setLang } = useLanguage();
-  const { user, isDemo, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -93,7 +93,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
               {user?.email ?? "زائر"}
             </span>
             <span className="font-body text-label-sm text-on-surface-variant">
-              {isDemo ? t.nav.demoMode : t.nav.dashboard}
+              {t.nav.dashboard}
             </span>
           </div>
         </div>
@@ -160,17 +160,18 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
           </div>
         </header>
 
-        {isDemo && (
-          <div className="border-b border-border bg-warning-container/40 px-4 py-2 text-sm text-on-warning-container">
-            {t.nav.demoBanner}{" "}
-            <Link to="/auth" className="font-semibold underline">
-              {t.nav.saveYourStore}
-            </Link>
-          </div>
-        )}
-
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6 pb-24 md:pb-6">{children}</main>
       </div>
+
+      {/* Mobile bottom tab bar */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-surface-container-lowest border-t border-border px-2 py-2 grid grid-cols-4 gap-1">
+        {NAV.slice(0, 4).map((item) => (
+          <Link key={item.to} to={item.to} className="flex flex-col items-center gap-0.5 rounded-md py-1.5 text-on-surface-variant [&.active]:text-primary">
+            <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+            <span className="font-body text-[10px]">{item.label}</span>
+          </Link>
+        ))}
+      </nav>
     </div>
   );
 }
