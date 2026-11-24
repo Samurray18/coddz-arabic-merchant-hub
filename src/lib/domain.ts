@@ -27,6 +27,8 @@ export interface Order {
   carrier: string;
   date: string;
   notes?: string;
+  source?: string;
+  flags?: { blacklisted?: boolean; duplicate?: boolean; previous_returns?: number } | null;
   created_at?: string;
 }
 
@@ -60,6 +62,8 @@ export function rowToOrder(row: {
   carrier?: string | null;
   status?: string | null;
   notes?: string | null;
+  source?: string | null;
+  flags?: unknown;
 }): Order {
   const p = (row.payload ?? {}) as Record<string, unknown>;
   const dateValue = row.created_at || String(p["date"] ?? "");
@@ -75,6 +79,8 @@ export function rowToOrder(row: {
     status: (row.status as OrderStatus) ?? (p["status"] as OrderStatus) ?? "new",
     carrier: String(row.carrier ?? p["carrier"] ?? ""),
     date: String(p["date"] || dateValue.slice(0, 10) || new Date().toISOString().slice(0, 10)),
+    source: row.source ?? String(p["source"] ?? "manual"),
+    flags: (row.flags as any) ?? (p["flags"] as any) ?? null,
     created_at: row.created_at,
   };
   const notes = row.notes ?? p["notes"];

@@ -209,7 +209,39 @@ function OrdersPage() {
               <tbody className="divide-y divide-outline-variant">
                 {filtered.map((order) => (
                   <tr key={order.id} className="transition-colors duration-state-change hover:bg-surface-container-low">
-                    <td className="px-4 py-3.5 font-mono text-mono-md tabular-nums text-on-surface">#{order.number || "—"}</td>
+                    <td className="px-4 py-3.5">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-mono text-mono-md tabular-nums text-on-surface">#{order.number || "—"}</span>
+                        <div className="flex flex-wrap gap-1">
+                          {order.source && order.source !== "manual" && (
+                            <span className="rounded-full bg-primary-container px-2 py-0.5 font-body text-label-sm text-on-primary-container">
+                              {order.source === "api"
+                                ? "API"
+                                : order.source === "shopify"
+                                ? "Shopify"
+                                : order.source === "woocommerce"
+                                ? "WooCommerce"
+                                : order.source}
+                            </span>
+                          )}
+                          {order.flags?.duplicate && (
+                            <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">
+                              مكرر
+                            </span>
+                          )}
+                          {order.flags?.blacklisted && (
+                            <span className="rounded-full bg-error-container px-2 py-0.5 font-body text-label-sm text-on-error-container">
+                              قائمة سوداء
+                            </span>
+                          )}
+                          {(order.flags?.previous_returns ?? 0) > 0 && (
+                            <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">
+                              مرتجعات سابقة
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
                     <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{order.name}</td>
                     <td className="px-4 py-3.5 font-mono text-mono-md tabular-nums text-on-surface-variant" dir="ltr">
                       {order.phone}

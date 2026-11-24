@@ -1,1 +1,10 @@
 project_id = "lxfgczdincyjtmfpyecm"
+
+[functions.ingest-order]
+verify_jwt = false
+
+[functions.ingest-shopify]
+verify_jwt = false
+
+[functions.ingest-woocommerce]
+verify_jwt = false

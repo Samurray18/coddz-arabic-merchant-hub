@@ -688,7 +688,127 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
+      },
+      api_keys: {
+        Row: {
+          created_at: string;
+          id: string;
+          key_hash: string;
+          key_prefix: string;
+          last_used_at: string | null;
+          name: string;
+          revoked_at: string | null;
+          store_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          key_hash: string;
+          key_prefix: string;
+          last_used_at?: string | null;
+          name: string;
+          revoked_at?: string | null;
+          store_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          key_hash?: string;
+          key_prefix?: string;
+          last_used_at?: string | null;
+          name?: string;
+          revoked_at?: string | null;
+          store_id?: string;
+        };
+        Relationships: [];
+      },
+      integrations: {
+        Row: {
+          created_at: string;
+          id: string;
+          status: string;
+          store_id: string;
+          type: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          status?: string;
+          store_id: string;
+          type: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          status?: string;
+          store_id?: string;
+          type?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      },
+      integration_secrets: {
+        Row: {
+          created_at: string;
+          id: string;
+          secret: string;
+          store_id: string;
+          type: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          secret: string;
+          store_id: string;
+          type: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          secret?: string;
+          store_id?: string;
+          type?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      },
+      intake_logs: {
+        Row: {
+          created_at: string;
+          error: string | null;
+          id: string;
+          order_id: string | null;
+          payload: any;
+          source: string;
+          status: string;
+          store_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          error?: string | null;
+          id?: string;
+          order_id?: string | null;
+          payload?: any;
+          source: string;
+          status: string;
+          store_id: string;
+        };
+        Update: {
+          created_at?: string;
+          error?: string | null;
+          id?: string;
+          order_id?: string | null;
+          payload?: any;
+          source?: string;
+          status?: string;
+          store_id?: string;
+        };
+        Relationships: [];
+      },
     }
     Views: {
       [_ in never]: never
@@ -706,6 +826,14 @@ export type Database = {
           revenue: number
           total_orders: number
         }[]
+      }
+      create_api_key: {
+        Args: { p_name: string; p_store_id: string }
+        Returns: { api_key: string; key_prefix: string }
+      }
+      set_integration_secret: {
+        Args: { p_secret: string; p_store_id: string; p_type: string }
+        Returns: undefined
       }
     }
     Enums: {
