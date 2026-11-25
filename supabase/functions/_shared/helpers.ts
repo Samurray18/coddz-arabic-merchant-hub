@@ -142,7 +142,7 @@ export async function hmacSha256Base64(secret: string, message: string): Promise
   const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(message));
   const bytes = new Uint8Array(sig);
   let binary = "";
-  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i] ?? 0);
   return btoa(binary);
 }
 
@@ -435,7 +435,9 @@ export function validateOrderBody(body: any): { ok: true; order: NormalizedOrder
     if (!Number.isFinite(quantity) || quantity <= 0) return { ok: false, message: "Invalid item quantity" };
     const price = Number(it?.price ?? 0);
     if (!Number.isFinite(price) || price < 0) return { ok: false, message: "Invalid item price" };
-    normItems.push({ name, sku: it?.sku ? String(it.sku) : undefined, quantity, price });
+    const _item: NormalizedOrder["items"][number] = { name, quantity, price };
+    if (it?.sku) _item.sku = String(it.sku);
+    normItems.push(_item);
   }
   const itemsTotal = normItems.reduce((s, it) => s + it.price * it.quantity, 0);
   const total = itemsTotal + delivery_price;
@@ -443,14 +445,14 @@ export function validateOrderBody(body: any): { ok: true; order: NormalizedOrder
     customer_name,
     phone,
     wilaya,
-    commune: body.commune ? String(body.commune) : undefined,
-    address: body.address ? String(body.address) : undefined,
     delivery_type,
     delivery_price,
     total,
-    notes: body.notes ? String(body.notes) : undefined,
     items: normItems,
   };
+  if (body.commune) order.commune = String(body.commune);
+  if (body.address) order.address = String(body.address);
+  if (body.notes) order.notes = String(body.notes);
   const externalId = body.external_id ? String(body.external_id) : null;
   return { ok: true, order, externalId };
 }

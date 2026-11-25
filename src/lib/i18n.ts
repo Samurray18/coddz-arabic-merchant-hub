@@ -145,6 +145,7 @@ export interface TranslationBundle {
     storeName: string;
     signInBtn: string;
     signUpBtn: string;
+    continueWithGoogle: string;
     sendResetBtn: string;
     updatePasswordBtn: string;
     forgotLink: string;
@@ -310,6 +311,7 @@ const ar: TranslationBundle = {
     storeName: "اسم المتجر",
     signInBtn: "دخول",
     signUpBtn: "إنشاء الحساب",
+    continueWithGoogle: "المتابعة بـ Google",
     sendResetBtn: "إرسال رابط الاستعادة",
     updatePasswordBtn: "تحديث كلمة المرور",
     forgotLink: "نسيت كلمة المرور؟",
@@ -475,6 +477,7 @@ const fr: TranslationBundle = {
     storeName: "Nom de la boutique",
     signInBtn: "Se connecter",
     signUpBtn: "Créer le compte",
+    continueWithGoogle: "Continuer avec Google",
     sendResetBtn: "Envoyer le lien",
     updatePasswordBtn: "Mettre à jour",
     forgotLink: "Mot de passe oublié ?",
@@ -640,6 +643,7 @@ const en: TranslationBundle = {
     storeName: "Store name",
     signInBtn: "Sign in",
     signUpBtn: "Create account",
+    continueWithGoogle: "Continue with Google",
     sendResetBtn: "Send reset link",
     updatePasswordBtn: "Update password",
     forgotLink: "Forgot password?",

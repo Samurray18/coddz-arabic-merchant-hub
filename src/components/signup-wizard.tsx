@@ -31,6 +31,7 @@ export function SignupWizard() {
   const [step, setStep] = useState(1);
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
   const [wilayaSearch, setWilayaSearch] = useState("");
@@ -89,6 +90,19 @@ export function SignupWizard() {
       }
     }
     return true;
+  };
+
+  const handleGoogle = async () => {
+    setGoogleLoading(true);
+    setError("");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
+    if (error) {
+      setError(error.message);
+      setGoogleLoading(false);
+    }
   };
 
   const next = () => {
@@ -215,6 +229,24 @@ export function SignupWizard() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
+          {step === 1 && (
+            <>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleGoogle}
+                disabled={googleLoading}
+              >
+                <span className="material-symbols-outlined me-2 text-[18px]">login</span>
+                {googleLoading ? "..." : t.auth.continueWithGoogle}
+              </Button>
+              <div className="relative flex items-center gap-2">
+                <span className="h-px flex-1 bg-outline-variant" />
+                <span className="font-body text-label-sm text-on-surface-variant">أو</span>
+                <span className="h-px flex-1 bg-outline-variant" />
+              </div>
+            </>
+          )}
           {error && <div className="text-sm text-error bg-error-container/40 rounded-md p-2">{error}</div>}
 
           {step === 1 && (

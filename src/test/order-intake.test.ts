@@ -87,7 +87,7 @@ describe("verifyHmacBase64", () => {
     const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(msg));
     const bytes = new Uint8Array(sig);
     let bin = "";
-    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i] ?? 0);
     const b64 = btoa(bin);
     expect(await verifyHmacBase64(secret, msg, b64)).toBe(true);
     expect(await verifyHmacBase64(secret, msg, "AAAA")).toBe(false);

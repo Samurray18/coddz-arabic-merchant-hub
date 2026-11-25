@@ -17,6 +17,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { t, lang } = useLanguage();
   const { user, onboardingCompleted } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,6 +29,19 @@ function AuthPage() {
   useEffect(() => {
     if (user) navigate({ to: onboardingCompleted ? "/dashboard" : "/onboarding" });
   }, [user, onboardingCompleted, navigate]);
+
+  const handleGoogle = async () => {
+    setGoogleLoading(true);
+    setError("");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
+    if (error) {
+      setError(error.message);
+      setGoogleLoading(false);
+    }
+  };
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -96,6 +110,20 @@ function AuthPage() {
           {error && <div className="text-sm text-error bg-error-container/40 rounded-md p-2">{error}</div>}
           <Button className="w-full" onClick={handleSignIn} disabled={loading}>
             {loading ? "..." : t.auth.signInBtn}
+          </Button>
+          <div className="relative flex items-center gap-2">
+            <span className="h-px flex-1 bg-outline-variant" />
+            <span className="font-body text-label-sm text-on-surface-variant">أو</span>
+            <span className="h-px flex-1 bg-outline-variant" />
+          </div>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={handleGoogle}
+            disabled={googleLoading}
+          >
+            <span className="material-symbols-outlined me-2 text-[18px]">login</span>
+            {googleLoading ? "..." : t.auth.continueWithGoogle}
           </Button>
           <div className="flex items-center justify-between text-xs">
             <Link to="/reset-password" className="text-on-surface-variant underline">
