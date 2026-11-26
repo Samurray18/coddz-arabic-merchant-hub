@@ -61,6 +61,12 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       );
     }
 
+    channel.on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "order_events", filter: `store_id=eq.${storeId}` },
+      invalidate,
+    );
+
     for (const event of ["INSERT", "UPDATE", "DELETE"] as const) {
       channel.on(
         "postgres_changes",

@@ -835,6 +835,10 @@ export type Database = {
         Args: { p_secret: string; p_store_id: string; p_type: string }
         Returns: undefined
       }
+      adjust_stock: {
+        Args: { p_delta: number; p_product_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
