@@ -96,11 +96,11 @@ function ConfirmationPage() {
 
         {isLoading ? (
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-            جارٍ التحميل...
+            {t.common.loading}
           </div>
         ) : pending.length === 0 ? (
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-            لا توجد طلبات بانتظار التأكيد
+            {t.common.empty}
           </div>
         ) : (
           <section className="grid grid-cols-1 gap-gutter-lg lg:grid-cols-2">

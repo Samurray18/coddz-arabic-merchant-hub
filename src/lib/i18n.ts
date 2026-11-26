@@ -4,6 +4,7 @@ export interface TranslationBundle {
   common: {
     loading: string;
     empty: string;
+    loadMore: string;
     save: string;
     cancel: string;
     close: string;
@@ -190,6 +191,7 @@ const ar: TranslationBundle = {
   common: {
     loading: "جارٍ التحميل...",
     empty: "لا توجد بيانات",
+    loadMore: "تحميل المزيد",
     save: "حفظ",
     cancel: "إلغاء",
     close: "إغلاق",
@@ -383,6 +385,7 @@ const fr: TranslationBundle = {
   common: {
     loading: "Chargement...",
     empty: "Aucune donnée",
+    loadMore: "Charger plus",
     save: "Enregistrer",
     cancel: "Annuler",
     close: "Fermer",
@@ -576,6 +579,7 @@ const en: TranslationBundle = {
   common: {
     loading: "Loading...",
     empty: "No data",
+    loadMore: "Load more",
     save: "Save",
     cancel: "Cancel",
     close: "Close",

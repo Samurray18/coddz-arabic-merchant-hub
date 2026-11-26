@@ -310,7 +310,7 @@ function OrdersPage() {
                           }}
                           className="rounded-md bg-surface-container-low px-2.5 py-1.5 font-body text-label-sm text-on-surface transition-colors hover:bg-surface-container"
                         >
-                          عرض
+                          {t.common.view}
                         </button>
                         {(order.status === "new" || order.status === "confirmed") && (
                           <button
@@ -349,7 +349,7 @@ function OrdersPage() {
                 disabled={isFetchingNextPage}
                 className="rounded-md bg-surface-container-low px-4 py-2 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container disabled:opacity-60"
               >
-                {isFetchingNextPage ? "جارٍ التحميل..." : "تحميل المزيد"}
+                {isFetchingNextPage ? t.common.loading : t.common.loadMore}
               </button>
             </div>
           )}
@@ -570,7 +570,7 @@ function OrdersPage() {
                 }}
                 className="mt-2 rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary"
               >
-                حفظ
+                {t.common.save}
               </button>
             </section>
 
@@ -638,7 +638,7 @@ function OrdersPage() {
                     onClick={() => setShowReturn(false)}
                     className="rounded-md bg-surface-container-low px-3 py-1.5 font-headline text-label-md text-on-surface"
                   >
-                    إلغاء
+                      {t.common.cancel}
                   </button>
                 </div>
               </section>
@@ -689,7 +689,7 @@ function OrdersPage() {
                       onClick={() => setShowBlacklist(false)}
                       className="rounded-md bg-surface-container-low px-3 py-1.5 font-headline text-label-md text-on-surface"
                     >
-                      إلغاء
+                      {t.common.cancel}
                     </button>
                   </div>
                 </div>
