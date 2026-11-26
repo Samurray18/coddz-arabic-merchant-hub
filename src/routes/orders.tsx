@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { useOrders, useSaveOrder, useUpdateOrderStatus } from "@/hooks/use-data";
+import { useOrders, useSaveOrder, useUpdateOrderStatus, useRecordReturn } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
@@ -49,6 +49,7 @@ function OrdersPage() {
   const { data: orders = [], isLoading } = useOrders();
   const saveOrder = useSaveOrder();
   const updateStatus = useUpdateOrderStatus();
+  const recordReturn = useRecordReturn();
   const qc = useQueryClient();
 
   const [search, setSearch] = useState("");
@@ -60,6 +61,9 @@ function OrdersPage() {
   const [notesDraft, setNotesDraft] = useState("");
   const [blacklistReason, setBlacklistReason] = useState("");
   const [showBlacklist, setShowBlacklist] = useState(false);
+  const [showReturn, setShowReturn] = useState(false);
+  const [returnReason, setReturnReason] = useState("");
+  const [restock, setRestock] = useState(true);
 
   const selectedOrder = orders.find((o) => o.id === selectedId) ?? null;
 
@@ -557,7 +561,7 @@ function OrdersPage() {
 
             {/* status actions */}
             <section className="mt-4 flex flex-wrap gap-gutter-sm">
-              {(["confirmed", "shipped", "delivered", "returned", "canceled"] as const).map((s) => (
+              {(["confirmed", "shipped", "delivered", "canceled"] as const).map((s) => (
                 <button
                   key={s}
                   type="button"
@@ -568,7 +572,62 @@ function OrdersPage() {
                   {s}
                 </button>
               ))}
+              <button
+                type="button"
+                onClick={() => setShowReturn(true)}
+                className="rounded-md bg-error-container px-3 py-1.5 font-headline text-label-sm text-on-error-container"
+              >
+                مرتجع
+              </button>
             </section>
+
+            {showReturn && (
+              <section className="mt-4 rounded-xl border border-outline-variant bg-surface p-4">
+                <h3 className="font-headline text-title-md text-on-surface">تسجيل مرتجع</h3>
+                <textarea
+                  rows={2}
+                  value={returnReason}
+                  onChange={(e) => setReturnReason(e.target.value)}
+                  placeholder="السبب"
+                  className="mt-2 w-full rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
+                />
+                <label className="mt-2 flex items-center gap-2 font-body text-body-md text-on-surface">
+                  <input
+                    type="checkbox"
+                    checked={restock}
+                    onChange={(e) => setRestock(e.target.checked)}
+                    className="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
+                  />
+                  إعادة للمخزون
+                </label>
+                <div className="mt-3 flex gap-gutter-sm">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        await recordReturn.mutateAsync({ id: selectedOrder.id, reason: returnReason, restock });
+                        toast.success("تم تسجيل المرتجع");
+                        setShowReturn(false);
+                        setReturnReason("");
+                      } catch (e: any) {
+                        toast.error(e?.message ?? "خطأ");
+                      }
+                    }}
+                    disabled={recordReturn.isPending}
+                    className="rounded-md bg-error px-3 py-1.5 font-headline text-label-md text-on-error disabled:opacity-60"
+                  >
+                    {recordReturn.isPending ? "..." : "تأكيد"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowReturn(false)}
+                    className="rounded-md bg-surface-container-low px-3 py-1.5 font-headline text-label-md text-on-surface"
+                  >
+                    إلغاء
+                  </button>
+                </div>
+              </section>
+            )}
 
             {/* blacklist */}
             <section className="mt-4">

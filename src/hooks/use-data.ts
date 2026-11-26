@@ -435,6 +435,55 @@ export function useAddAdSpend() {
   });
 }
 
+export function useRecordReturn() {
+  const { storeId, user } = useAuth();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { id: string; reason: string; restock: boolean }) => {
+      if (!storeId) throw new Error("No store");
+      // update order status to returned
+      const { data: current } = await (supabase as any)
+        .from("orders")
+        .select("status, payload")
+        .eq("id", input.id)
+        .eq("store_id", storeId)
+        .single();
+      const fromStatus = current?.status ?? null;
+      const payload = { ...((current?.payload as Record<string, unknown>) ?? {}), status: "returned" };
+      const { error: upErr } = await (supabase as any)
+        .from("orders")
+        .update({ payload: payload as any, status: "returned", notes: input.reason || null })
+        .eq("id", input.id)
+        .eq("store_id", storeId);
+      if (upErr) throw upErr;
+      // order_events: status_change + return
+      try {
+        await (supabase as any).from("order_events").insert({
+          order_id: input.id,
+          store_id: storeId,
+          type: "status_change",
+          from_status: fromStatus,
+          to_status: "returned",
+          user_id: user?.id ?? null,
+        });
+      } catch {}
+      try {
+        await (supabase as any).from("order_events").insert({
+          order_id: input.id,
+          store_id: storeId,
+          type: "return",
+          note: `${input.reason || "مرتجع"}${input.restock ? " (إعادة للمخزون)" : " (بدون إعادة)"}`,
+          to_status: "returned",
+          user_id: user?.id ?? null,
+        });
+      } catch {}
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
+    },
+  });
+}
+
 export function useUpdateOrderStatus() {
   const { storeId, user } = useAuth();
   const queryClient = useQueryClient();

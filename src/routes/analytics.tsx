@@ -23,6 +23,21 @@ function AnalyticsPage() {
   const { t } = useLanguage();
   const { storeId } = useAuth();
   const { data: orders = [], isLoading } = useOrders();
+  const { data: returnEvents = [] } = useQuery({
+    queryKey: ["return_events", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("order_events")
+        .select("*")
+        .eq("store_id", storeId!)
+        .eq("type", "return")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
   const { data: stats } = useQuery({
     queryKey: ["dashboard_stats", storeId],
     enabled: !!storeId,
@@ -202,6 +217,25 @@ function AnalyticsPage() {
             </article>
           </section>
         )}
+
+        <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
+          <h2 className="font-headline text-title-lg text-on-surface">المرتجعات</h2>
+          <p className="font-body text-body-md text-on-surface-variant">عدد المرتجعات: {orders.filter((o) => o.status === "returned").length}</p>
+          {returnEvents.length === 0 ? (
+            <p className="mt-3 font-body text-body-md text-on-surface-variant">لا توجد مرتجعات</p>
+          ) : (
+            <ul className="mt-3 flex flex-col gap-gutter-sm">
+              {returnEvents.map((ev: any) => (
+                <li key={ev.id} className="rounded-md border border-outline-variant bg-surface p-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-body text-body-md text-on-surface">{ev.note}</span>
+                    <span className="font-body text-label-sm text-on-surface-variant">{new Date(ev.created_at).toLocaleString()}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
     </DashboardShell>
   );
