@@ -46,7 +46,8 @@ const emptyForm = {
 function OrdersPage() {
   const { t, lang } = useLanguage();
   const { storeId, user } = useAuth();
-  const { data: orders = [], isLoading } = useOrders();
+  const { data: ordersData, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useOrders();
+  const orders = ordersData?.pages.flat() ?? [];
   const saveOrder = useSaveOrder();
   const updateStatus = useUpdateOrderStatus();
   const recordReturn = useRecordReturn();
@@ -230,6 +231,7 @@ function OrdersPage() {
         ) : filtered.length === 0 ? (
           <EmptyState title={t.orders.emptyTitle} subtitle={t.orders.emptySub} />
         ) : (
+          <>
           <div className="w-full overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
             <table className="w-full border-collapse text-right">
               <thead className="border-b border-outline-variant bg-surface-container-low">
@@ -339,6 +341,19 @@ function OrdersPage() {
               </tbody>
             </table>
           </div>
+          {hasNextPage && (
+            <div className="flex justify-center">
+              <button
+                type="button"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="rounded-md bg-surface-container-low px-4 py-2 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container disabled:opacity-60"
+              >
+                {isFetchingNextPage ? "جارٍ التحميل..." : "تحميل المزيد"}
+              </button>
+            </div>
+          )}
+          </>
         )}
       </div>
 

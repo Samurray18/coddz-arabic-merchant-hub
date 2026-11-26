@@ -104,8 +104,10 @@ function PendingOrderCard({ order }: { order: Order }) {
 
 function WelcomeChecklist() {
   const { storeId } = useAuth();
-  const { data: products = [] } = useProducts();
-  const { data: orders = [] } = useOrders();
+  const { data: productsData } = useProducts();
+  const products = productsData?.pages.flat() ?? [];
+  const { data: ordersData } = useOrders();
+  const orders = ordersData?.pages.flat() ?? [];
   const { data: carriers = [] } = useQuery({
     queryKey: ["store_carriers", storeId],
     enabled: !!storeId,
@@ -211,8 +213,10 @@ function WelcomeChecklist() {
 
 function DashboardPage() {
   const { t } = useLanguage();
-  const { data: orders = [], isLoading } = useOrders();
-  const { data: products = [] } = useProducts();
+  const { data: ordersData, isLoading } = useOrders();
+  const orders = ordersData?.pages.flat() ?? [];
+  const { data: productsData } = useProducts();
+  const products = productsData?.pages.flat() ?? [];
 
   const revenue = orders.reduce((sum, order) => sum + order.amount, 0);
   const awaiting = orders.filter((order) => order.status === "new" || order.status === "confirmed").length;

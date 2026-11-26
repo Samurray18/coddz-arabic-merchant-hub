@@ -37,7 +37,8 @@ const STATUS_CLASS: Record<string, string> = {
 function ShipmentsPage() {
   const { storeId } = useAuth();
   const { data: shipments = [], isLoading } = useShipments();
-  const { data: orders = [] } = useOrders();
+  const { data: ordersData } = useOrders();
+  const orders = ordersData?.pages.flat() ?? [];
   const createShipment = useCreateShipment();
   const updateShipment = useUpdateShipment();
 

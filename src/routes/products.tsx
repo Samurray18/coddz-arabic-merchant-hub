@@ -34,7 +34,8 @@ const emptyForm = {
 
 function ProductsPage() {
   const { t } = useLanguage();
-  const { data: products = [], isLoading } = useProducts();
+  const { data: productsData, isLoading } = useProducts();
+  const products = productsData?.pages.flat() ?? [];
   const saveProduct = useSaveProduct();
   const deleteProduct = useDeleteProduct();
 

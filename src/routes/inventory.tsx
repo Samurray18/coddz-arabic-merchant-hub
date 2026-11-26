@@ -26,7 +26,8 @@ function statusFor(stock: number) {
 function InventoryPage() {
   const { t } = useLanguage();
   const { storeId } = useAuth();
-  const { data: products = [], isLoading: productsLoading } = useProducts();
+  const { data: productsData, isLoading: productsLoading } = useProducts();
+  const products = productsData?.pages.flat() ?? [];
   const { data: movements = [], isLoading: movementsLoading } = useStockMovements();
   const adjustStock = useAdjustStock();
 

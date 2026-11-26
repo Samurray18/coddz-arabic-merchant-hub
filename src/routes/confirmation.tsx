@@ -25,7 +25,8 @@ const CONFIRMATION_LABEL: Record<string, string> = {
 
 function ConfirmationPage() {
   const { t } = useLanguage();
-  const { data: orders = [], isLoading } = useOrders();
+  const { data: ordersData, isLoading } = useOrders();
+  const orders = ordersData?.pages.flat() ?? [];
   const updateStatus = useUpdateOrderStatus();
   const recordConfirmation = useRecordConfirmation();
 

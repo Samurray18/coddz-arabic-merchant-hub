@@ -1,9 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { rowToProduct, rowToOrder, productToPayload, orderToPayload, type Product, type Order } from "@/lib/domain";
 
 const ownOrderIds = new Set<string>();
+
+const PAGE_SIZE = 50;
 
 export function markOwnOrder(id: string) {
   ownOrderIds.add(id);
@@ -19,34 +21,46 @@ export function isOwnOrder(id: string) {
 
 export function useProducts() {
   const { storeId } = useAuth();
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["products", storeId],
     enabled: !!storeId,
-    queryFn: async (): Promise<Product[]> => {
+    initialPageParam: 0,
+    queryFn: async ({ pageParam }): Promise<Product[]> => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
         .eq("store_id", storeId!)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .range(pageParam as number, (pageParam as number) + PAGE_SIZE - 1);
       if (error) throw error;
       return (data ?? []).map((row) => rowToProduct(row as any));
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < PAGE_SIZE) return undefined;
+      return allPages.reduce((s, p) => s + p.length, 0);
     },
   });
 }
 
 export function useOrders() {
   const { storeId } = useAuth();
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["orders", storeId],
     enabled: !!storeId,
-    queryFn: async (): Promise<Order[]> => {
+    initialPageParam: 0,
+    queryFn: async ({ pageParam }): Promise<Order[]> => {
       const { data, error } = await supabase
         .from("orders")
         .select("*, order_items(name, quantity, price)")
         .eq("store_id", storeId!)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .range(pageParam as number, (pageParam as number) + PAGE_SIZE - 1);
       if (error) throw error;
       return (data ?? []).map((row) => rowToOrder(row as any));
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < PAGE_SIZE) return undefined;
+      return allPages.reduce((s, p) => s + p.length, 0);
     },
   });
 }

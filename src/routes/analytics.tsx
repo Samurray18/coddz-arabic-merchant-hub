@@ -22,7 +22,8 @@ const MONTHS_AR = ["جوان", "جويلية", "أوت", "سبتمبر", "أكت
 function AnalyticsPage() {
   const { t } = useLanguage();
   const { storeId } = useAuth();
-  const { data: orders = [], isLoading } = useOrders();
+  const { data: ordersData, isLoading } = useOrders();
+  const orders = ordersData?.pages.flat() ?? [];
   const { data: returnEvents = [] } = useQuery({
     queryKey: ["return_events", storeId],
     enabled: !!storeId,
