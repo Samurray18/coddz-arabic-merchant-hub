@@ -315,6 +315,52 @@ export function useUpdateShipment() {
   });
 }
 
+export function useStockMovements() {
+  const { storeId } = useAuth();
+  return useQuery({
+    queryKey: ["stock_movements", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("stock_movements")
+        .select("*")
+        .eq("store_id", storeId!)
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useAdjustStock() {
+  const { storeId, user } = useAuth();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { productId: string; delta: number; reason: string }) => {
+      if (!storeId) throw new Error("No store");
+      const { error } = await (supabase as any).rpc("adjust_stock", {
+        p_product_id: input.productId,
+        p_delta: input.delta,
+      });
+      if (error) throw error;
+      try {
+        await (supabase as any).from("stock_movements").insert({
+          store_id: storeId,
+          product_id: input.productId,
+          change: input.delta,
+          reason: input.reason || "adjustment",
+          created_by: user?.id ?? null,
+        });
+      } catch {}
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products", storeId] });
+      queryClient.invalidateQueries({ queryKey: ["stock_movements", storeId] });
+    },
+  });
+}
+
 export function useUpdateOrderStatus() {
   const { storeId, user } = useAuth();
   const queryClient = useQueryClient();
