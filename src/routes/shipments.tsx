@@ -35,6 +35,7 @@ const STATUS_CLASS: Record<string, string> = {
 };
 
 function ShipmentsPage() {
+  const { t } = useLanguage();
   const { storeId } = useAuth();
   const { data: shipments = [], isLoading } = useShipments();
   const { data: ordersData } = useOrders();
@@ -77,8 +78,8 @@ function ShipmentsPage() {
       <div className="flex flex-col gap-gutter-xl">
         <div className="flex items-center justify-between gap-gutter-md">
           <div>
-            <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">الشحنات</h1>
-            <p className="font-body text-body-md text-on-surface-variant">تتبع شحناتك وشركات التوصيل</p>
+            <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">{t.shipments.title}</h1>
+            <p className="font-body text-body-md text-on-surface-variant">{t.shipments.subtitle}</p>
           </div>
           <button
             type="button"
@@ -92,11 +93,11 @@ function ShipmentsPage() {
 
         {isLoading ? (
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-            جارٍ التحميل...
+            {t.common.loading}
           </div>
         ) : shipments.length === 0 ? (
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-            لا توجد شحنات
+            {t.shipments.noShipments}
           </div>
         ) : (
           <div className="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">

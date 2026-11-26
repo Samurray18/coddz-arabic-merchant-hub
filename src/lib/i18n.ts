@@ -161,6 +161,268 @@ export interface TranslationBundle {
     emptyTitle: string;
     emptySub: string;
   };
+  delivery: {
+    title: string;
+    subtitle: string;
+    avg: string;
+    connected: string;
+    ready: string;
+    noShipments: string;
+  };
+  shipments: {
+    title: string;
+    subtitle: string;
+    new: string;
+    order: string;
+    carrier: string;
+    tracking: string;
+    cod: string;
+    status: string;
+    actions: string;
+    create: string;
+    selectOrder: string;
+    trackingNumber: string;
+    codAmount: string;
+    createBtn: string;
+    cancel: string;
+    noShipments: string;
+    pending: string;
+    shipped: string;
+    inTransit: string;
+    delivered: string;
+    returned: string;
+    canceled: string;
+    ship: string;
+    deliver: string;
+    return: string;
+    chooseOrder: string;
+  };
+  expenses: {
+    title: string;
+    subtitle: string;
+    totalExpenses: string;
+    totalAds: string;
+    addExpense: string;
+    amount: string;
+    note: string;
+    add: string;
+    category: string;
+    date: string;
+    noExpenses: string;
+    addCampaign: string;
+    platform: string;
+    noCampaigns: string;
+  };
+  confirmation: {
+    title: string;
+    pendingCalls: string;
+    confirmedToday: string;
+    confirmRate: string;
+    noPending: string;
+    confirm: string;
+    postpone: string;
+    noAnswer: string;
+    refuse: string;
+    attempt: string;
+  };
+  analytics: {
+    title: string;
+    netRevenue: string;
+    deliveryRate: string;
+    returnRate: string;
+    avgOrder: string;
+    netProfit: string;
+    monthlySales: string;
+    last6Months: string;
+    topWilayas: string;
+    returns: string;
+    noData: string;
+  };
+  team: {
+    title: string;
+    totalMembers: string;
+    activeAgents: string;
+    pendingInvites: string;
+    invite: string;
+    all: string;
+    phone: string;
+    phoneConfirm: string;
+    shipping: string;
+    inviteSent: string;
+    inviteMember: string;
+    storeManager: string;
+    agent: string;
+    stockKeeper: string;
+    active: string;
+    pending: string;
+  };
+  settings: {
+    title: string;
+    subtitle: string;
+    storeIdentity: string;
+    verified: string;
+    saveChanges: string;
+    basicData: string;
+    storeName: string;
+    defaultWilaya: string;
+    supportPhone: string;
+    preferences: string;
+    autoConfirm: string;
+    autoConfirmHint: string;
+    smsOnDelivery: string;
+    smsOnDeliveryHint: string;
+    lowStockAlert: string;
+    lowStockAlertHint: string;
+    accountMgmt: string;
+    accountMgmtSub: string;
+    pauseStore: string;
+  };
+  inventory: {
+    title: string;
+    subtitle: string;
+    totalProducts: string;
+    lowStock: string;
+    stockValue: string;
+    searchPlaceholder: string;
+    all: string;
+    low: string;
+    out: string;
+    addProduct: string;
+    sku: string;
+    product: string;
+    category: string;
+    available: string;
+    price: string;
+    status: string;
+    actions: string;
+    inStock: string;
+    lowStockLabel: string;
+    outOfStock: string;
+    products: string;
+    movements: string;
+    noProducts: string;
+    noMovements: string;
+    adjustStock: string;
+    change: string;
+    reason: string;
+    time: string;
+    adjustTitle: string;
+    invalidQty: string;
+    stockAdjusted: string;
+    error: string;
+  };
+  integrations: {
+    title: string;
+    subtitle: string;
+    notAuthorized: string;
+    notAuthorizedSub: string;
+    api: string;
+    shopify: string;
+    woocommerce: string;
+    logs: string;
+    intakeLogs: string;
+    endpoint: string;
+    copy: string;
+    apiKeys: string;
+    createKey: string;
+    name: string;
+    prefix: string;
+    created: string;
+    lastUsed: string;
+    status: string;
+    actions: string;
+    revoked: string;
+    active: string;
+    revoke: string;
+    noKeys: string;
+    keyName: string;
+    keyNameRequired: string;
+    keyCreated: string;
+    keyWarning: string;
+    close: string;
+    create: string;
+    cancel: string;
+    error: string;
+    docs: string;
+    docsIntro: string;
+    fields: string;
+    field: string;
+    type: string;
+    required: string;
+    description: string;
+    yes: string;
+    no: string;
+    customerName: string;
+    phone: string;
+    phoneDesc: string;
+    wilaya: string;
+    wilayaDesc: string;
+    commune: string;
+    address: string;
+    deliveryType: string;
+    deliveryPrice: string;
+    notes: string;
+    items: string;
+    externalId: string;
+    webhookUrl: string;
+    state: string;
+    activeStatus: string;
+    paused: string;
+    signingSecret: string;
+    pasteSecret: string;
+    saveSecret: string;
+    secretSaved: string;
+    secretRequired: string;
+    setupSteps: string;
+    step1Shopify: string;
+    step2Shopify: string;
+    step3Shopify: string;
+    step4Shopify: string;
+    step1Woo: string;
+    step2Woo: string;
+    step3Woo: string;
+    step4Woo: string;
+    noLogs: string;
+    source: string;
+    logStatus: string;
+    logError: string;
+    logTime: string;
+    details: string;
+    payload: string;
+    accepted: string;
+    rejected: string;
+    duplicate: string;
+  };
+  onboarding: {
+    title: string;
+    storeInfo: string;
+    storeName: string;
+    storeNameRequired: string;
+    selectWilaya: string;
+    searchWilaya: string;
+    deliveryCompanies: string;
+    optional: string;
+    saveError: string;
+    phone: string;
+    invalidPhone: string;
+    businessType: string;
+    selectBusinessType: string;
+    salesChannels: string;
+    monthlyOrders: string;
+    selectMonthlyOrders: string;
+    team: string;
+    solo: string;
+    withTeam: string;
+    agentsCount: string;
+    logo: string;
+    chooseImage: string;
+    defaultDelivery: string;
+    homeDelivery: string;
+    deskDelivery: string;
+    preparing: string;
+    preparingSub: string;
+    steps: string[];
+  };
   auth: {
     signInTitle: string;
     signUpTitle: string;
@@ -354,6 +616,268 @@ const ar: TranslationBundle = {
     cancel: "إلغاء",
     emptyTitle: "لا توجد منتجات بعد",
     emptySub: "أضف منتجك الأول لتبدأ استقبال طلبات الدفع عند الاستلام.",
+  },
+  delivery: {
+    title: "التوصيل",
+    subtitle: "أداء التسليم حسب شركة التوصيل",
+    avg: "متوسط",
+    connected: "متصل",
+    ready: "جاهز للربط",
+    noShipments: "لا توجد شحنات",
+  },
+  shipments: {
+    title: "الشحنات",
+    subtitle: "تتبع شحناتك وشركات التوصيل",
+    new: "شحنة جديدة",
+    order: "الطلب",
+    carrier: "الناقل",
+    tracking: "رقم التتبع",
+    cod: "COD",
+    status: "الحالة",
+    actions: "إجراءات",
+    create: "إنشاء",
+    selectOrder: "اختر طلبًا",
+    trackingNumber: "رقم التتبع",
+    codAmount: "مبلغ COD",
+    createBtn: "إنشاء",
+    cancel: "إلغاء",
+    noShipments: "لا توجد شحنات",
+    pending: "قيد الانتظار",
+    shipped: "تم الشحن",
+    inTransit: "قيد التوصيل",
+    delivered: "تم التسليم",
+    returned: "مرتجع",
+    canceled: "ملغى",
+    ship: "شحن",
+    deliver: "تسليم",
+    return: "إرجاع",
+    chooseOrder: "اختر طلبًا",
+  },
+  expenses: {
+    title: "المصاريف والحملات",
+    subtitle: "تتبع المصاريف وإعلاناتك",
+    totalExpenses: "إجمالي المصاريف",
+    totalAds: "إجمالي الإعلانات",
+    addExpense: "إضافة مصروف",
+    amount: "المبلغ",
+    note: "ملاحظة",
+    add: "إضافة",
+    category: "التصنيف",
+    date: "التاريخ",
+    noExpenses: "لا توجد مصاريف",
+    addCampaign: "إضافة حملة إعلانية",
+    platform: "المنصة",
+    noCampaigns: "لا توجد حملات",
+  },
+  confirmation: {
+    title: "التأكيد",
+    pendingCalls: "بانتظار الاتصال",
+    confirmedToday: "مؤكدة اليوم",
+    confirmRate: "معدل التأكيد",
+    noPending: "لا توجد طلبات بانتظار التأكيد",
+    confirm: "تأكيد الطلب",
+    postpone: "تأجيل",
+    noAnswer: "لا يرد",
+    refuse: "إلغاء",
+    attempt: "المحاولة",
+  },
+  analytics: {
+    title: "الإحصائيات",
+    netRevenue: "صافي المداخيل (الشهر)",
+    deliveryRate: "نسبة التسليم الناجح",
+    returnRate: "نسبة المرتجعات",
+    avgOrder: "متوسط قيمة الطلب",
+    netProfit: "صافي الربح",
+    monthlySales: "تطور المبيعات الشهرية",
+    last6Months: "آخر 6 أشهر",
+    topWilayas: "أعلى الولايات طلبًا",
+    returns: "المرتجعات",
+    noData: "لا توجد بيانات",
+  },
+  team: {
+    title: "الفريق",
+    totalMembers: "إجمالي الأعضاء",
+    activeAgents: "فريق التأكيد النشط",
+    pendingInvites: "دعوات معلقة",
+    invite: "دعوة عضو جديد",
+    all: "الكل",
+    phone: "التأكيد الهاتفي",
+    phoneConfirm: "التأكيد الهاتفي",
+    shipping: "تجهيز الشحنات",
+    inviteSent: "سيتم إرسال دعوة بالبريد الإلكتروني.",
+    inviteMember: "دعوة عضو جديد",
+    storeManager: "مدير المتجر",
+    agent: "تأكيد الطلبات",
+    stockKeeper: "تجهيز الشحنات",
+    active: "نشط",
+    pending: "دعوة معلقة",
+  },
+  settings: {
+    title: "الإعدادات",
+    subtitle: "تخصيص بيانات متجرك وتفضيلات التأكيد والشحن",
+    storeIdentity: "متجرك",
+    verified: "حساب موثق",
+    saveChanges: "حفظ التغييرات",
+    basicData: "البيانات الأساسية",
+    storeName: "اسم المتجر",
+    defaultWilaya: "ولاية الانطلاق الافتراضية",
+    supportPhone: "رقم هاتف الدعم",
+    preferences: "تفضيلات التأكيد والتوصيل",
+    autoConfirm: "تأكيد تلقائي للعملاء الموثوقين",
+    autoConfirmHint: "تجاوز الاتصال الهاتفي للعملاء بنسبة استلام 100%",
+    smsOnDelivery: "إشعار SMS عند تسليم الطرد للناقل",
+    smsOnDeliveryHint: "إرسال رقم التتبع تلقائيًا عبر الرسائل القصيرة",
+    lowStockAlert: "تنبيه انخفاض المخزون",
+    lowStockAlertHint: "إرسال إشعار عند وصول الكمية إلى أقل من 10 قطع",
+    accountMgmt: "إدارة الحساب والبيانات",
+    accountMgmtSub: "تعطيل استقبال الطلبات مؤقتًا أو إغلاق المتجر",
+    pauseStore: "إيقاف المتجر مؤقتًا",
+  },
+  inventory: {
+    title: "المخزون",
+    subtitle: "أدر المخزون والحركات",
+    totalProducts: "إجمالي المنتجات",
+    lowStock: "مخزون منخفض",
+    stockValue: "قيمة المخزون الحالية",
+    searchPlaceholder: "ابحث باسم المنتج أو رمز SKU...",
+    all: "الكل",
+    low: "منخفض",
+    out: "نفذت الكمية",
+    addProduct: "إضافة منتج",
+    sku: "رمز SKU",
+    product: "المنتج",
+    category: "التصنيف",
+    available: "المتوفر",
+    price: "سعر البيع",
+    status: "الحالة",
+    actions: "إجراءات",
+    inStock: "متوفر",
+    lowStockLabel: "مخزون منخفض",
+    outOfStock: "نفذت الكمية",
+    products: "المنتجات",
+    movements: "الحركات",
+    noProducts: "لا توجد منتجات",
+    noMovements: "لا توجد حركات",
+    adjustStock: "تعديل المخزون",
+    change: "التغيير",
+    reason: "السبب",
+    time: "الوقت",
+    adjustTitle: "تعديل المخزون",
+    invalidQty: "أدخل كمية صحيحة",
+    stockAdjusted: "تم تعديل المخزون",
+    error: "خطأ",
+  },
+  integrations: {
+    title: "الربط",
+    subtitle: "ربط المتجر بقنوات البيع وAPI",
+    notAuthorized: "غير مصرح",
+    notAuthorizedSub: "هذه الصفحة للمدراء فقط",
+    api: "API",
+    shopify: "Shopify",
+    woocommerce: "WooCommerce",
+    logs: "السجلات",
+    endpoint: "نقطة النهاية (Endpoint)",
+    copy: "نسخ",
+    apiKeys: "مفاتيح API",
+    createKey: "إنشاء مفتاح",
+    name: "الاسم",
+    prefix: "البادئة",
+    created: "الإنشاء",
+    lastUsed: "آخر استخدام",
+    status: "الحالة",
+    actions: "إجراءات",
+    revoked: "ملغى",
+    active: "نشط",
+    revoke: "إلغاء",
+    noKeys: "لا توجد مفاتيح",
+    keyName: "اسم المفتاح",
+    keyNameRequired: "اسم المفتاح مطلوب",
+    keyCreated: "تم إنشاء المفتاح",
+    keyWarning: "انسخ هذا المفتاح الآن. لن يتم عرضه مرة أخرى.",
+    close: "إغلاق",
+    create: "إنشاء",
+    cancel: "إلغاء",
+    error: "خطأ",
+    docs: "التوثيق",
+    docsIntro: "أرسل POST إلى نقطة النهاية مع رأس x-api-key.",
+    fields: "الحقول",
+    field: "الحقل",
+    type: "النوع",
+    required: "مطلوب",
+    description: "الوصف",
+    yes: "نعم",
+    no: "لا",
+    customerName: "اسم الزبون",
+    phone: "رقم هاتف جزائري",
+    phoneDesc: "رقم هاتف جزائري",
+    wilaya: "اسم أو رمز الولاية",
+    wilayaDesc: "اسم أو رمز الولاية",
+    commune: "البلدية",
+    address: "العنوان",
+    deliveryType: "نوع التوصيل (افتراضي home)",
+    deliveryPrice: "سعر التوصيل",
+    notes: "ملاحظات",
+    items: "المنتجات",
+    externalId: "معرّف خارجي",
+    webhookUrl: "عنوان الـ Webhook",
+    state: "الحالة",
+    activeStatus: "نشط",
+    paused: "متوقف",
+    signingSecret: "سر التوقيع (Signing secret)",
+    pasteSecret: "الصق السر هنا",
+    saveSecret: "حفظ السر",
+    secretSaved: "تم حفظ السر",
+    secretRequired: "السر مطلوب",
+    setupSteps: "خطوات الإعداد",
+    step1Shopify: "في Shopify، اذهب إلى Settings → Notifications → Webhooks.",
+    step2Shopify: "أنشئ webhook جديدًا: Event = Order creation.",
+    step3Shopify: "Format = JSON، URL = عنوان الـ webhook أعلاه.",
+    step4Shopify: "انسخ signing secret والصقه هنا، ثم فعّل التكامل.",
+    step1Woo: "في WooCommerce، اذهب إلى Settings → Advanced → Webhooks.",
+    step2Woo: "أضف webhook جديدًا: Topic = Order created.",
+    step3Woo: "Delivery URL = عنوان الـ webhook أعلاه.",
+    step4Woo: "Secret = أي نص، انسخه والصقه هنا، ثم فعّل التكامل.",
+    intakeLogs: "سجلات الاستقبال",
+    noLogs: "لا توجد سجلات",
+    source: "المصدر",
+    logStatus: "الحالة",
+    logError: "الخطأ",
+    logTime: "الوقت",
+    details: "التفاصيل",
+    payload: "الحمولة (Payload)",
+    accepted: "مقبول",
+    rejected: "مرفوض",
+    duplicate: "مكرر",
+  },
+  onboarding: {
+    title: "إعداد متجرك",
+    storeInfo: "معلومات متجرك",
+    storeName: "اسم المتجر",
+    storeNameRequired: "اسم المتجر مطلوب",
+    selectWilaya: "يرجى اختيار الولاية",
+    searchWilaya: "ابحث عن ولاية...",
+    deliveryCompanies: "شركات التوصيل (اختياري)",
+    optional: "اختياري",
+    saveError: "خطأ في حفظ شركات التوصيل",
+    phone: "رقم الهاتف (WhatsApp)",
+    invalidPhone: "رقم هاتف غير صالح",
+    businessType: "نوع النشاط",
+    selectBusinessType: "يرجى اختيار نوع النشاط",
+    salesChannels: "قنوات البيع (اختيار متعدد)",
+    monthlyOrders: "عدد الطلبات شهريًا",
+    selectMonthlyOrders: "يرجى اختيار حجم الطلبات",
+    team: "فريق العمل",
+    solo: "أنا فقط",
+    withTeam: "مع فريق",
+    agentsCount: "عدد الموظفين",
+    logo: "شعار المتجر (اختياري)",
+    chooseImage: "اختر صورة",
+    defaultDelivery: "نوع التوصيل الافتراضي",
+    homeDelivery: "توصيل للمنزل",
+    deskDelivery: "توصيل للمكتب",
+    preparing: "جارٍ إعداد مساحة عملك",
+    preparingSub: "يرجى الانتظار قليلاً...",
+    steps: ["إعداد متجرك", "تجهيز المنتجات", "ربط التوصيل", "تخصيص لوحة التحكم"],
   },
   auth: {
     signInTitle: "تسجيل الدخول إلى متجرك",
@@ -549,6 +1073,16 @@ const fr: TranslationBundle = {
     emptyTitle: "Aucun produit pour le moment",
     emptySub: "Ajoutez votre premier produit pour démarrer votre catalogue.",
   },
+  delivery: { title: "Livraison", subtitle: "Performance par transporteur", avg: "Moyenne", connected: "Connecté", ready: "Prêt", noShipments: "Aucune expédition" },
+  shipments: { title: "Expéditions", subtitle: "Suivez vos expéditions", new: "Nouvelle", order: "Commande", carrier: "Transporteur", tracking: "Suivi", cod: "COD", status: "Statut", actions: "Actions", create: "Créer", selectOrder: "Choisir", trackingNumber: "N° de suivi", codAmount: "Montant COD", createBtn: "Créer", cancel: "Annuler", noShipments: "Aucune", pending: "En attente", shipped: "Expédié", inTransit: "En transit", delivered: "Livré", returned: "Retourné", canceled: "Annulé", ship: "Expédier", deliver: "Livrer", return: "Retourner", chooseOrder: "Choisir" },
+  expenses: { title: "Dépenses et campagnes", subtitle: "Suivez vos dépenses", totalExpenses: "Total dépenses", totalAds: "Total pubs", addExpense: "Ajouter dépense", amount: "Montant", note: "Note", add: "Ajouter", category: "Catégorie", date: "Date", noExpenses: "Aucune", addCampaign: "Ajouter campagne", platform: "Plateforme", noCampaigns: "Aucune" },
+  confirmation: { title: "Confirmation", pendingCalls: "En attente", confirmedToday: "Confirmées", confirmRate: "Taux", noPending: "Aucune en attente", confirm: "Confirmer", postpone: "Reporter", noAnswer: "Pas de réponse", refuse: "Refuser", attempt: "Tentative" },
+  analytics: { title: "Statistiques", netRevenue: "Revenus nets", deliveryRate: "Taux livraison", returnRate: "Taux retour", avgOrder: "Panier moyen", netProfit: "Bénéfice net", monthlySales: "Ventes mensuelles", last6Months: "6 mois", topWilayas: "Top wilayas", returns: "Retours", noData: "Aucune donnée" },
+  team: { title: "Équipe", totalMembers: "Membres", activeAgents: "Agents actifs", pendingInvites: "Invitations", invite: "Inviter", all: "Tous", phone: "Téléphone", phoneConfirm: "Confirmation", shipping: "Préparation", inviteSent: "Invitation envoyée.", inviteMember: "Inviter", storeManager: "Gérant", agent: "Agent", stockKeeper: "Stock", active: "Actif", pending: "En attente" },
+  settings: { title: "Paramètres", subtitle: "Personnalisez", storeIdentity: "Boutique", verified: "Vérifié", saveChanges: "Enregistrer", basicData: "Données", storeName: "Nom", defaultWilaya: "Wilaya", supportPhone: "Téléphone", preferences: "Préférences", autoConfirm: "Confirmation auto", autoConfirmHint: "Ignorer l'appel", smsOnDelivery: "SMS livraison", smsOnDeliveryHint: "Envoyer le suivi", lowStockAlert: "Alerte stock", lowStockAlertHint: "Notifier", accountMgmt: "Compte", accountMgmtSub: "Désactiver", pauseStore: "Mettre en pause" },
+  inventory: { title: "Stock", subtitle: "Gérez le stock", totalProducts: "Produits", lowStock: "Stock faible", stockValue: "Valeur", searchPlaceholder: "Rechercher...", all: "Tous", low: "Faible", out: "Rupture", addProduct: "Ajouter", sku: "SKU", product: "Produit", category: "Catégorie", available: "Disponible", price: "Prix", status: "Statut", actions: "Actions", inStock: "En stock", lowStockLabel: "Stock faible", outOfStock: "Rupture", products: "Produits", movements: "Mouvements", noProducts: "Aucun", noMovements: "Aucun", adjustStock: "Ajuster", change: "Changement", reason: "Raison", time: "Heure", adjustTitle: "Ajuster", invalidQty: "Quantité invalide", stockAdjusted: "Ajusté", error: "Erreur" },
+  integrations: { title: "Intégrations", subtitle: "Connectez", notAuthorized: "Non autorisé", notAuthorizedSub: "Réservé", api: "API", shopify: "Shopify", woocommerce: "WooCommerce", logs: "Logs", endpoint: "Endpoint", copy: "Copier", apiKeys: "Clés", createKey: "Créer", name: "Nom", prefix: "Préfixe", created: "Créé", lastUsed: "Dernière utilisation", status: "Statut", actions: "Actions", revoked: "Révoquée", active: "Actif", revoke: "Révoquer", noKeys: "Aucune", keyName: "Nom", keyNameRequired: "Nom requis", keyCreated: "Créée", keyWarning: "Copiez maintenant", close: "Fermer", create: "Créer", cancel: "Annuler", error: "Erreur", docs: "Docs", docsIntro: "POST avec x-api-key", fields: "Champs", field: "Champ", type: "Type", required: "Requis", description: "Description", yes: "Oui", no: "Non", customerName: "Client", phone: "Tél algérien", phoneDesc: "Tél algérien", wilaya: "Wilaya", wilayaDesc: "Wilaya", commune: "Commune", address: "Adresse", deliveryType: "Type livraison", deliveryPrice: "Frais", notes: "Notes", items: "Produits", externalId: "ID externe", webhookUrl: "URL webhook", state: "Statut", activeStatus: "Actif", paused: "Pause", signingSecret: "Secret", pasteSecret: "Collez", saveSecret: "Enregistrer", secretSaved: "Enregistré", secretRequired: "Secret requis", setupSteps: "Étapes", step1Shopify: "Shopify settings", step2Shopify: "Créer webhook", step3Shopify: "Format JSON", step4Shopify: "Copier secret", step1Woo: "Woo settings", step2Woo: "Ajouter webhook", step3Woo: "Delivery URL", step4Woo: "Secret", intakeLogs: "Logs", noLogs: "Aucun", source: "Source", logStatus: "Statut", logError: "Erreur", logTime: "Heure", details: "Détails", payload: "Payload", accepted: "Accepté", rejected: "Rejeté", duplicate: "Doublon" },
+  onboarding: { title: "Configuration", storeInfo: "Infos boutique", storeName: "Nom", storeNameRequired: "Nom requis", selectWilaya: "Choisir wilaya", searchWilaya: "Rechercher...", deliveryCompanies: "Transporteurs", optional: "Optionnel", saveError: "Erreur", phone: "Téléphone", invalidPhone: "Invalide", businessType: "Type", selectBusinessType: "Choisir", salesChannels: "Canaux", monthlyOrders: "Commandes/mois", selectMonthlyOrders: "Choisir", team: "Équipe", solo: "Seul", withTeam: "Avec équipe", agentsCount: "Agents", logo: "Logo", chooseImage: "Choisir", defaultDelivery: "Livraison par défaut", homeDelivery: "Domicile", deskDelivery: "Bureau", preparing: "Préparation", preparingSub: "Patientez...", steps: ["Préparation", "Produits", "Livraison", "Tableau"] },
   auth: {
     signInTitle: "Connexion à votre boutique",
     signUpTitle: "Créer un compte marchand",
@@ -743,6 +1277,16 @@ const en: TranslationBundle = {
     emptyTitle: "No products yet",
     emptySub: "Add your first product to start taking COD orders.",
   },
+  delivery: { title: "Delivery", subtitle: "Delivery performance by carrier", avg: "Average", connected: "Connected", ready: "Ready", noShipments: "No shipments" },
+  shipments: { title: "Shipments", subtitle: "Track your shipments and carriers", new: "New shipment", order: "Order", carrier: "Carrier", tracking: "Tracking", cod: "COD", status: "Status", actions: "Actions", create: "Create", selectOrder: "Select order", trackingNumber: "Tracking number", codAmount: "COD amount", createBtn: "Create", cancel: "Cancel", noShipments: "No shipments", pending: "Pending", shipped: "Shipped", inTransit: "In transit", delivered: "Delivered", returned: "Returned", canceled: "Canceled", ship: "Ship", deliver: "Deliver", return: "Return", chooseOrder: "Choose order" },
+  expenses: { title: "Expenses & campaigns", subtitle: "Track your expenses and ads", totalExpenses: "Total expenses", totalAds: "Total ads", addExpense: "Add expense", amount: "Amount", note: "Note", add: "Add", category: "Category", date: "Date", noExpenses: "No expenses", addCampaign: "Add campaign", platform: "Platform", noCampaigns: "No campaigns" },
+  confirmation: { title: "Confirmation", pendingCalls: "Pending calls", confirmedToday: "Confirmed today", confirmRate: "Confirmation rate", noPending: "No pending orders", confirm: "Confirm", postpone: "Postpone", noAnswer: "No answer", refuse: "Refuse", attempt: "Attempt" },
+  analytics: { title: "Analytics", netRevenue: "Net revenue (month)", deliveryRate: "Delivery rate", returnRate: "Return rate", avgOrder: "Avg order value", netProfit: "Net profit", monthlySales: "Monthly sales", last6Months: "Last 6 months", topWilayas: "Top wilayas", returns: "Returns", noData: "No data" },
+  team: { title: "Team", totalMembers: "Total members", activeAgents: "Active agents", pendingInvites: "Pending invites", invite: "Invite member", all: "All", phone: "Phone", phoneConfirm: "Phone confirmation", shipping: "Shipping prep", inviteSent: "An invitation will be sent by email.", inviteMember: "Invite member", storeManager: "Store manager", agent: "Agent", stockKeeper: "Stock keeper", active: "Active", pending: "Pending" },
+  settings: { title: "Settings", subtitle: "Customize your store", storeIdentity: "Your store", verified: "Verified", saveChanges: "Save changes", basicData: "Basic data", storeName: "Store name", defaultWilaya: "Default wilaya", supportPhone: "Support phone", preferences: "Confirmation & delivery preferences", autoConfirm: "Auto-confirm trusted customers", autoConfirmHint: "Skip call for 100% delivery customers", smsOnDelivery: "SMS on delivery", smsOnDeliveryHint: "Send tracking via SMS", lowStockAlert: "Low stock alert", lowStockAlertHint: "Notify under 10 units", accountMgmt: "Account management", accountMgmtSub: "Temporarily disable or close", pauseStore: "Pause store" },
+  inventory: { title: "Inventory", subtitle: "Manage stock and movements", totalProducts: "Total products", lowStock: "Low stock", stockValue: "Stock value", searchPlaceholder: "Search by name or SKU...", all: "All", low: "Low", out: "Out of stock", addProduct: "Add product", sku: "SKU", product: "Product", category: "Category", available: "Available", price: "Selling price", status: "Status", actions: "Actions", inStock: "In stock", lowStockLabel: "Low stock", outOfStock: "Out of stock", products: "Products", movements: "Movements", noProducts: "No products", noMovements: "No movements", adjustStock: "Adjust stock", change: "Change", reason: "Reason", time: "Time", adjustTitle: "Adjust stock", invalidQty: "Invalid quantity", stockAdjusted: "Stock adjusted", error: "Error" },
+  integrations: { title: "Integrations", subtitle: "Connect your store to sales channels", notAuthorized: "Not authorized", notAuthorizedSub: "Managers only", api: "API", shopify: "Shopify", woocommerce: "WooCommerce", logs: "Logs", endpoint: "Endpoint", copy: "Copy", apiKeys: "API keys", createKey: "Create key", name: "Name", prefix: "Prefix", created: "Created", lastUsed: "Last used", status: "Status", actions: "Actions", revoked: "Revoked", active: "Active", revoke: "Revoke", noKeys: "No keys", keyName: "Key name", keyNameRequired: "Name required", keyCreated: "Key created", keyWarning: "Copy this key now. It won't be shown again.", close: "Close", create: "Create", cancel: "Cancel", error: "Error", docs: "Docs", docsIntro: "POST to endpoint with x-api-key header.", fields: "Fields", field: "Field", type: "Type", required: "Required", description: "Description", yes: "Yes", no: "No", customerName: "Customer name", phone: "Algerian phone", phoneDesc: "Algerian phone", wilaya: "Wilaya (name or code)", wilayaDesc: "Wilaya (name or code)", commune: "Commune", address: "Address", deliveryType: "Delivery type (default home)", deliveryPrice: "Delivery price", notes: "Notes", items: "Items", externalId: "External ID", webhookUrl: "Webhook URL", state: "Status", activeStatus: "Active", paused: "Paused", signingSecret: "Signing secret", pasteSecret: "Paste secret here", saveSecret: "Save secret", secretSaved: "Secret saved", secretRequired: "Secret required", setupSteps: "Setup steps", step1Shopify: "In Shopify, go to Settings → Notifications → Webhooks.", step2Shopify: "Create webhook: Event = Order creation.", step3Shopify: "Format = JSON, URL = webhook URL above.", step4Shopify: "Copy signing secret and paste here, then activate.", step1Woo: "In WooCommerce, go to Settings → Advanced → Webhooks.", step2Woo: "Add webhook: Topic = Order created.", step3Woo: "Delivery URL = webhook URL above.", step4Woo: "Secret = any text, copy here and activate.", intakeLogs: "Intake logs", noLogs: "No logs", source: "Source", logStatus: "Status", logError: "Error", logTime: "Time", details: "Details", payload: "Payload", accepted: "Accepted", rejected: "Rejected", duplicate: "Duplicate" },
+  onboarding: { title: "Onboarding", storeInfo: "Store info", storeName: "Store name", storeNameRequired: "Name required", selectWilaya: "Select wilaya", searchWilaya: "Search wilaya...", deliveryCompanies: "Carriers (optional)", optional: "Optional", saveError: "Save error", phone: "Phone (WhatsApp)", invalidPhone: "Invalid phone", businessType: "Business type", selectBusinessType: "Select type", salesChannels: "Sales channels (multi)", monthlyOrders: "Monthly orders", selectMonthlyOrders: "Select range", team: "Team", solo: "Solo", withTeam: "With team", agentsCount: "Agents count", logo: "Logo (optional)", chooseImage: "Choose image", defaultDelivery: "Default delivery", homeDelivery: "Home", deskDelivery: "Desk", preparing: "Preparing your workspace", preparingSub: "Please wait...", steps: ["Prepare", "Products", "Delivery", "Dashboard"] },
   auth: {
     signInTitle: "Sign in to your store",
     signUpTitle: "Create a free merchant account",
