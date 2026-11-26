@@ -17,6 +17,7 @@ export interface TranslationBundle {
     home: string;
     confirmation: string;
     delivery: string;
+    shipments: string;
     inventory: string;
     analytics: string;
     team: string;
@@ -176,6 +177,7 @@ const ar: TranslationBundle = {
     home: "الرئيسية",
     confirmation: "التأكيد",
     delivery: "التوصيل",
+    shipments: "الشحنات",
     inventory: "المخزون",
     analytics: "الإحصائيات",
     team: "الفريق",
@@ -342,6 +344,7 @@ const fr: TranslationBundle = {
     home: "Accueil",
     confirmation: "Confirmation",
     delivery: "Livraison",
+    shipments: "Expéditions",
     inventory: "Stock",
     analytics: "Statistiques",
     team: "Équipe",
@@ -508,6 +511,7 @@ const en: TranslationBundle = {
     home: "Home",
     confirmation: "Confirmation",
     delivery: "Delivery",
+    shipments: "Shipments",
     inventory: "Inventory",
     analytics: "Analytics",
     team: "Team",

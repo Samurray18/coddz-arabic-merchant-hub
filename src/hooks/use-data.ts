@@ -239,6 +239,82 @@ export function useRecordConfirmation() {
   });
 }
 
+export function useShipments() {
+  const { storeId } = useAuth();
+  return useQuery({
+    queryKey: ["shipments", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("shipments")
+        .select("*")
+        .eq("store_id", storeId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useCreateShipment() {
+  const { storeId, user } = useAuth();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: {
+      orderId: string;
+      carrier: string;
+      trackingNumber?: string;
+      codAmount?: number;
+    }) => {
+      if (!storeId) throw new Error("No store");
+      const { data, error } = await (supabase as any)
+        .from("shipments")
+        .insert({
+          store_id: storeId,
+          order_id: input.orderId,
+          carrier: input.carrier,
+          tracking_number: input.trackingNumber || null,
+          cod_amount: input.codAmount ?? 0,
+          status: "pending",
+        })
+        .select("*")
+        .single();
+      if (error) throw error;
+      // update order carrier/status to shipped? keep status change separate
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shipments", storeId] });
+    },
+  });
+}
+
+export function useUpdateShipment() {
+  const { storeId } = useAuth();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { id: string; status?: string; tracking_number?: string; collected?: boolean }) => {
+      if (!storeId) throw new Error("No store");
+      const patch: any = {};
+      if (input.status) patch.status = input.status;
+      if (input.tracking_number !== undefined) patch.tracking_number = input.tracking_number;
+      if (input.collected !== undefined) {
+        patch.collected = input.collected;
+        if (input.collected) patch.collected_at = new Date().toISOString();
+      }
+      const { error } = await (supabase as any)
+        .from("shipments")
+        .update(patch)
+        .eq("id", input.id)
+        .eq("store_id", storeId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shipments", storeId] });
+    },
+  });
+}
+
 export function useUpdateOrderStatus() {
   const { storeId, user } = useAuth();
   const queryClient = useQueryClient();

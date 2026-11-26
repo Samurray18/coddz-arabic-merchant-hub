@@ -36,6 +36,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     const invalidate = () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
       queryClient.invalidateQueries({ queryKey: ["products", storeId] });
+      queryClient.invalidateQueries({ queryKey: ["shipments", storeId] });
     };
 
     const channel = supabase.channel(`store-${storeId}`);
@@ -71,6 +72,14 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       channel.on(
         "postgres_changes",
         { event, schema: "public", table: "products", filter: `store_id=eq.${storeId}` },
+        invalidate,
+      );
+    }
+
+    for (const event of ["INSERT", "UPDATE", "DELETE"] as const) {
+      channel.on(
+        "postgres_changes",
+        { event, schema: "public", table: "shipments", filter: `store_id=eq.${storeId}` },
         invalidate,
       );
     }

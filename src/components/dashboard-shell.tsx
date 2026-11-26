@@ -11,6 +11,7 @@ const NAV = [
   { to: "/products", icon: "inventory_2", labelKey: "products", mobile: true },
   { to: "/confirmation", icon: "task_alt", labelKey: "confirmation", soon: true, mobile: true },
   { to: "/delivery", icon: "monitoring", labelKey: "delivery", soon: true },
+  { to: "/shipments", icon: "local_shipping", labelKey: "shipments" },
   { to: "/inventory", icon: "inventory_2", labelKey: "inventory", soon: true },
   { to: "/analytics", icon: "analytics", labelKey: "analytics", soon: true },
   { to: "/team", icon: "group", labelKey: "team", soon: true },

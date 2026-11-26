@@ -23,6 +23,7 @@ import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -97,6 +98,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShipmentsRoute = ShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/shipments': typeof ShipmentsRoute
   '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/shipments': typeof ShipmentsRoute
   '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
+  '/shipments': typeof ShipmentsRoute
   '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/reset-password'
     | '/settings'
+    | '/shipments'
     | '/signup'
     | '/team'
     | '/auth/callback'
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/reset-password'
     | '/settings'
+    | '/shipments'
     | '/signup'
     | '/team'
     | '/auth/callback'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/products'
     | '/reset-password'
     | '/settings'
+    | '/shipments'
     | '/signup'
     | '/team'
     | '/auth/callback'
@@ -246,6 +258,7 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
+  ShipmentsRoute: typeof ShipmentsRoute
   SignupRoute: typeof SignupRoute
   TeamRoute: typeof TeamRoute
 }
@@ -350,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shipments': {
+      id: '/shipments'
+      path: '/shipments'
+      fullPath: '/shipments'
+      preLoaderRoute: typeof ShipmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -399,6 +419,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
+  ShipmentsRoute: ShipmentsRoute,
   SignupRoute: SignupRoute,
   TeamRoute: TeamRoute,
 }
