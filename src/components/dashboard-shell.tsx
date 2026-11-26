@@ -8,6 +8,7 @@ import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
 const NAV = [
   { to: "/dashboard", icon: "dashboard", labelKey: "home", mobile: true },
   { to: "/orders", icon: "receipt_long", labelKey: "orders", mobile: true },
+  { to: "/customers", icon: "group", labelKey: "customers" },
   { to: "/products", icon: "inventory_2", labelKey: "products", mobile: true },
   { to: "/confirmation", icon: "task_alt", labelKey: "confirmation", soon: true, mobile: true },
   { to: "/delivery", icon: "monitoring", labelKey: "delivery", soon: true },

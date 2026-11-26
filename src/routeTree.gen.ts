@@ -14,6 +14,7 @@ import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConfirmationRouteImport } from './routes/confirmation'
+import { Route as CustomersRouteImport } from './routes/customers'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as ExpensesRouteImport } from './routes/expenses'
@@ -52,6 +53,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const ConfirmationRoute = ConfirmationRouteImport.update({
   id: '/confirmation',
   path: '/confirmation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/confirmation': typeof ConfirmationRoute
+  '/customers': typeof CustomersRoute
   '/dashboard': typeof DashboardRoute
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/confirmation': typeof ConfirmationRoute
+  '/customers': typeof CustomersRoute
   '/dashboard': typeof DashboardRoute
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/confirmation': typeof ConfirmationRoute
+  '/customers': typeof CustomersRoute
   '/dashboard': typeof DashboardRoute
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/confirmation'
+    | '/customers'
     | '/dashboard'
     | '/delivery'
     | '/expenses'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/confirmation'
+    | '/customers'
     | '/dashboard'
     | '/delivery'
     | '/expenses'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/confirmation'
+    | '/customers'
     | '/dashboard'
     | '/delivery'
     | '/expenses'
@@ -261,6 +273,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
   ConfirmationRoute: typeof ConfirmationRoute
+  CustomersRoute: typeof CustomersRoute
   DashboardRoute: typeof DashboardRoute
   DeliveryRoute: typeof DeliveryRoute
   ExpensesRoute: typeof ExpensesRoute
@@ -311,6 +324,13 @@ declare module '@tanstack/react-router' {
       path: '/confirmation'
       fullPath: '/confirmation'
       preLoaderRoute: typeof ConfirmationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -430,6 +450,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
   ConfirmationRoute: ConfirmationRoute,
+  CustomersRoute: CustomersRoute,
   DashboardRoute: DashboardRoute,
   DeliveryRoute: DeliveryRoute,
   ExpensesRoute: ExpensesRoute,

@@ -34,6 +34,7 @@ export interface TranslationBundle {
     faq: string;
     dashboard: string;
     orders: string;
+    customers: string;
     products: string;
     overview: string;
     signIn: string;
@@ -483,6 +484,7 @@ const ar: TranslationBundle = {
     faq: "الأسئلة الشائعة",
     dashboard: "لوحة التحكم",
     orders: "الطلبات",
+    customers: "الزبائن",
     products: "المنتجات",
     overview: "نظرة عامة",
     signIn: "تسجيل الدخول",
@@ -939,6 +941,7 @@ const fr: TranslationBundle = {
     faq: "FAQ",
     dashboard: "Tableau de bord",
     orders: "Commandes",
+    customers: "Clients",
     products: "Produits",
     overview: "Aperçu",
     signIn: "Connexion",
@@ -1143,6 +1146,7 @@ const en: TranslationBundle = {
     faq: "FAQ",
     dashboard: "Dashboard",
     orders: "Orders",
+    customers: "Customers",
     products: "Products",
     overview: "Overview",
     signIn: "Sign in",
