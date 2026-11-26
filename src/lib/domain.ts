@@ -64,10 +64,10 @@ export function rowToProduct(row: {
     stock,
     category,
     sku,
-    image: p["image"] ? String(p["image"]) : undefined,
-    variants: p["variants"] ? String(p["variants"]) : undefined,
     created_at: row.created_at,
   };
+  if (p["image"]) result.image = String(p["image"]);
+  if (p["variants"]) result.variants = String(p["variants"]);
   return result;
 }
 
@@ -97,7 +97,7 @@ export function rowToOrder(row: {
   let product = String(p["product"] ?? "");
   const items = row.order_items;
   if (Array.isArray(items) && items.length) {
-    product = items[0].name;
+    product = items[0]?.name ?? "";
     if (items.length > 1) product = product + " +" + (items.length - 1);
   }
   const wilaya = row.wilaya && String(row.wilaya).trim() ? String(row.wilaya) : String(p["wilaya"] ?? "");

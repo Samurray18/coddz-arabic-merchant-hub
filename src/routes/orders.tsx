@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
+import { useAuth } from "@/lib/auth-context";
+import { supabase } from "@/integrations/supabase/client";
 import { useOrders, useSaveOrder, useUpdateOrderStatus } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
@@ -42,15 +45,52 @@ const emptyForm = {
 
 function OrdersPage() {
   const { t, lang } = useLanguage();
+  const { storeId, user } = useAuth();
   const { data: orders = [], isLoading } = useOrders();
   const saveOrder = useSaveOrder();
   const updateStatus = useUpdateOrderStatus();
+  const qc = useQueryClient();
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all");
   const [createOpen, setCreateOpen] = useState(false);
   const [phoneError, setPhoneError] = useState("");
   const [form, setForm] = useState({ ...emptyForm });
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [notesDraft, setNotesDraft] = useState("");
+  const [blacklistReason, setBlacklistReason] = useState("");
+  const [showBlacklist, setShowBlacklist] = useState(false);
+
+  const selectedOrder = orders.find((o) => o.id === selectedId) ?? null;
+
+  const { data: events = [] } = useQuery({
+    queryKey: ["order_events", selectedId],
+    enabled: !!selectedId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("order_events")
+        .select("*")
+        .eq("order_id", selectedId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const userIds = Array.from(new Set((events as any[]).map((e) => e.user_id).filter(Boolean)));
+  const { data: profiles = [] } = useQuery({
+    queryKey: ["profiles", userIds.join(",")],
+    enabled: userIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("profiles")
+        .select("id, display_name")
+        .in("id", userIds);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const profileMap = new Map((profiles as any[]).map((p) => [p.id, p.display_name]));
 
   useEffect(() => {
     if (window.location.hash === "#new-order") setCreateOpen(true);
@@ -256,6 +296,16 @@ function OrdersPage() {
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-gutter-xs">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(order.id);
+                            setNotesDraft(order.notes ?? "");
+                          }}
+                          className="rounded-md bg-surface-container-low px-2.5 py-1.5 font-body text-label-sm text-on-surface transition-colors hover:bg-surface-container"
+                        >
+                          عرض
+                        </button>
                         {(order.status === "new" || order.status === "confirmed") && (
                           <button
                             type="button"
@@ -394,6 +444,218 @@ function OrdersPage() {
           </div>
         </div>
       )}
+
+      {selectedOrder && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40" role="dialog" aria-modal="true">
+          <div className="h-full w-full max-w-md overflow-y-auto bg-surface-container-lowest p-5 shadow-xl">
+            <div className="flex items-center justify-between">
+              <h2 className="font-headline text-title-lg text-on-surface">تفاصيل الطلب #{selectedOrder.number}</h2>
+              <button type="button" onClick={() => setSelectedId(null)} className="text-on-surface-variant hover:text-on-surface">
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            {/* customer card */}
+            <section className="mt-4 rounded-xl border border-outline-variant bg-surface p-4">
+              <h3 className="font-headline text-title-md text-on-surface">{selectedOrder.name}</h3>
+              <p className="font-mono text-mono-md tabular-nums text-on-surface-variant" dir="ltr">{selectedOrder.phone}</p>
+              <p className="font-body text-body-md text-on-surface-variant">
+                {selectedOrder.wilaya}{selectedOrder.commune ? ` • ${selectedOrder.commune}` : ""}
+              </p>
+              {selectedOrder.address && <p className="font-body text-body-md text-on-surface-variant">{selectedOrder.address}</p>}
+              <div className="mt-3 flex gap-gutter-sm">
+                {selectedOrder.phone && (
+                  <a
+                    href={`tel:${selectedOrder.phone}`}
+                    className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">call</span>
+                    اتصال
+                  </a>
+                )}
+                {selectedOrder.phone && (
+                  <a
+                    href={buildWhatsAppLink(selectedOrder.phone, whatsappMessage(selectedOrder.name, selectedOrder.number, selectedOrder.product, selectedOrder.amount, selectedOrder.wilaya))}
+                    className="inline-flex items-center gap-1 rounded-md bg-accent-container px-3 py-1.5 font-headline text-label-md text-on-accent-container"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">chat</span>
+                    WhatsApp
+                  </a>
+                )}
+              </div>
+            </section>
+
+            {/* items */}
+            <section className="mt-4">
+              <h3 className="font-headline text-title-md text-on-surface">المنتجات</h3>
+              <p className="mt-1 font-body text-body-md text-on-surface-variant">{selectedOrder.product}</p>
+            </section>
+
+            {/* price breakdown */}
+            <section className="mt-4 rounded-xl border border-outline-variant bg-surface p-4">
+              <div className="flex justify-between font-body text-body-md text-on-surface">
+                <span>المجموع</span>
+                <span className="tabular-nums">{formatDA(selectedOrder.amount)}</span>
+              </div>
+              {selectedOrder.delivery_price != null && (
+                <div className="flex justify-between font-body text-body-md text-on-surface-variant">
+                  <span>التوصيل</span>
+                  <span className="tabular-nums">{formatDA(selectedOrder.delivery_price)}</span>
+                </div>
+              )}
+            </section>
+
+            {/* flags */}
+            {selectedOrder.flags && (
+              <div className="mt-4 flex flex-wrap gap-1">
+                {selectedOrder.flags.duplicate && (
+                  <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">مكرر</span>
+                )}
+                {selectedOrder.flags.blacklisted && (
+                  <span className="rounded-full bg-error-container px-2 py-0.5 font-body text-label-sm text-on-error-container">قائمة سوداء</span>
+                )}
+                {(selectedOrder.flags.previous_returns ?? 0) > 0 && (
+                  <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">مرتجعات سابقة</span>
+                )}
+              </div>
+            )}
+
+            {/* notes editable */}
+            <section className="mt-4">
+              <h3 className="font-headline text-title-md text-on-surface">ملاحظات</h3>
+              <textarea
+                rows={3}
+                value={notesDraft}
+                onChange={(e) => setNotesDraft(e.target.value)}
+                className="mt-2 w-full rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const { error } = await (supabase as any)
+                      .from("orders")
+                      .update({ notes: notesDraft, payload: { ...{}, notes: notesDraft } })
+                      .eq("id", selectedOrder.id)
+                      .eq("store_id", storeId);
+                    if (error) throw error;
+                    // update payload notes too
+                    const { data: cur } = await (supabase as any).from("orders").select("payload").eq("id", selectedOrder.id).single();
+                    const pl = { ...((cur?.payload as any) ?? {}), notes: notesDraft };
+                    await (supabase as any).from("orders").update({ payload: pl, notes: notesDraft }).eq("id", selectedOrder.id);
+                    qc.invalidateQueries({ queryKey: ["orders", storeId] });
+                    toast.success("تم حفظ الملاحظات");
+                  } catch (e: any) {
+                    toast.error(e?.message ?? "خطأ");
+                  }
+                }}
+                className="mt-2 rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary"
+              >
+                حفظ
+              </button>
+            </section>
+
+            {/* status actions */}
+            <section className="mt-4 flex flex-wrap gap-gutter-sm">
+              {(["confirmed", "shipped", "delivered", "returned", "canceled"] as const).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => updateStatus.mutate({ id: selectedOrder.id, status: s })}
+                  disabled={updateStatus.isPending}
+                  className="rounded-md bg-surface-container-low px-3 py-1.5 font-headline text-label-sm text-on-surface transition-colors hover:bg-surface-container disabled:opacity-60"
+                >
+                  {s}
+                </button>
+              ))}
+            </section>
+
+            {/* blacklist */}
+            <section className="mt-4">
+              {!showBlacklist ? (
+                <button
+                  type="button"
+                  onClick={() => setShowBlacklist(true)}
+                  className="rounded-md bg-error-container px-3 py-1.5 font-headline text-label-md text-on-error-container"
+                >
+                  إضافة إلى القائمة السوداء
+                </button>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <input
+                    value={blacklistReason}
+                    onChange={(e) => setBlacklistReason(e.target.value)}
+                    placeholder="السبب (اختياري)"
+                    className="w-full rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
+                  />
+                  <div className="flex gap-gutter-sm">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const { error } = await (supabase as any).from("blacklist").insert({
+                            store_id: storeId,
+                            phone: selectedOrder.phone,
+                            reason: blacklistReason || null,
+                          });
+                          if (error) throw error;
+                          toast.success("تمت الإضافة إلى القائمة السوداء");
+                          setShowBlacklist(false);
+                          setBlacklistReason("");
+                        } catch (e: any) {
+                          toast.error(e?.message ?? "خطأ");
+                        }
+                      }}
+                      className="rounded-md bg-error px-3 py-1.5 font-headline text-label-md text-on-error"
+                    >
+                      تأكيد
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowBlacklist(false)}
+                      className="rounded-md bg-surface-container-low px-3 py-1.5 font-headline text-label-md text-on-surface"
+                    >
+                      إلغاء
+                    </button>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            {/* timeline */}
+            <section className="mt-4">
+              <h3 className="font-headline text-title-md text-on-surface">الجدول الزمني</h3>
+              <ul className="mt-2 flex flex-col gap-gutter-sm">
+                {(events as any[]).map((ev) => (
+                  <li key={ev.id} className="rounded-md border border-outline-variant bg-surface p-3">
+                    <div className="flex items-center justify-between">
+                      <span className="font-headline text-label-md text-on-surface">{ev.type}</span>
+                      <span className="font-body text-label-sm text-on-surface-variant">
+                        {new Date(ev.created_at).toLocaleString()}
+                      </span>
+                    </div>
+                    {(ev.from_status || ev.to_status) && (
+                      <p className="font-body text-body-md text-on-surface-variant">
+                        {ev.from_status ?? "—"} → {ev.to_status ?? "—"}
+                      </p>
+                    )}
+                    {ev.note && <p className="font-body text-body-md text-on-surface-variant">{ev.note}</p>}
+                    {ev.user_id && (
+                      <p className="font-body text-label-sm text-on-surface-variant">
+                        {profileMap.get(ev.user_id) ?? ev.user_id}
+                      </p>
+                    )}
+                  </li>
+                ))}
+                {events.length === 0 && (
+                  <p className="font-body text-body-md text-on-surface-variant">لا توجد أحداث</p>
+                )}
+              </ul>
+            </section>
+          </div>
+        </div>
+      )}
+
     </DashboardShell>
   );
 }
