@@ -90,6 +90,35 @@ describe("OnboardingWizard store-loaded timing", () => {
     expect(screen.getByText("6")).toBeInTheDocument();
   });
 
+  it("e. completes step 3 of 6, reloads with store complete, resumes right after", async () => {
+    const auth1 = makeAuth({ loading: false, storeLoaded: true, storeName: "متجري", storeWilaya: null, onboardingStep: 2 });
+    const { unmount } = render(
+      <LanguageProvider>
+        <AuthContext.Provider value={auth1}>
+          <OnboardingWizard />
+        </AuthContext.Provider>
+      </LanguageProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("6")).toBeInTheDocument();
+    });
+    unmount();
+
+    const auth2 = makeAuth({ loading: false, storeLoaded: true, storeName: "My Shop", storeWilaya: "Alger", onboardingStep: 2 });
+    render(
+      <LanguageProvider>
+        <AuthContext.Provider value={auth2}>
+          <OnboardingWizard />
+        </AuthContext.Provider>
+      </LanguageProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("أقل من 50")).toBeInTheDocument();
+    });
+    expect(screen.getByText("5")).toBeInTheDocument();
+    expect(screen.queryByText("6")).not.toBeInTheDocument();
+  });
+
   it("d. after step 1 saves and context updates to real name/wilaya, still 6 steps and next is phone/business type", async () => {
     const auth = makeAuth({ loading: false, storeLoaded: true, storeName: "متجري", storeWilaya: null });
     const { rerender } = render(

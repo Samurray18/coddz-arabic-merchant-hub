@@ -133,7 +133,7 @@ export function OnboardingWizard() {
     try {
       const { error: upErr } = await (supabase as any)
         .from("stores")
-        .update({ onboarding_completed: true, onboarding_step: TOTAL_STEPS })
+        .update({ onboarding_completed: true, onboarding_step: 5 })
         .eq("id", storeId);
       if (upErr) throw upErr;
       await refreshStore();
@@ -170,7 +170,7 @@ export function OnboardingWizard() {
         return;
       }
       try {
-        await saveStep({ name: form.storeName.trim(), wilaya: form.wilaya }, 1);
+        await saveStep({ name: form.storeName.trim(), wilaya: form.wilaya }, needsStoreSetup ? step - 1 : step);
         if (form.carriers.length) {
           try {
             const { error: insErr } = await (supabase as any)
@@ -205,7 +205,7 @@ export function OnboardingWizard() {
             phone: form.phone ? normalizeAlgerianPhone(form.phone) : null,
             business_type: form.businessType,
           },
-          step,
+          needsStoreSetup ? step - 1 : step,
         );
         setStep(step + 1);
       } catch {}
@@ -213,7 +213,7 @@ export function OnboardingWizard() {
     }
     if (os === 2) {
       try {
-        await saveStep({ sales_channels: form.salesChannels }, step);
+        await saveStep({ sales_channels: form.salesChannels }, needsStoreSetup ? step - 1 : step);
         setStep(step + 1);
       } catch {}
       return;
@@ -224,7 +224,7 @@ export function OnboardingWizard() {
         return;
       }
       try {
-        await saveStep({ monthly_orders: MONTHLY_ORDERS.findIndex((m) => m.key === form.monthlyOrders) + 1 }, step);
+        await saveStep({ monthly_orders: MONTHLY_ORDERS.findIndex((m) => m.key === form.monthlyOrders) + 1 }, needsStoreSetup ? step - 1 : step);
         setStep(step + 1);
       } catch {}
       return;
@@ -235,7 +235,7 @@ export function OnboardingWizard() {
           {
             team_size: form.teamMode === "solo" ? 1 : Math.max(1, form.teamSize),
           },
-          step,
+          needsStoreSetup ? step - 1 : step,
         );
         setStep(step + 1);
       } catch {}
@@ -264,7 +264,7 @@ export function OnboardingWizard() {
         await supabase.auth.updateUser({ data: { default_delivery: form.defaultDelivery } });
         const { error: upErr } = await (supabase as any)
           .from("stores")
-          .update({ onboarding_completed: true, onboarding_step: TOTAL_STEPS })
+          .update({ onboarding_completed: true, onboarding_step: 5 })
           .eq("id", storeId);
         if (upErr) throw upErr;
         await refreshStore();
