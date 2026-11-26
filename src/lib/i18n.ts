@@ -1,6 +1,31 @@
 import type { Lang, OrderStatus } from "./coddz";
 
 export interface TranslationBundle {
+  common: {
+    loading: string;
+    empty: string;
+    save: string;
+    cancel: string;
+    close: string;
+    search: string;
+    all: string;
+    view: string;
+    call: string;
+    confirm: string;
+    postpone: string;
+    refuse: string;
+    noAnswer: string;
+    add: string;
+    edit: string;
+    delete: string;
+    create: string;
+    back: string;
+    next: string;
+    skip: string;
+    finish: string;
+    yes: string;
+    no: string;
+  };
   nav: {
     features: string;
     howItWorks: string;
@@ -162,6 +187,31 @@ export interface TranslationBundle {
 }
 
 const ar: TranslationBundle = {
+  common: {
+    loading: "جارٍ التحميل...",
+    empty: "لا توجد بيانات",
+    save: "حفظ",
+    cancel: "إلغاء",
+    close: "إغلاق",
+    search: "بحث",
+    all: "الكل",
+    view: "عرض",
+    call: "اتصال",
+    confirm: "تأكيد",
+    postpone: "تأجيل",
+    refuse: "إلغاء",
+    noAnswer: "لا يرد",
+    add: "إضافة",
+    edit: "تعديل",
+    delete: "حذف",
+    create: "إنشاء",
+    back: "رجوع",
+    next: "التالي",
+    skip: "تخطي",
+    finish: "إنهاء",
+    yes: "نعم",
+    no: "لا",
+  },
   nav: {
     features: "المميزات",
     howItWorks: "كيف يعمل",
@@ -330,6 +380,31 @@ const ar: TranslationBundle = {
 };
 
 const fr: TranslationBundle = {
+  common: {
+    loading: "Chargement...",
+    empty: "Aucune donnée",
+    save: "Enregistrer",
+    cancel: "Annuler",
+    close: "Fermer",
+    search: "Rechercher",
+    all: "Tous",
+    view: "Voir",
+    call: "Appeler",
+    confirm: "Confirmer",
+    postpone: "Reporter",
+    refuse: "Refuser",
+    noAnswer: "Pas de réponse",
+    add: "Ajouter",
+    edit: "Modifier",
+    delete: "Supprimer",
+    create: "Créer",
+    back: "Retour",
+    next: "Suivant",
+    skip: "Passer",
+    finish: "Terminer",
+    yes: "Oui",
+    no: "Non",
+  },
   nav: {
     features: "Fonctionnalités",
     howItWorks: "Comment ça marche",
@@ -498,6 +573,31 @@ const fr: TranslationBundle = {
 };
 
 const en: TranslationBundle = {
+  common: {
+    loading: "Loading...",
+    empty: "No data",
+    save: "Save",
+    cancel: "Cancel",
+    close: "Close",
+    search: "Search",
+    all: "All",
+    view: "View",
+    call: "Call",
+    confirm: "Confirm",
+    postpone: "Postpone",
+    refuse: "Cancel",
+    noAnswer: "No answer",
+    add: "Add",
+    edit: "Edit",
+    delete: "Delete",
+    create: "Create",
+    back: "Back",
+    next: "Next",
+    skip: "Skip",
+    finish: "Finish",
+    yes: "Yes",
+    no: "No",
+  },
   nav: {
     features: "Features",
     howItWorks: "How it works",

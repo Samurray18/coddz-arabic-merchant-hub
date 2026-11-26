@@ -24,6 +24,7 @@ function statusFor(stock: number) {
 }
 
 function InventoryPage() {
+  const { t } = useLanguage();
   const { storeId } = useAuth();
   const { data: products = [], isLoading: productsLoading } = useProducts();
   const { data: movements = [], isLoading: movementsLoading } = useStockMovements();
@@ -187,7 +188,7 @@ function InventoryPage() {
 
             {productsLoading ? (
               <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-                جارٍ التحميل...
+                {t.common.loading}
               </div>
             ) : filtered.length === 0 ? (
               <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">

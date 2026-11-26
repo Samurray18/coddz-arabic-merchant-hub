@@ -225,7 +225,7 @@ function OrdersPage() {
 
         {isLoading ? (
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-            {t.orders.title}...
+            {t.common.loading}
           </div>
         ) : filtered.length === 0 ? (
           <EmptyState title={t.orders.emptyTitle} subtitle={t.orders.emptySub} />
