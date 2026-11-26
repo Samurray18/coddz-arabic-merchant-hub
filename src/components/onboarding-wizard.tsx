@@ -1,5 +1,5 @@
 import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
@@ -51,11 +51,19 @@ const MONTHLY_ORDERS = [
 
 export function OnboardingWizard() {
   const { t, lang } = useLanguage();
-  const { user, storeId, storeName, storeWilaya, onboardingCompleted, onboardingStep, refreshStore } = useAuth();
+  const { user, storeId, storeName, storeWilaya, onboardingCompleted, onboardingStep, refreshStore, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
 
-  const needsStoreSetup = storeName === "متجري" || !storeWilaya;
+  const needsStoreSetupRef = useRef<boolean | null>(null);
+  const [needsStoreSetup, setNeedsStoreSetup] = useState(false);
+  useEffect(() => {
+    if (needsStoreSetupRef.current !== null) return;
+    if (authLoading) return;
+    const val = storeName === "متجري" || !storeWilaya;
+    needsStoreSetupRef.current = val;
+    setNeedsStoreSetup(val);
+  }, [authLoading, storeName, storeWilaya]);
   const TOTAL_STEPS = needsStoreSetup ? 6 : 5;
 
   const [step, setStep] = useState(1);
@@ -158,7 +166,7 @@ export function OnboardingWizard() {
           try {
             const { error: insErr } = await (supabase as any)
               .from("store_delivery_companies")
-              .insert(form.carriers.map((c) => ({ store_id: storeId, company: c })));
+              .upsert(form.carriers.map((c) => ({ store_id: storeId, company: c })), { onConflict: "store_id,company", ignoreDuplicates: true });
             if (insErr) throw insErr;
           } catch (e: any) {
             setError(e?.message ?? "خطأ في حفظ شركات التوصيل");
