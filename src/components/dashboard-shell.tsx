@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
@@ -29,6 +29,21 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
   const { status } = useRealtime();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [dark, setDark] = useState(() => {
+    try {
+      return localStorage.getItem("theme") === "dark";
+    } catch {
+      return false;
+    }
+  });
+  useEffect(() => {
+    const root = document.documentElement;
+    if (dark) root.classList.add("dark");
+    else root.classList.remove("dark");
+    try {
+      localStorage.setItem("theme", dark ? "dark" : "light");
+    } catch {}
+  }, [dark]);
 
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
   const displayName = storeName || t.nav.yourStore;
@@ -170,6 +185,14 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
               <LiveBadge compact />
               <button
                 type="button"
+                onClick={() => setDark((d) => !d)}
+                aria-label="theme"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface"
+              >
+                <span className="material-symbols-outlined text-[20px]">{dark ? "light_mode" : "dark_mode"}</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => void handleSignOut()}
                 aria-label={t.nav.signOut}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface"
@@ -189,6 +212,14 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
             </div>
             <div className="flex items-center gap-gutter-md">
               <LiveBadge />
+              <button
+                type="button"
+                onClick={() => setDark((d) => !d)}
+                aria-label="theme"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface"
+              >
+                <span className="material-symbols-outlined text-[20px]">{dark ? "light_mode" : "dark_mode"}</span>
+              </button>
               <LanguageSelect />
               <button
                 type="button"

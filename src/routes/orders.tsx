@@ -59,6 +59,23 @@ function OrdersPage() {
   const [phoneError, setPhoneError] = useState("");
   const [form, setForm] = useState({ ...emptyForm });
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const exportCSV = () => {
+    const rows = [
+      ["رقم الطلب", "الزبون", "الهاتف", "الولاية", "المنتج", "المبلغ", "الحالة", "الناقل", "التاريخ"],
+      ...orders.map((o) => [
+        o.number, o.name, o.phone, o.wilaya, o.product, String(o.amount), o.status, o.carrier, o.date,
+      ]),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "orders.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
   const [notesDraft, setNotesDraft] = useState("");
   const [blacklistReason, setBlacklistReason] = useState("");
   const [showBlacklist, setShowBlacklist] = useState(false);
@@ -167,14 +184,24 @@ function OrdersPage() {
             </h1>
             <p className="font-body text-body-md text-on-surface-variant">{t.orders.subtitle}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setCreateOpen(true)}
-            className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3.5 py-2.5 font-headline text-label-md text-on-primary transition-colors duration-state-change hover:bg-success"
-          >
-            <span className="material-symbols-outlined text-[18px]">add_circle</span>
-            {t.orders.newOrder}
-          </button>
+          <div className="flex shrink-0 items-center gap-gutter-sm">
+            <button
+              type="button"
+              onClick={exportCSV}
+              className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
+            >
+              <span className="material-symbols-outlined text-[18px]">download</span>
+              تصدير CSV
+            </button>
+            <button
+              type="button"
+              onClick={() => setCreateOpen(true)}
+              className="inline-flex items-center justify-center gap-1.5 rounded-md bg-primary px-3.5 py-2.5 font-headline text-label-md text-on-primary transition-colors duration-state-change hover:bg-success"
+            >
+              <span className="material-symbols-outlined text-[18px]">add_circle</span>
+              {t.orders.newOrder}
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-gutter-md">

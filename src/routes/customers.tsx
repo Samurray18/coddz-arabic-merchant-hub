@@ -28,7 +28,8 @@ interface Customer {
 
 function CustomersPage() {
   const { t } = useLanguage();
-  const { data: orders = [], isLoading } = useOrders();
+  const { data: ordersData, isLoading } = useOrders();
+  const orders = ordersData?.pages.flat() ?? [];
   const [search, setSearch] = useState("");
 
   const map = new Map<string, Customer>();
@@ -58,6 +59,21 @@ function CustomersPage() {
   }
   const customers = [...map.values()].sort((a, b) => b.total - a.total);
 
+  const exportCSV = () => {
+    const rows = [
+      ["الاسم", "الهاتف", "الولاية", "الطلبات", "المبيعات", "التسليم", "المرتجعات", "آخر طلب"],
+      ...customers.map((c) => [c.name, c.phone, c.wilaya, String(c.orders), String(c.total), String(c.delivered), String(c.returned), c.lastDate]),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "customers.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const filtered = customers.filter((c) => {
     if (!search) return true;
     const hay = `${c.name} ${c.phone} ${c.wilaya}`.toLowerCase();
@@ -71,9 +87,19 @@ function CustomersPage() {
   return (
     <DashboardShell>
       <div className="flex flex-col gap-gutter-xl">
-        <div>
-          <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">الزبائن</h1>
-          <p className="font-body text-body-md text-on-surface-variant">قائمة زبائنك وطلباتهم</p>
+        <div className="flex items-center justify-between gap-gutter-md">
+          <div>
+            <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">الزبائن</h1>
+            <p className="font-body text-body-md text-on-surface-variant">قائمة زبائنك وطلباتهم</p>
+          </div>
+          <button
+            type="button"
+            onClick={exportCSV}
+            className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
+          >
+            <span className="material-symbols-outlined text-[18px]">download</span>
+            تصدير CSV
+          </button>
         </div>
 
         <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-3 items-stretch">

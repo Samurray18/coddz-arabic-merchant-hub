@@ -45,6 +45,21 @@ function ProductsPage() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState({ ...emptyForm });
 
+  const exportCSV = () => {
+    const rows = [
+      ["اسم المنتج", "SKU", "التصنيف", "سعر البيع", "التكلفة", "المخزون"],
+      ...products.map((p) => [p.name, p.sku, p.category, String(p.price), String(p.cost), String(p.stock)]),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "products.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const categories = Array.from(new Set(products.map((product) => product.category).filter(Boolean)));
   const filtered = products.filter((product) => {
     if (category !== "all" && product.category !== category) return false;
@@ -107,14 +122,24 @@ function ProductsPage() {
             <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">{t.products.title}</h1>
             <p className="font-body text-body-md text-on-surface-variant">{t.products.subtitle}</p>
           </div>
-          <button
-            type="button"
-            onClick={openNew}
-            className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3.5 py-2.5 font-headline text-label-md text-on-primary transition-colors duration-state-change hover:bg-success"
-          >
-            <span className="material-symbols-outlined text-[18px]">add_circle</span>
-            {t.products.addProduct}
-          </button>
+          <div className="flex shrink-0 items-center gap-gutter-sm">
+            <button
+              type="button"
+              onClick={exportCSV}
+              className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
+            >
+              <span className="material-symbols-outlined text-[18px]">download</span>
+              تصدير CSV
+            </button>
+            <button
+              type="button"
+              onClick={openNew}
+              className="inline-flex items-center justify-center gap-1.5 rounded-md bg-primary px-3.5 py-2.5 font-headline text-label-md text-on-primary transition-colors duration-state-change hover:bg-success"
+            >
+              <span className="material-symbols-outlined text-[18px]">add_circle</span>
+              {t.products.addProduct}
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-gutter-md">
