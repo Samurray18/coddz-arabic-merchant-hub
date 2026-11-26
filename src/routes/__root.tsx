@@ -168,6 +168,24 @@ function RootComponent() {
         onboarding_completed?: boolean | null;
         onboarding_step?: number | null;
       } | null;
+
+      // Fill profile display_name from metadata if empty (once)
+      if (user) {
+        try {
+          const { data: profile } = await (supabase as any)
+            .from("profiles")
+            .select("display_name")
+            .eq("id", user.id)
+            .maybeSingle();
+          if (profile && !profile.display_name) {
+            const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+            const displayName = meta["full_name"] ? String(meta["full_name"]) : meta["name"] ? String(meta["name"]) : null;
+            if (displayName) {
+              await (supabase as any).from("profiles").update({ display_name: displayName }).eq("id", user.id);
+            }
+          }
+        } catch {}
+      }
       const storeId = store?.id ?? null;
       // Backfill from signup metadata if needed
       if (storeId && user) {

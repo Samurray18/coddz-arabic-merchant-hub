@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { WILAYAS } from "@/lib/coddz";
+import { WILAYAS, CARRIER_OPTIONS } from "@/lib/coddz";
 import { isValidAlgerianPhone, normalizeAlgerianPhone } from "@/lib/coddz";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,16 @@ import { Label } from "@/components/ui/label";
 import { Check, ChevronLeft, ChevronRight, Upload, Store, Users, Package, Megaphone, Globe } from "lucide-react";
 import { toast } from "sonner";
 
-const TOTAL_STEPS = 5;
+const LOGO_EXT: Record<string, string> = {
+  yalidine: "png",
+  zrexpress: "svg",
+  dhd: "png",
+  noest: "png",
+  maystro: "svg",
+  ecotrack: "png",
+};
+
+const TOTAL_STEPS_BASE = 5;
 
 const BUSINESS_TYPES = [
   { key: "retail", label: "تجزئة" },
@@ -42,9 +51,12 @@ const MONTHLY_ORDERS = [
 
 export function OnboardingWizard() {
   const { t, lang } = useLanguage();
-  const { user, storeId, onboardingCompleted, onboardingStep, refreshStore } = useAuth();
+  const { user, storeId, storeName, storeWilaya, onboardingCompleted, onboardingStep, refreshStore } = useAuth();
   const navigate = useNavigate();
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
+
+  const needsStoreSetup = storeName === "متجري" || !storeWilaya;
+  const TOTAL_STEPS = needsStoreSetup ? 6 : 5;
 
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -62,6 +74,11 @@ export function OnboardingWizard() {
     defaultDelivery: "home" as "home" | "desk",
     logoFile: null as File | null,
     logoUrl: "",
+    storeName: storeName ?? "",
+    wilaya: storeWilaya ?? "",
+    carriers: [] as string[],
+    wilayaSearch: "",
+    showWilayaList: false,
   });
 
   // Resume from saved step
@@ -125,7 +142,38 @@ export function OnboardingWizard() {
 
   const next = async () => {
     setError("");
-    if (step === 1) {
+    // Step 1 (conditional): store info
+    if (needsStoreSetup && step === 1) {
+      if (!form.storeName.trim()) {
+        setError("اسم المتجر مطلوب");
+        return;
+      }
+      if (!form.wilaya) {
+        setError("يرجى اختيار الولاية");
+        return;
+      }
+      try {
+        await saveStep({ name: form.storeName.trim(), wilaya: form.wilaya }, 1);
+        if (form.carriers.length) {
+          try {
+            const { error: insErr } = await (supabase as any)
+              .from("store_delivery_companies")
+              .insert(form.carriers.map((c) => ({ store_id: storeId, company: c })));
+            if (insErr) throw insErr;
+          } catch (e: any) {
+            setError(e?.message ?? "خطأ في حفظ شركات التوصيل");
+            return;
+          }
+        }
+        await refreshStore();
+        setStep(2);
+      } catch {}
+      return;
+    }
+
+    const os = needsStoreSetup ? step - 1 : step; // original step 1-5
+
+    if (os === 1) {
       if (form.phone && !isValidAlgerianPhone(form.phone)) {
         setError("رقم هاتف غير صالح");
         return;
@@ -140,43 +188,43 @@ export function OnboardingWizard() {
             phone: form.phone ? normalizeAlgerianPhone(form.phone) : null,
             business_type: form.businessType,
           },
-          1,
+          step,
         );
-        setStep(2);
+        setStep(step + 1);
       } catch {}
       return;
     }
-    if (step === 2) {
+    if (os === 2) {
       try {
-        await saveStep({ sales_channels: form.salesChannels }, 2);
-        setStep(3);
+        await saveStep({ sales_channels: form.salesChannels }, step);
+        setStep(step + 1);
       } catch {}
       return;
     }
-    if (step === 3) {
+    if (os === 3) {
       if (!form.monthlyOrders) {
         setError("يرجى اختيار حجم الطلبات");
         return;
       }
       try {
-        await saveStep({ monthly_orders: MONTHLY_ORDERS.findIndex((m) => m.key === form.monthlyOrders) + 1 }, 3);
-        setStep(4);
+        await saveStep({ monthly_orders: MONTHLY_ORDERS.findIndex((m) => m.key === form.monthlyOrders) + 1 }, step);
+        setStep(step + 1);
       } catch {}
       return;
     }
-    if (step === 4) {
+    if (os === 4) {
       try {
         await saveStep(
           {
             team_size: form.teamMode === "solo" ? 1 : Math.max(1, form.teamSize),
           },
-          4,
+          step,
         );
-        setStep(5);
+        setStep(step + 1);
       } catch {}
       return;
     }
-    if (step === 5) {
+    if (os === 5) {
       setLoading(true);
       setError("");
       try {
@@ -289,7 +337,87 @@ export function OnboardingWizard() {
         <CardContent className="space-y-4">
           {error && <div className="text-sm text-error bg-error-container/40 rounded-md p-2">{error}</div>}
 
-          {step === 1 && (
+          {needsStoreSetup && step === 1 && (
+            <div className="space-y-3">
+              <div>
+                <Label>اسم المتجر</Label>
+                <Input
+                  value={form.storeName}
+                  onChange={(e) => setForm({ ...form, storeName: e.target.value })}
+                />
+              </div>
+              <div className="relative">
+                <Label>الولاية</Label>
+                <Input
+                  value={form.wilaya ? form.wilaya : form.wilayaSearch}
+                  onChange={(e) => {
+                    setForm({ ...form, wilayaSearch: e.target.value, wilaya: "" });
+                    setForm((f) => ({ ...f, showWilayaList: true }));
+                  }}
+                  onFocus={() => setForm((f) => ({ ...f, showWilayaList: true }))}
+                  placeholder="ابحث عن ولاية..."
+                />
+                {form.showWilayaList && (
+                  <div className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-md border border-outline-variant bg-surface-container-lowest shadow-sm">
+                    {WILAYAS.filter((w) =>
+                      `${w.code} ${w.latin} ${w.ar}`.toLowerCase().includes(form.wilayaSearch.toLowerCase()),
+                    ).map((w) => (
+                      <button
+                        key={w.code}
+                        type="button"
+                        className="block w-full px-3 py-2 text-start text-sm hover:bg-surface-container-low"
+                        onClick={() => {
+                          setForm((f) => ({ ...f, wilaya: `${w.code} - ${w.latin}`, wilayaSearch: "", showWilayaList: false }));
+                        }}
+                      >
+                        {w.code} - {w.latin}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
+                <Label>شركات التوصيل (اختياري)</Label>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  {CARRIER_OPTIONS.map((c) => {
+                    const ext = LOGO_EXT[c.key];
+                    const selected = form.carriers.includes(c.key);
+                    return (
+                      <button
+                        key={c.key}
+                        type="button"
+                        onClick={() =>
+                          setForm((f) => ({
+                            ...f,
+                            carriers: f.carriers.includes(c.key)
+                              ? f.carriers.filter((x) => x !== c.key)
+                              : [...f.carriers, c.key],
+                          }))
+                        }
+                        className={`relative h-24 rounded-xl border p-4 bg-surface-container-lowest flex flex-col items-center justify-center gap-1 transition-colors ${
+                          selected ? "border-primary bg-accent-container" : "border-outline-variant"
+                        }`}
+                      >
+                        {selected && (
+                          <span className="absolute top-1 end-1 w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
+                            <Check className="w-3 h-3" />
+                          </span>
+                        )}
+                        {ext ? (
+                          <img src={`/images/carriers/${c.key}.${ext}`} alt={c.name} className="max-h-10 max-w-full object-contain" />
+                        ) : (
+                          <span className="font-headline text-label-md text-on-surface">{c.name}</span>
+                        )}
+                        <span className="font-body text-label-sm text-on-surface-variant">{c.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {(needsStoreSetup ? step - 1 : step) === 1 && (
             <div className="space-y-3">
               <div>
                 <Label>رقم الهاتف (WhatsApp)</Label>
@@ -323,7 +451,7 @@ export function OnboardingWizard() {
             </div>
           )}
 
-          {step === 2 && (
+          {(needsStoreSetup ? step - 1 : step) === 2 && (
             <div className="space-y-3">
               <p className="text-sm text-on-surface-variant">قنوات البيع (اختيار متعدد)</p>
               <div className="grid grid-cols-2 gap-3">
@@ -348,7 +476,7 @@ export function OnboardingWizard() {
             </div>
           )}
 
-          {step === 3 && (
+          {(needsStoreSetup ? step - 1 : step) === 3 && (
             <div className="space-y-3">
               <p className="text-sm text-on-surface-variant">عدد الطلبات شهريًا</p>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -370,7 +498,7 @@ export function OnboardingWizard() {
             </div>
           )}
 
-          {step === 4 && (
+          {(needsStoreSetup ? step - 1 : step) === 4 && (
             <div className="space-y-3">
               <p className="text-sm text-on-surface-variant">فريق العمل</p>
               <div className="grid grid-cols-2 gap-3">
@@ -409,7 +537,7 @@ export function OnboardingWizard() {
             </div>
           )}
 
-          {step === 5 && (
+          {(needsStoreSetup ? step - 1 : step) === 5 && (
             <div className="space-y-3">
               <div>
                 <Label>شعار المتجر (اختياري)</Label>

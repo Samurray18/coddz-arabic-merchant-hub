@@ -240,6 +240,7 @@ export function SignupWizard() {
                 <span className="material-symbols-outlined me-2 text-[18px]">login</span>
                 {googleLoading ? "..." : t.auth.continueWithGoogle}
               </Button>
+              <p className="text-center text-xs text-on-surface-variant">ستكمل بقية المعلومات بعد تسجيل الدخول</p>
               <div className="relative flex items-center gap-2">
                 <span className="h-px flex-1 bg-outline-variant" />
                 <span className="font-body text-label-sm text-on-surface-variant">أو</span>
