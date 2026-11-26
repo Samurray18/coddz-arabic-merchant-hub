@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
-import { useOrders, useUpdateOrderStatus } from "@/hooks/use-data";
+import { useOrders, useUpdateOrderStatus, useRecordConfirmation } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
@@ -15,26 +15,49 @@ export const Route = createFileRoute("/confirmation")({
   head: () => ({ meta: [{ title: "Confirmation — COD YOU" }] }),
 });
 
+const CONFIRMATION_LABEL: Record<string, string> = {
+  pending: "بانتظار الاتصال",
+  answered: "تم التأكيد",
+  no_answer: "لا يرد",
+  postponed: "مؤجل",
+  refused: "مرفوض",
+};
+
 function ConfirmationPage() {
   const { t } = useLanguage();
   const { data: orders = [], isLoading } = useOrders();
   const updateStatus = useUpdateOrderStatus();
+  const recordConfirmation = useRecordConfirmation();
 
   const pending = orders.filter((o) => o.status === "new" || o.status === "confirmed");
-  const confirmedToday = orders.filter((o) => o.status === "confirmed").length;
+  const confirmedToday = orders.filter((o) => o.confirmation_status === "answered" || o.status === "confirmed").length;
   const rate = orders.length ? Math.round((confirmedToday / Math.max(orders.length, 1)) * 1000) / 10 : 0;
 
   const handleConfirm = (id: string) => {
-    updateStatus.mutate(
-      { id, status: "confirmed" },
+    recordConfirmation.mutate(
+      { id, result: "answered" },
       { onSuccess: () => toast.success("تم تأكيد الطلب") },
     );
+    updateStatus.mutate({ id, status: "confirmed" });
   };
-  const handleCancel = (id: string) => {
-    updateStatus.mutate(
-      { id, status: "canceled" },
-      { onSuccess: () => toast("تم إلغاء الطلب") },
+  const handlePostpone = (id: string) => {
+    recordConfirmation.mutate(
+      { id, result: "postponed" },
+      { onSuccess: () => toast("تم التأجيل") },
     );
+  };
+  const handleNoAnswer = (id: string) => {
+    recordConfirmation.mutate(
+      { id, result: "no_answer" },
+      { onSuccess: () => toast("تم تسجيل: لا يرد") },
+    );
+  };
+  const handleRefuse = (id: string) => {
+    recordConfirmation.mutate(
+      { id, result: "refused" },
+      { onSuccess: () => toast("تم رفض الطلب") },
+    );
+    updateStatus.mutate({ id, status: "canceled" });
   };
 
   return (
@@ -88,14 +111,8 @@ function ConfirmationPage() {
                 <header className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-mono-md text-on-surface">#{order.number || "—"}</span>
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 font-body text-label-sm ${
-                        order.status === "new"
-                          ? "bg-accent-container text-on-accent-container"
-                          : "bg-warning-container text-on-warning-container"
-                      }`}
-                    >
-                      {order.status === "new" ? "طلب جديد" : "المحاولة 1"}
+                    <span className="rounded-full bg-warning-container px-2.5 py-0.5 font-body text-label-sm text-on-warning-container">
+                      {CONFIRMATION_LABEL[order.confirmation_status ?? "pending"] ?? "بانتظار الاتصال"}
                     </span>
                   </div>
                   <span className="font-headline text-title-md tabular-nums text-primary">{formatDA(order.amount)}</span>
@@ -107,11 +124,11 @@ function ConfirmationPage() {
                     {order.wilaya} • عبر {order.carrier || "Yalidine"}
                   </p>
                 </div>
-                <footer className="flex items-center gap-2 border-t border-outline-variant pt-3">
+                <footer className="flex flex-wrap items-center gap-2 border-t border-outline-variant pt-3">
                   <button
                     type="button"
                     onClick={() => handleConfirm(order.id)}
-                    disabled={updateStatus.isPending}
+                    disabled={recordConfirmation.isPending || updateStatus.isPending}
                     className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-primary py-2.5 px-3 font-headline text-label-md text-on-primary transition-colors hover:bg-success disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">check_circle</span>
@@ -119,16 +136,26 @@ function ConfirmationPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => toast("تم التأجيل", { description: order.number })}
-                    className="inline-flex items-center justify-center gap-1 rounded-md bg-surface-container-low px-3 py-2.5 font-body text-label-md text-on-surface transition-colors hover:bg-surface-container"
+                    onClick={() => handlePostpone(order.id)}
+                    disabled={recordConfirmation.isPending}
+                    className="inline-flex items-center justify-center gap-1 rounded-md bg-surface-container-low px-3 py-2.5 font-body text-label-md text-on-surface transition-colors hover:bg-surface-container disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">schedule</span>
                     تأجيل
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleCancel(order.id)}
-                    disabled={updateStatus.isPending}
+                    onClick={() => handleNoAnswer(order.id)}
+                    disabled={recordConfirmation.isPending}
+                    className="inline-flex items-center justify-center gap-1 rounded-md bg-warning-container px-3 py-2.5 font-body text-label-md text-on-warning-container disabled:opacity-60"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">phone_missed</span>
+                    لا يرد
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleRefuse(order.id)}
+                    disabled={recordConfirmation.isPending || updateStatus.isPending}
                     className="inline-flex items-center justify-center gap-1 rounded-md bg-error-container px-3 py-2.5 font-body text-label-md text-on-error-container disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">cancel</span>

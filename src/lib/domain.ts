@@ -28,6 +28,7 @@ export interface Order {
   product: string;
   amount: number;
   status: OrderStatus;
+  confirmation_status?: string | null;
   carrier: string;
   date: string;
   notes?: string;
@@ -82,6 +83,7 @@ export function rowToOrder(row: {
   phone?: string | null;
   carrier?: string | null;
   status?: string | null;
+  confirmation_status?: string | null;
   notes?: string | null;
   source?: string | null;
   flags?: unknown;
@@ -115,6 +117,7 @@ export function rowToOrder(row: {
     product,
     amount: Number(row.total ?? p["amount"] ?? 0),
     status: (row.status as OrderStatus) ?? (p["status"] as OrderStatus) ?? "new",
+    confirmation_status: row.confirmation_status ?? (p["confirmation_status"] as string) ?? "pending",
     carrier: String(row.carrier ?? p["carrier"] ?? ""),
     date: String(p["date"] || dateValue.slice(0, 10) || new Date().toISOString().slice(0, 10)),
     source: row.source ?? String(p["source"] ?? "manual"),
