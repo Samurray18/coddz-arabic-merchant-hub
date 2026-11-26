@@ -14,6 +14,7 @@ const NAV = [
   { to: "/shipments", icon: "local_shipping", labelKey: "shipments" },
   { to: "/inventory", icon: "inventory_2", labelKey: "inventory", soon: true },
   { to: "/analytics", icon: "analytics", labelKey: "analytics", soon: true },
+  { to: "/expenses", icon: "receipt", labelKey: "expenses" },
   { to: "/team", icon: "group", labelKey: "team", soon: true },
   { to: "/integrations", icon: "hub", labelKey: "integrations", soon: true },
   { to: "/settings", icon: "settings", labelKey: "settings", soon: true },

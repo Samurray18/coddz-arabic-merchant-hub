@@ -20,6 +20,7 @@ export interface TranslationBundle {
     shipments: string;
     inventory: string;
     analytics: string;
+    expenses: string;
     team: string;
     integrations: string;
     settings: string;
@@ -180,6 +181,7 @@ const ar: TranslationBundle = {
     shipments: "الشحنات",
     inventory: "المخزون",
     analytics: "الإحصائيات",
+    expenses: "المصاريف",
     team: "الفريق",
     integrations: "الربط",
     settings: "الإعدادات",
@@ -347,6 +349,7 @@ const fr: TranslationBundle = {
     shipments: "Expéditions",
     inventory: "Stock",
     analytics: "Statistiques",
+    expenses: "Dépenses",
     team: "Équipe",
     integrations: "Intégrations",
     settings: "Paramètres",
@@ -514,6 +517,7 @@ const en: TranslationBundle = {
     shipments: "Shipments",
     inventory: "Inventory",
     analytics: "Analytics",
+    expenses: "Expenses",
     team: "Team",
     integrations: "Integrations",
     settings: "Settings",

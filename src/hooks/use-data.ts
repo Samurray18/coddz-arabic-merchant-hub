@@ -361,6 +361,80 @@ export function useAdjustStock() {
   });
 }
 
+export function useExpenses() {
+  const { storeId } = useAuth();
+  return useQuery({
+    queryKey: ["expenses", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("expenses")
+        .select("*")
+        .eq("store_id", storeId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useAdSpend() {
+  const { storeId } = useAuth();
+  return useQuery({
+    queryKey: ["ad_spend", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("ad_spend")
+        .select("*")
+        .eq("store_id", storeId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useAddExpense() {
+  const { storeId } = useAuth();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { amount: number; category: string; note?: string }) => {
+      if (!storeId) throw new Error("No store");
+      const { error } = await (supabase as any).from("expenses").insert({
+        store_id: storeId,
+        amount: input.amount,
+        category: input.category,
+        note: input.note ?? null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["expenses", storeId] });
+    },
+  });
+}
+
+export function useAddAdSpend() {
+  const { storeId } = useAuth();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { amount: number; platform: string; date?: string }) => {
+      if (!storeId) throw new Error("No store");
+      const { error } = await (supabase as any).from("ad_spend").insert({
+        store_id: storeId,
+        amount: input.amount,
+        platform: input.platform,
+        date: input.date ?? new Date().toISOString().slice(0, 10),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ad_spend", storeId] });
+    },
+  });
+}
+
 export function useUpdateOrderStatus() {
   const { storeId, user } = useAuth();
   const queryClient = useQueryClient();

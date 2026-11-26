@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
+import { useAuth } from "@/lib/auth-context";
 import { useOrders } from "@/hooks/use-data";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
@@ -18,7 +21,17 @@ const MONTHS_AR = ["جوان", "جويلية", "أوت", "سبتمبر", "أكت
 
 function AnalyticsPage() {
   const { t } = useLanguage();
+  const { storeId } = useAuth();
   const { data: orders = [], isLoading } = useOrders();
+  const { data: stats } = useQuery({
+    queryKey: ["dashboard_stats", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any).rpc("get_dashboard_stats", { _store_id: storeId, _from: null, _to: null });
+      if (error) throw error;
+      return Array.isArray(data) ? data[0] : data;
+    },
+  });
 
   const revenue = orders.reduce((s, o) => s + o.amount, 0);
   const delivered = orders.filter((o) => o.status === "delivered");
@@ -89,7 +102,7 @@ function AnalyticsPage() {
   return (
     <DashboardShell>
       <div className="flex flex-col gap-gutter-xl">
-        <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-2 lg:grid-cols-4 items-stretch">
+        <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-2 lg:grid-cols-5 items-stretch">
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">صافي المداخيل (الشهر)</span>
             <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(thisMonthRevenue || revenue)}</span>
@@ -113,6 +126,13 @@ function AnalyticsPage() {
             <span className="font-body text-label-md text-on-surface-variant">متوسط قيمة الطلب</span>
             <span className="font-headline text-headline-md tabular-nums text-on-surface">{formatDA(avgOrder)}</span>
             <span className="font-body text-label-sm tabular-nums text-on-surface-variant">عبر {wilayaCount || 0} ولاية</span>
+          </article>
+          <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
+            <span className="font-body text-label-md text-on-surface-variant">صافي الربح</span>
+            <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(Number(stats?.net_profit ?? 0))}</span>
+            <span className="font-body text-label-sm tabular-nums text-on-surface-variant">
+              إيرادات {formatDA(Number(stats?.revenue ?? revenue))} • مصاريف {formatDA(Number(stats?.expenses ?? 0) + Number(stats?.ad_spend ?? 0))}
+            </span>
           </article>
         </section>
 
