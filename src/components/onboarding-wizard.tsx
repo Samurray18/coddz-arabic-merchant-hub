@@ -51,19 +51,31 @@ const MONTHLY_ORDERS = [
 
 export function OnboardingWizard() {
   const { t, lang } = useLanguage();
-  const { user, storeId, storeName, storeWilaya, onboardingCompleted, onboardingStep, refreshStore, loading: authLoading } = useAuth();
+  const { user, storeId, storeName, storeWilaya, onboardingCompleted, onboardingStep, refreshStore, loading: authLoading, storeLoaded } = useAuth();
   const navigate = useNavigate();
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
 
   const needsStoreSetupRef = useRef<boolean | null>(null);
   const [needsStoreSetup, setNeedsStoreSetup] = useState(false);
+  const [frozen, setFrozen] = useState(false);
   useEffect(() => {
     if (needsStoreSetupRef.current !== null) return;
     if (authLoading) return;
+    if (!storeLoaded) return;
     const val = storeName === "متجري" || !storeWilaya;
     needsStoreSetupRef.current = val;
     setNeedsStoreSetup(val);
-  }, [authLoading, storeName, storeWilaya]);
+    // initialize form from store values at freeze moment
+    setForm((f) => ({
+      ...f,
+      storeName: storeName && storeName !== "متجري" ? storeName : "",
+      wilaya: storeWilaya ?? "",
+    }));
+    // resume step
+    const resume = Math.min(val ? 6 : 5, Math.max(1, (onboardingStep ?? 0) + 1));
+    setStep(resume);
+    setFrozen(true);
+  }, [authLoading, storeLoaded, storeName, storeWilaya, onboardingStep]);
   const TOTAL_STEPS = needsStoreSetup ? 6 : 5;
 
   const [step, setStep] = useState(1);
@@ -93,11 +105,8 @@ export function OnboardingWizard() {
   useEffect(() => {
     if (onboardingCompleted) {
       navigate({ to: "/dashboard", replace: true });
-      return;
     }
-    const resume = Math.min(TOTAL_STEPS, Math.max(1, (onboardingStep ?? 0) + 1));
-    setStep(resume);
-  }, [onboardingCompleted, onboardingStep, navigate]);
+  }, [onboardingCompleted, navigate]);
 
   const saveStep = async (patch: Record<string, unknown>, nextStep: number) => {
     if (!storeId) throw new Error("No store");
@@ -278,6 +287,17 @@ export function OnboardingWizard() {
         : [...f.salesChannels, key],
     }));
   };
+
+  if (!frozen) {
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-gutter-md">
+          <span className="h-10 w-10 animate-spin rounded-full border-2 border-outline-variant border-t-primary" />
+          <span className="font-body text-body-md text-on-surface-variant">جارٍ التحميل...</span>
+        </div>
+      </div>
+    );
+  }
 
   if (finishing) {
     const items = ["إعداد متجرك", "تجهيز المنتجات", "ربط التوصيل", "تخصيص لوحة التحكم"];

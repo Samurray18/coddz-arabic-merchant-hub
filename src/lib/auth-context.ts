@@ -5,6 +5,7 @@ export interface AuthState {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  storeLoaded: boolean;
   storeId: string | null;
   storeName: string | null;
   storeWilaya: string | null;

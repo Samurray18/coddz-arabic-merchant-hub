@@ -140,6 +140,7 @@ function RootComponent() {
     user: null,
     session: null,
     loading: true,
+    storeLoaded: false,
     storeId: null,
     storeName: null,
     storeWilaya: null,
@@ -149,9 +150,10 @@ function RootComponent() {
 
   const refreshStore = async (userId: string | null) => {
     if (!userId) {
-      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null, onboardingCompleted: false, onboardingStep: 0 }));
+      setAuthState((prev) => ({ ...prev, storeLoaded: true, storeId: null, storeName: null, storeWilaya: null, onboardingCompleted: false, onboardingStep: 0 }));
       return;
     }
+    setAuthState((prev) => ({ ...prev, storeLoaded: false }));
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const user = sessionData.session?.user ?? null;
@@ -212,6 +214,7 @@ function RootComponent() {
       }
       setAuthState((prev) => ({
         ...prev,
+        storeLoaded: true,
         storeId,
         storeName: store?.name ?? null,
         storeWilaya: store?.wilaya ?? null,
@@ -219,7 +222,7 @@ function RootComponent() {
         onboardingStep: store?.onboarding_step ?? 0,
       }));
     } catch {
-      setAuthState((prev) => ({ ...prev, storeId: null, storeName: null, storeWilaya: null, onboardingCompleted: false, onboardingStep: 0 }));
+      setAuthState((prev) => ({ ...prev, storeLoaded: true, storeId: null, storeName: null, storeWilaya: null, onboardingCompleted: false, onboardingStep: 0 }));
     }
   };
 
@@ -269,6 +272,7 @@ function RootComponent() {
       user: null,
       session: null,
       loading: false,
+      storeLoaded: false,
       storeId: null,
       storeName: null,
       storeWilaya: null,
