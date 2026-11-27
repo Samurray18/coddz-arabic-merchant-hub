@@ -51,6 +51,20 @@ function ShipmentsPage() {
   const [tracking, setTracking] = useState("");
   const [cod, setCod] = useState("");
 
+  const exportCSV = () => {
+    const rows = [
+      ["الطلب", "الناقل", "رقم التتبع", "COD", "الحالة"],
+      ...shipments.map((s: any) => [s.order_id, s.carrier, s.tracking_number ?? "", String(s.cod_amount), s.status]),
+    ];
+    const csv = rows.map((r) => r.map((c: any) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "shipments.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
   const shippableOrders = orders.filter((o) => o.status === "confirmed" || o.status === "new");
 
   const handleCreate = async () => {
@@ -83,14 +97,24 @@ function ShipmentsPage() {
             <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">{t.shipments.title}</h1>
             <p className="font-body text-body-md text-on-surface-variant">{t.shipments.subtitle}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3.5 py-2.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success"
-          >
-            <span className="material-symbols-outlined text-[18px]">add</span>
-            شحنة جديدة
-          </button>
+          <div className="flex shrink-0 items-center gap-gutter-sm">
+            <button
+              type="button"
+              onClick={exportCSV}
+              className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
+            >
+              <span className="material-symbols-outlined text-[18px]">download</span>
+              تصدير CSV
+            </button>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3.5 py-2.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success"
+            >
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              شحنة جديدة
+            </button>
+          </div>
         </div>
 
         {isLoading ? (
