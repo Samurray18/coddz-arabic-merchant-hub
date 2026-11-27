@@ -878,7 +878,10 @@ function OrdersPage() {
                       .select("payload")
                       .eq("id", selectedOrder.id)
                       .single();
-                    const pl = { ...((cur?.payload as Record<string, unknown>) ?? {}), notes: notesDraft };
+                    const pl = {
+                      ...((cur?.payload as Record<string, unknown>) ?? {}),
+                      notes: notesDraft,
+                    };
                     const { error: noteErr } = await supabase
                       .from("orders")
                       .update({ payload: pl, notes: notesDraft })
@@ -959,8 +962,8 @@ function OrdersPage() {
                         toast.success("تم تسجيل المرتجع");
                         setShowReturn(false);
                         setReturnReason("");
-                      } catch (e: any) {
-                        toast.error(e?.message ?? "خطأ");
+                      } catch (e) {
+                        toast.error(e instanceof Error ? e.message : "خطأ");
                       }
                     }}
                     disabled={recordReturn.isPending}
@@ -1002,7 +1005,7 @@ function OrdersPage() {
                       type="button"
                       onClick={async () => {
                         try {
-                          const { error } = await (supabase as any).from("blacklist").insert({
+                          const { error } = await supabase.from("blacklist").insert({
                             store_id: storeId,
                             phone: selectedOrder.phone,
                             reason: blacklistReason || null,
@@ -1011,8 +1014,8 @@ function OrdersPage() {
                           toast.success("تمت الإضافة إلى القائمة السوداء");
                           setShowBlacklist(false);
                           setBlacklistReason("");
-                        } catch (e: any) {
-                          toast.error(e?.message ?? "خطأ");
+                        } catch (e) {
+                          toast.error(e instanceof Error ? e.message : "خطأ");
                         }
                       }}
                       className="rounded-md bg-error px-3 py-1.5 font-headline text-label-md text-on-error"
@@ -1035,7 +1038,7 @@ function OrdersPage() {
             <section className="mt-4">
               <h3 className="font-headline text-title-md text-on-surface">الجدول الزمني</h3>
               <ul className="mt-2 flex flex-col gap-gutter-sm">
-                {(events as any[]).map((ev) => (
+                {events.map((ev) => (
                   <li
                     key={ev.id}
                     className="rounded-md border border-outline-variant bg-surface p-3"
