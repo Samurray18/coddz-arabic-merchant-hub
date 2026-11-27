@@ -23,11 +23,13 @@ const LOGO_EXT: Record<string, string> = {
 export function SignupWizard() {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const { user, refreshStore } = useAuth();
+  const { user, onboardingCompleted, storeLoaded, refreshStore } = useAuth();
 
   useEffect(() => {
-    if (user) navigate({ to: "/onboarding" });
-  }, [user, navigate]);
+    if (user && storeLoaded) {
+      navigate({ to: onboardingCompleted ? "/dashboard" : "/onboarding", replace: true });
+    }
+  }, [user, storeLoaded, onboardingCompleted, navigate]);
   const [step, setStep] = useState(1);
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -199,7 +201,7 @@ export function SignupWizard() {
   }
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-4">
       <Card className="w-full max-w-md lg:max-w-lg">
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
