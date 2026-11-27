@@ -252,6 +252,81 @@ export function useRecordConfirmation() {
   });
 }
 
+export interface CustomerAgg {
+  name: string;
+  phone: string;
+  wilaya: string;
+  orders: number;
+  total: number;
+  delivered: number;
+  returned: number;
+  lastDate: string;
+  blacklisted: boolean;
+}
+
+export function useCustomers() {
+  const { storeId } = useAuth();
+  return useQuery({
+    queryKey: ["customers", storeId],
+    enabled: !!storeId,
+    queryFn: async (): Promise<CustomerAgg[]> => {
+      // read all orders in pages of 1000, cap 20000
+      const all: any[] = [];
+      let offset = 0;
+      const pageSize = 1000;
+      const cap = 20000;
+      while (offset < cap) {
+        const { data, error } = await (supabase as any)
+          .from("orders")
+          .select("phone, customer_name, wilaya, total, status, created_at")
+          .eq("store_id", storeId!)
+          .order("created_at", { ascending: false })
+          .range(offset, offset + pageSize - 1);
+        if (error) throw error;
+        const rows = data ?? [];
+        all.push(...rows);
+        if (rows.length < pageSize) break;
+        offset += pageSize;
+      }
+      // blacklist
+      const { data: bl } = await (supabase as any)
+        .from("blacklist")
+        .select("phone")
+        .eq("store_id", storeId!);
+      const blacklistedSet = new Set((bl ?? []).map((r: any) => String(r.phone)));
+
+      const map = new Map<string, CustomerAgg>();
+      for (const o of all) {
+        const key = o.phone ? String(o.phone) : String(o.id ?? Math.random());
+        const cur = map.get(key);
+        if (!cur) {
+          map.set(key, {
+            name: o.customer_name ?? "",
+            phone: o.phone ?? "",
+            wilaya: o.wilaya ?? "",
+            orders: 1,
+            total: Number(o.total ?? 0),
+            delivered: o.status === "delivered" ? 1 : 0,
+            returned: o.status === "returned" ? 1 : 0,
+            lastDate: o.created_at ?? "",
+            blacklisted: blacklistedSet.has(key),
+          });
+        } else {
+          cur.orders += 1;
+          cur.total += Number(o.total ?? 0);
+          if (o.status === "delivered") cur.delivered += 1;
+          if (o.status === "returned") cur.returned += 1;
+          if (o.created_at && o.created_at > cur.lastDate) cur.lastDate = o.created_at;
+          if (!cur.name && o.customer_name) cur.name = o.customer_name;
+          if (!cur.wilaya && o.wilaya) cur.wilaya = o.wilaya;
+          if (blacklistedSet.has(key)) cur.blacklisted = true;
+        }
+      }
+      return [...map.values()].sort((a, b) => b.total - a.total);
+    },
+  });
+}
+
 export function useShipments() {
   const { storeId } = useAuth();
   return useQuery({

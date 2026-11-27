@@ -114,6 +114,7 @@ export interface TranslationBundle {
     allWilayas: string;
     allCarriers: string;
     bulkMark: string;
+    exportSelected: string;
     selected: string;
     customer: string;
     phone: string;
@@ -572,6 +573,7 @@ const ar: TranslationBundle = {
     allCarriers: "كل شركات التوصيل",
     bulkMark: "تحديث الحالة المحددة",
     selected: "محدد",
+    exportSelected: "تصدير المحدد",
     customer: "الزبون",
     phone: "الهاتف",
     wilaya: "الولاية",
@@ -1029,6 +1031,7 @@ const fr: TranslationBundle = {
     allCarriers: "Tous les transporteurs",
     bulkMark: "Appliquer à la sélection",
     selected: "sélectionné(s)",
+    exportSelected: "Exporter la sélection",
     customer: "Client",
     phone: "Téléphone",
     wilaya: "Wilaya",
@@ -1234,6 +1237,7 @@ const en: TranslationBundle = {
     allCarriers: "All carriers",
     bulkMark: "Update selected",
     selected: "selected",
+    exportSelected: "Export selected",
     customer: "Customer",
     phone: "Phone",
     wilaya: "Wilaya",
