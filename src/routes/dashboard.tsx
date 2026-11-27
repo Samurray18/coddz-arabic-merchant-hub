@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/empty-state";
 import { buildWhatsAppLink, formatDA, STATUS_BADGE_CLASS, type OrderStatus } from "@/lib/coddz";
 import { Check } from "lucide-react";
 import type { Order } from "@/lib/domain";
+import { computeDashboardKpis } from "@/lib/kpi";
 import { useState } from "react";
 
 export const Route = createFileRoute("/dashboard")({
@@ -213,20 +214,32 @@ function WelcomeChecklist() {
 
 function DashboardPage() {
   const { t } = useLanguage();
+  const { storeId } = useAuth();
   const { data: ordersData, isLoading } = useOrders();
   const orders = ordersData?.pages.flat() ?? [];
   const { data: productsData } = useProducts();
   const products = productsData?.pages.flat() ?? [];
 
-  const revenue = orders.reduce((sum, order) => sum + order.amount, 0);
-  const awaiting = orders.filter((order) => order.status === "new" || order.status === "confirmed").length;
-  const inDelivery = orders.filter((order) => order.status === "shipped").length;
-  const delivered = orders.filter((order) => order.status === "delivered");
-  const returned = orders.filter((order) => order.status === "returned" || order.status === "canceled").length;
-  const deliveryRate = orders.length ? Math.round((delivered.length / orders.length) * 100) : 0;
-  const returnRate = orders.length ? Math.round((returned / orders.length) * 100) : 0;
-  const deliveredAmount = delivered.reduce((sum, order) => sum + order.amount, 0);
-  const collectionPercent = revenue ? Math.round((deliveredAmount / revenue) * 100) : 0;
+  const { data: stats } = useQuery({
+    queryKey: ["dashboard_stats", storeId],
+    enabled: !!storeId,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any).rpc("get_dashboard_stats", { _store_id: storeId, _from: null, _to: null });
+      if (error) throw error;
+      return Array.isArray(data) ? data[0] : data;
+    },
+  });
+
+  const kpis = computeDashboardKpis(stats);
+  const revenue = kpis.revenue;
+  const totalOrders = kpis.totalOrders;
+  const awaiting = kpis.awaiting;
+  const inDelivery = kpis.inDelivery;
+  const deliveredCount = kpis.deliveredCount;
+  const returnedCount = kpis.returnedCount;
+  const deliveryRate = kpis.deliveryRate;
+  const returnRate = kpis.returnRate;
+  const collectionPercent = revenue ? Math.round((kpis.deliveredCount / Math.max(totalOrders, 1)) * 100) : 0;
   const pendingOrders = orders.filter((order) => order.status === "new" || order.status === "confirmed");
 
   return (

@@ -265,6 +265,7 @@ export type Database = {
           source: string
           status: string
           store_id: string
+          return_restock: boolean
           total: number
           tracking_number: string | null
           updated_at: string
@@ -290,6 +291,7 @@ export type Database = {
           source?: string
           status?: string
           store_id: string
+          return_restock?: boolean
           total?: number
           tracking_number?: string | null
           updated_at?: string
@@ -315,6 +317,7 @@ export type Database = {
           source?: string
           status?: string
           store_id?: string
+          return_restock?: boolean
           total?: number
           tracking_number?: string | null
           updated_at?: string

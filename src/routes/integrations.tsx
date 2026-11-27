@@ -443,9 +443,10 @@ function WebhookTab({ storeId, type }: { storeId: string; type: "shopify" | "woo
     setToggling(true);
     try {
       const newStatus = integration?.status === "active" ? "paused" : "active";
-      await (supabase as any)
+      const { error: togErr } = await (supabase as any)
         .from("integrations")
         .upsert({ store_id: storeId, type, status: newStatus }, { onConflict: "store_id,type" });
+      if (togErr) throw togErr;
       qc.invalidateQueries({ queryKey: ["integration", storeId, type] });
     } catch (e: any) {
       toast.error(e?.message ?? "خطأ");

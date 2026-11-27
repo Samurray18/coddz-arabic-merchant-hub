@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
+import { computeDashboardKpis } from "@/lib/kpi";
 
 export const Route = createFileRoute("/analytics")({
   component: () => (
@@ -49,12 +50,14 @@ function AnalyticsPage() {
     },
   });
 
-  const revenue = orders.reduce((s, o) => s + o.amount, 0);
-  const delivered = orders.filter((o) => o.status === "delivered");
-  const returned = orders.filter((o) => o.status === "returned" || o.status === "canceled");
-  const deliveryRate = orders.length ? (delivered.length / orders.length) * 100 : 0;
-  const returnRate = orders.length ? (returned.length / orders.length) * 100 : 0;
-  const avgOrder = orders.length ? revenue / orders.length : 0;
+  const kpis = computeDashboardKpis(stats);
+  const revenue = kpis.revenue || orders.reduce((s, o) => s + o.amount, 0);
+  const totalOrders = kpis.totalOrders || orders.length;
+  const deliveredCount = kpis.deliveredCount;
+  const returnedCount = kpis.returnedCount;
+  const deliveryRate = kpis.deliveryRate;
+  const returnRate = kpis.returnRate;
+  const avgOrder = totalOrders ? revenue / totalOrders : 0;
 
   // Real month-over-month changes
   const now = new Date();
@@ -145,7 +148,7 @@ function AnalyticsPage() {
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">صافي الربح</span>
-            <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(Number(stats?.net_profit ?? 0))}</span>
+            <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(kpis.netProfit)}</span>
             <span className="font-body text-label-sm tabular-nums text-on-surface-variant">
               إيرادات {formatDA(Number(stats?.revenue ?? revenue))} • مصاريف {formatDA(Number(stats?.expenses ?? 0) + Number(stats?.ad_spend ?? 0))}
             </span>

@@ -588,7 +588,8 @@ function OrdersPage() {
                     // update payload notes too
                     const { data: cur } = await (supabase as any).from("orders").select("payload").eq("id", selectedOrder.id).single();
                     const pl = { ...((cur?.payload as any) ?? {}), notes: notesDraft };
-                    await (supabase as any).from("orders").update({ payload: pl, notes: notesDraft }).eq("id", selectedOrder.id);
+                    const { error: noteErr } = await (supabase as any).from("orders").update({ payload: pl, notes: notesDraft }).eq("id", selectedOrder.id);
+                    if (noteErr) throw noteErr;
                     qc.invalidateQueries({ queryKey: ["orders", storeId] });
                     toast.success("تم حفظ الملاحظات");
                   } catch (e: any) {
@@ -633,21 +634,26 @@ function OrdersPage() {
                   placeholder="السبب"
                   className="mt-2 w-full rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
                 />
-                <label className="mt-2 flex items-center gap-2 font-body text-body-md text-on-surface">
-                  <input
-                    type="checkbox"
-                    checked={restock}
-                    onChange={(e) => setRestock(e.target.checked)}
-                    className="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
-                  />
-                  إعادة للمخزون
-                </label>
+                {(selectedOrder.status === "shipped" || selectedOrder.status === "delivered") ? (
+                  <label className="mt-2 flex items-center gap-2 font-body text-body-md text-on-surface">
+                    <input
+                      type="checkbox"
+                      checked={restock}
+                      onChange={(e) => setRestock(e.target.checked)}
+                      className="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
+                    />
+                    إعادة للمخزون
+                  </label>
+                ) : (
+                  <p className="mt-2 font-body text-body-md text-on-surface-variant">لم يتم خصم هذا الطلب من المخزون</p>
+                )}
                 <div className="mt-3 flex gap-gutter-sm">
                   <button
                     type="button"
                     onClick={async () => {
                       try {
-                        await recordReturn.mutateAsync({ id: selectedOrder.id, reason: returnReason, restock });
+                        const canRestock = selectedOrder.status === "shipped" || selectedOrder.status === "delivered";
+                        await recordReturn.mutateAsync({ id: selectedOrder.id, reason: returnReason, restock: canRestock ? restock : false });
                         toast.success("تم تسجيل المرتجع");
                         setShowReturn(false);
                         setReturnReason("");

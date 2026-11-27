@@ -2,6 +2,7 @@ import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from "@tansta
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { rowToProduct, rowToOrder, productToPayload, orderToPayload, type Product, type Order } from "@/lib/domain";
+import { toast } from "sonner";
 
 const ownOrderIds = new Set<string>();
 
@@ -209,15 +210,14 @@ export function useSaveOrder() {
       }
 
       // order_events created
-      try {
-        await (supabase as any).from("order_events").insert({
-          order_id: orderId,
-          store_id: storeId,
-          type: "created",
-          to_status: "new",
-          user_id: user?.id ?? null,
-        });
-      } catch {}
+      const { error: evErr } = await (supabase as any).from("order_events").insert({
+        order_id: orderId,
+        store_id: storeId,
+        type: "created",
+        to_status: "new",
+        user_id: user?.id ?? null,
+      });
+      if (evErr) toast.warning(evErr.message ?? "خطأ في تسجيل الحدث");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
@@ -237,15 +237,14 @@ export function useRecordConfirmation() {
         .eq("id", id)
         .eq("store_id", storeId);
       if (error) throw error;
-      try {
-        await (supabase as any).from("order_events").insert({
-          order_id: id,
-          store_id: storeId,
-          type: "confirmation",
-          note: result,
-          user_id: user?.id ?? null,
-        });
-      } catch {}
+      const { error: evErr } = await (supabase as any).from("order_events").insert({
+        order_id: id,
+        store_id: storeId,
+        type: "confirmation",
+        note: result,
+        user_id: user?.id ?? null,
+      });
+      if (evErr) toast.warning(evErr.message ?? "خطأ في تسجيل الحدث");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
@@ -358,15 +357,14 @@ export function useAdjustStock() {
         p_delta: input.delta,
       });
       if (error) throw error;
-      try {
-        await (supabase as any).from("stock_movements").insert({
-          store_id: storeId,
-          product_id: input.productId,
-          change: input.delta,
-          reason: input.reason || "adjustment",
-          created_by: user?.id ?? null,
-        });
-      } catch {}
+      const { error: mvErr } = await (supabase as any).from("stock_movements").insert({
+        store_id: storeId,
+        product_id: input.productId,
+        change: input.delta,
+        reason: input.reason || "adjustment",
+        created_by: user?.id ?? null,
+      });
+      if (mvErr) toast.warning(mvErr.message ?? "خطأ في تسجيل الحركة");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products", storeId] });
@@ -466,31 +464,29 @@ export function useRecordReturn() {
       const payload = { ...((current?.payload as Record<string, unknown>) ?? {}), status: "returned" };
       const { error: upErr } = await (supabase as any)
         .from("orders")
-        .update({ payload: payload as any, status: "returned", notes: input.reason || null })
+        .update({ payload: payload as any, status: "returned", notes: input.reason || null, return_restock: input.restock })
         .eq("id", input.id)
         .eq("store_id", storeId);
       if (upErr) throw upErr;
       // order_events: status_change + return
-      try {
-        await (supabase as any).from("order_events").insert({
-          order_id: input.id,
-          store_id: storeId,
-          type: "status_change",
-          from_status: fromStatus,
-          to_status: "returned",
-          user_id: user?.id ?? null,
-        });
-      } catch {}
-      try {
-        await (supabase as any).from("order_events").insert({
-          order_id: input.id,
-          store_id: storeId,
-          type: "return",
-          note: `${input.reason || "مرتجع"}${input.restock ? " (إعادة للمخزون)" : " (بدون إعادة)"}`,
-          to_status: "returned",
-          user_id: user?.id ?? null,
-        });
-      } catch {}
+      const { error: evErr1 } = await (supabase as any).from("order_events").insert({
+        order_id: input.id,
+        store_id: storeId,
+        type: "status_change",
+        from_status: fromStatus,
+        to_status: "returned",
+        user_id: user?.id ?? null,
+      });
+      if (evErr1) toast.warning(evErr1.message ?? "خطأ في تسجيل الحدث");
+      const { error: evErr2 } = await (supabase as any).from("order_events").insert({
+        order_id: input.id,
+        store_id: storeId,
+        type: "return",
+        note: `${input.reason || "مرتجع"}${input.restock ? " (إعادة للمخزون)" : " (بدون إعادة)"}`,
+        to_status: "returned",
+        user_id: user?.id ?? null,
+      });
+      if (evErr2) toast.warning(evErr2.message ?? "خطأ في تسجيل الحدث");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
@@ -518,16 +514,15 @@ export function useUpdateOrderStatus() {
         .eq("id", id)
         .eq("store_id", storeId);
       if (updateError) throw updateError;
-      try {
-        await (supabase as any).from("order_events").insert({
-          order_id: id,
-          store_id: storeId,
-          type: "status_change",
-          from_status: fromStatus,
-          to_status: status,
-          user_id: user?.id ?? null,
-        });
-      } catch {}
+      const { error: evErr } = await (supabase as any).from("order_events").insert({
+        order_id: id,
+        store_id: storeId,
+        type: "status_change",
+        from_status: fromStatus,
+        to_status: status,
+        user_id: user?.id ?? null,
+      });
+      if (evErr) toast.warning(evErr.message ?? "خطأ في تسجيل الحدث");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
