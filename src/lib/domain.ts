@@ -11,6 +11,7 @@ export interface Product {
   sku: string;
   image?: string;
   variants?: string;
+  lowStockThreshold?: number;
   created_at?: string;
 }
 
@@ -70,6 +71,7 @@ export function rowToProduct(row: {
   };
   if (p["image"]) result.image = String(p["image"]);
   if (p["variants"]) result.variants = String(p["variants"]);
+  if (p["lowStockThreshold"] != null) result.lowStockThreshold = Number(p["lowStockThreshold"]);
   return result;
 }
 
@@ -142,6 +144,7 @@ export function productToPayload(p: Partial<Product>): Record<string, unknown> {
     sku: p.sku,
     image: p.image,
     variants: p.variants,
+    lowStockThreshold: p.lowStockThreshold,
   };
 }
 

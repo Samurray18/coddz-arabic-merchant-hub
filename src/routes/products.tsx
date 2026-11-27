@@ -27,7 +27,7 @@ const emptyForm = {
   price: "",
   cost: "",
   stock: "",
-  category: "",
+  category: "إلكترونيات",
   sku: "",
   image: "watch",
   variants: "",
@@ -100,8 +100,10 @@ function ProductsPage() {
       sku: product.sku,
       image: product.image ?? "watch",
       variants: product.variants ?? "",
-      lowStockThreshold: "",
+      lowStockThreshold:
+        product.lowStockThreshold != null ? String(product.lowStockThreshold) : "",
     });
+    setImagePreview(product.image ? getProductImage(product.image) : null);
     setEditOpen(true);
   };
 
@@ -117,10 +119,11 @@ function ProductsPage() {
         price: Number(form.price) || 0,
         cost: Number(form.cost) || 0,
         stock: Number(form.stock) || 0,
-        category: form.category,
+        category: form.category || "إلكترونيات",
         sku: form.sku,
         image: form.image,
         variants: form.variants,
+        lowStockThreshold: form.lowStockThreshold ? Number(form.lowStockThreshold) : undefined,
       });
       setEditOpen(false);
       toast.success(t.products.save);
