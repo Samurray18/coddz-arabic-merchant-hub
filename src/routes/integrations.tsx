@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { LocalDate } from "@/components/local-date";
 
 export const Route = createFileRoute("/integrations")({
   component: () => (
@@ -238,10 +239,10 @@ function ApiTab({ storeId }: { storeId: string }) {
                       {k.key_prefix}...
                     </td>
                     <td className="px-4 py-3 font-body text-label-sm text-on-surface-variant">
-                      {new Date(k.created_at).toLocaleString()}
+                      <LocalDate value={k.created_at} />
                     </td>
                     <td className="px-4 py-3 font-body text-label-sm text-on-surface-variant">
-                      {k.last_used_at ? new Date(k.last_used_at).toLocaleString() : "—"}
+                      {k.last_used_at ? <LocalDate value={k.last_used_at} /> : "—"}
                     </td>
                     <td className="px-4 py-3">
                       <span
@@ -584,7 +585,7 @@ function LogsTab({ storeId }: { storeId: string }) {
                     </td>
                     <td className="px-4 py-3 font-body text-label-sm text-on-surface-variant">{l.error ?? "—"}</td>
                     <td className="px-4 py-3 font-body text-label-sm text-on-surface-variant">
-                      {new Date(l.created_at).toLocaleString()}
+                      <LocalDate value={l.created_at} />
                     </td>
                     <td className="px-4 py-3">
                       <button

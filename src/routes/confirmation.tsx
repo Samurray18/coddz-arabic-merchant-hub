@@ -4,7 +4,6 @@ import { useOrders, useUpdateOrderStatus, useRecordConfirmation } from "@/hooks/
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { Money } from "@/components/money";
-import { formatDA } from "@/lib/coddz";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/confirmation")({

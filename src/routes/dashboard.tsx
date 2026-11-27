@@ -53,13 +53,13 @@ function KpiCard({
 }
 
 function PendingOrderCard({ order }: { order: Order }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const updateStatus = useUpdateOrderStatus();
   const message = t.orders.whatsappTemplate
     .replace("{name}", order.name)
     .replace("{number}", order.number)
     .replace("{product}", order.product)
-    .replace("{amount}", formatDA(order.amount))
+    .replace("{amount}", formatDA(order.amount, lang))
     .replace("{wilaya}", order.wilaya);
 
   return (
@@ -80,7 +80,7 @@ function PendingOrderCard({ order }: { order: Order }) {
             {order.wilaya} • {order.product}
           </p>
         </div>
-        <span className="shrink-0 font-headline text-title-md text-primary tabular-nums">{formatDA(order.amount)}</span>
+        <span className="shrink-0 font-headline text-title-md text-primary tabular-nums"><Money value={order.amount} /></span>
       </div>
       <footer className="flex items-center gap-2 border-t border-outline-variant pt-2">
         <button

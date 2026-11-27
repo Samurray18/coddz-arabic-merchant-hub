@@ -10,6 +10,7 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
 import { computeDashboardKpis } from "@/lib/kpi";
 import { Money } from "@/components/money";
+import { LocalDate } from "@/components/local-date";
 import {
   AreaChart,
   Area,
@@ -43,7 +44,7 @@ export const Route = createFileRoute("/analytics")({
 const MONTHS_AR = ["جوان", "جويلية", "أوت", "سبتمبر", "أكتوبر", "نوفمبر"];
 
 function AnalyticsPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { storeId } = useAuth();
   const { data: ordersData, isLoading } = useOrders();
   const orders = ordersData?.pages.flat() ?? [];
@@ -272,7 +273,7 @@ function AnalyticsPage() {
                       tickFormatter={(value) => `${Math.round(value / 1000)}k`}
                     />
                     <ChartTooltip
-                      content={<ChartTooltipContent formatter={(val) => formatDA(Number(val))} />}
+                      content={<ChartTooltipContent formatter={(val) => formatDA(Number(val), lang)} />}
                     />
                     <Area
                       type="monotone"
@@ -349,7 +350,7 @@ function AnalyticsPage() {
                   <div className="flex items-center justify-between">
                     <span className="font-body text-body-md text-on-surface">{ev.note}</span>
                     <span className="font-body text-label-sm text-on-surface-variant">
-                      {new Date(ev.created_at).toLocaleString()}
+                      <LocalDate value={ev.created_at} />
                     </span>
                   </div>
                 </li>

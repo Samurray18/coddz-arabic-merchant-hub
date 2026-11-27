@@ -6,7 +6,6 @@ import { useAuth } from "@/lib/auth-context";
 import { useOrders, useShipments, useCreateShipment, useUpdateShipment } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { formatDA } from "@/lib/coddz";
 import { Money } from "@/components/money";
 
 export const Route = createFileRoute("/shipments")({

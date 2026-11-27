@@ -6,8 +6,8 @@ import { useAuth } from "@/lib/auth-context";
 import { useProducts, useStockMovements, useAdjustStock } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { formatDA } from "@/lib/coddz";
 import { Money } from "@/components/money";
+import { LocalDate } from "@/components/local-date";
 
 export const Route = createFileRoute("/inventory")({
   component: () => (
@@ -281,7 +281,7 @@ function InventoryPage() {
                           {m.change >= 0 ? `+${m.change}` : m.change}
                         </td>
                         <td className="px-4 py-3.5 font-body text-body-md text-on-surface-variant">{m.reason}</td>
-                        <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant">{new Date(m.created_at).toLocaleString()}</td>
+                        <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant"><LocalDate value={m.created_at} /></td>
                       </tr>
                     );
                   })}

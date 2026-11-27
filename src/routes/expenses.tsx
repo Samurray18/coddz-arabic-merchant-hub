@@ -6,8 +6,8 @@ import { useAuth } from "@/lib/auth-context";
 import { useExpenses, useAdSpend, useAddExpense, useAddAdSpend } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { formatDA } from "@/lib/coddz";
 import { Money } from "@/components/money";
+import { LocalDate } from "@/components/local-date";
 
 export const Route = createFileRoute("/expenses")({
   component: () => (
@@ -122,7 +122,7 @@ function ExpensesPage() {
                         <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface"><Money value={Number(e.amount)} /></td>
                         <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{e.category}</td>
                         <td className="px-4 py-3.5 font-body text-body-md text-on-surface-variant">{e.note ?? "—"}</td>
-                        <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant">{new Date(e.created_at).toLocaleDateString()}</td>
+                        <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant"><LocalDate value={e.created_at} /></td>
                       </tr>
                     ))}
                   </tbody>

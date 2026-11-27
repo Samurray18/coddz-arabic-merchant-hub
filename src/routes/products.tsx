@@ -6,7 +6,7 @@ import { useProducts, useSaveProduct, useDeleteProduct } from "@/hooks/use-data"
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
-import { formatDA, getProductImage, PRODUCT_IMAGES } from "@/lib/coddz";
+import { getProductImage, PRODUCT_IMAGES } from "@/lib/coddz";
 import { Money } from "@/components/money";
 import type { Product } from "@/lib/domain";
 

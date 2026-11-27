@@ -2,7 +2,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
 import { useOrders, useProducts, useCustomers } from "@/hooks/use-data";
-import { formatDA } from "@/lib/coddz";
+import { Money } from "@/components/money";
 
 export function GlobalSearch() {
   const { t } = useLanguage();
@@ -81,7 +81,7 @@ export function GlobalSearch() {
                   className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-2 text-start hover:bg-surface-container-low"
                 >
                   <span className="font-body text-body-md text-on-surface">#{o.number} — {o.name}</span>
-                  <span className="font-mono text-mono-md tabular-nums text-on-surface-variant">{formatDA(o.amount)}</span>
+                  <span className="font-mono text-mono-md tabular-nums text-on-surface-variant"><Money value={o.amount} /></span>
                 </button>
               ))}
             </div>

@@ -299,7 +299,7 @@ function OrdersPage() {
       .replace("{name}", name)
       .replace("{number}", number)
       .replace("{product}", product)
-      .replace("{amount}", formatDA(amount))
+      .replace("{amount}", formatDA(amount, lang))
       .replace("{wilaya}", wilaya);
 
   return (
@@ -845,7 +845,7 @@ function OrdersPage() {
             <section className="mt-4 rounded-xl border border-outline-variant bg-surface p-4">
               <div className="flex justify-between font-body text-body-md text-on-surface">
                 <span>المجموع</span>
-                <span className="tabular-nums">{formatDA(selectedOrder.amount)}</span>
+                <span className="tabular-nums"><Money value={selectedOrder.amount} /></span>
               </div>
               {selectedOrder.delivery_price != null && (
                 <div className="flex justify-between font-body text-body-md text-on-surface-variant">
@@ -1071,7 +1071,7 @@ function OrdersPage() {
                     <div className="flex items-center justify-between">
                       <span className="font-headline text-label-md text-on-surface">{ev.type}</span>
                       <span className="font-body text-label-sm text-on-surface-variant">
-                        {new Date(ev.created_at).toLocaleString()}
+                        <LocalDate value={ev.created_at} />
                       </span>
                     </div>
                     {(ev.from_status || ev.to_status) && (
