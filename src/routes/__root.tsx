@@ -18,25 +18,25 @@ import { AuthContext, type AuthState } from "../lib/auth-context";
 import { LanguageProvider } from "../hooks/use-language";
 import { RealtimeProvider } from "@/components/realtime-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Illustration } from "@/components/illustration";
 import type { User, Session } from "@supabase/supabase-js";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-gutter-md bg-background px-4 text-center">
+      <Illustration name="error" className="h-40 w-56" />
+      <h1 className="font-headline text-headline-lg text-foreground">404</h1>
+      <h2 className="font-headline text-title-lg text-foreground">Page not found</h2>
+      <p className="font-body text-body-md text-muted-foreground">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <div className="mt-6">
+        <Link
+          to="/"
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Go home
+        </Link>
       </div>
     </div>
   );
@@ -50,11 +50,11 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-gutter-md bg-background px-4 text-center">
+      <Illustration name="error" className="h-40 w-56" />
+      <h1 className="text-xl font-semibold tracking-tight text-foreground">
+        This page didn't load
+      </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
@@ -75,7 +75,6 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
             Go home
           </a>
         </div>
-      </div>
     </div>
   );
 }

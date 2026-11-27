@@ -29,6 +29,7 @@ import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as DevIllustrationsRouteImport } from './routes/dev.illustrations'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -130,6 +131,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/callback',
   getParentRoute: () => AuthRoute,
 } as any)
+const DevIllustrationsRoute = DevIllustrationsRouteImport.update({
+  id: '/dev/illustrations',
+  path: '/dev/illustrations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/dev/illustrations': typeof DevIllustrationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/dev/illustrations': typeof DevIllustrationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/team': typeof TeamRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/dev/illustrations': typeof DevIllustrationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -221,6 +230,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/team'
     | '/auth/callback'
+    | '/dev/illustrations'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/team'
     | '/auth/callback'
+    | '/dev/illustrations'
   id:
     | '__root__'
     | '/'
@@ -265,6 +276,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/team'
     | '/auth/callback'
+    | '/dev/illustrations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -287,6 +299,7 @@ export interface RootRouteChildren {
   ShipmentsRoute: typeof ShipmentsRoute
   SignupRoute: typeof SignupRoute
   TeamRoute: typeof TeamRoute
+  DevIllustrationsRoute: typeof DevIllustrationsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -431,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/dev/illustrations': {
+      id: '/dev/illustrations'
+      path: '/dev/illustrations'
+      fullPath: '/dev/illustrations'
+      preLoaderRoute: typeof DevIllustrationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -464,6 +484,7 @@ const rootRouteChildren: RootRouteChildren = {
   ShipmentsRoute: ShipmentsRoute,
   SignupRoute: SignupRoute,
   TeamRoute: TeamRoute,
+  DevIllustrationsRoute: DevIllustrationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

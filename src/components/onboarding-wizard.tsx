@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check, ChevronLeft, ChevronRight, Upload, Store, Users, Package, Megaphone, Globe } from "lucide-react";
+import { Illustration } from "@/components/illustration";
 import { toast } from "sonner";
 
 const LOGO_EXT: Record<string, string> = {
@@ -306,9 +307,7 @@ export function OnboardingWizard() {
         <Card className="w-full max-w-md">
           <CardContent className="p-8 space-y-4">
             <div className="text-center space-y-2">
-              <div className="w-16 h-16 mx-auto rounded-full bg-accent-container text-on-accent-container flex items-center justify-center">
-                <Store className="w-8 h-8" />
-              </div>
+              <Illustration name="success" className="mx-auto h-32 w-44" />
               <h2 className="font-headline text-headline-md text-on-surface">جارٍ إعداد مساحة عملك</h2>
               <p className="font-body text-body-md text-on-surface-variant">يرجى الانتظار قليلاً...</p>
             </div>

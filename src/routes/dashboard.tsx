@@ -299,14 +299,14 @@ function DashboardPage() {
                   <p className="font-body text-label-md text-on-surface-variant">{t.dashboard.deliveryRate}</p>
                 </div>
                 <span className="shrink-0 font-headline text-headline-md text-primary tabular-nums">
-                  {formatDA(deliveredAmount)}
+                  {formatDA(revenue)}
                 </span>
               </div>
               <div className="h-3 w-full overflow-hidden rounded-full bg-surface-container-low">
                 <div className="h-full rounded-full bg-accent" style={{ width: `${collectionPercent}%` }} />
               </div>
               <div className="flex items-center justify-between font-body text-label-sm text-on-surface-variant">
-                <span>{delivered.length} {t.dashboard.unitsSold}</span>
+                <span>{deliveredCount} {t.dashboard.unitsSold}</span>
                 <span className="tabular-nums">{collectionPercent}% {t.dashboard.deliveryRate}</span>
               </div>
             </section>

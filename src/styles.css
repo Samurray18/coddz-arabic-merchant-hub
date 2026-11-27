@@ -231,6 +231,8 @@
   --sidebar-accent-foreground: #002113;
   --sidebar-border: #DBE5DB;
   --sidebar-ring: #2c6e49;
+  --illustration-surface: #EAF5EE;
+  --illustration-outline: #C9D8CE;
   --gradient-brand: linear-gradient(135deg, oklch(0.47 0.095 154), oklch(0.69 0.115 156));
   --shadow-card: 0 8px 28px -12px oklch(0.35 0.06 154 / 12%);
 }
@@ -283,6 +285,8 @@
   --sidebar-accent-foreground: oklch(0.92 0.04 152);
   --sidebar-border: oklch(0.28 0.026 156);
   --sidebar-ring: oklch(0.69 0.115 156);
+  --illustration-surface: #1F2E24;
+  --illustration-outline: #3A4A40;
   --gradient-brand: linear-gradient(135deg, oklch(0.47 0.095 154), oklch(0.69 0.115 156));
   --shadow-card: 0 10px 30px -12px oklch(0.06 0.01 158 / 50%);
 }
