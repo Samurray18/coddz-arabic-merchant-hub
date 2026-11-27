@@ -26,6 +26,7 @@ export interface TranslationBundle {
     finish: string;
     yes: string;
     no: string;
+    error: string;
   };
   nav: {
     features: string;
@@ -153,6 +154,15 @@ export interface TranslationBundle {
     timelineSection: string;
     noEvents: string;
     returnRecorded: string;
+    notesSaved: string;
+    returned: string;
+    recordReturn: string;
+    restockHint: string;
+    blacklistReasonOptional: string;
+    blacklistAddedFull: string;
+    badgeDuplicate: string;
+    badgeBlacklist: string;
+    badgePreviousReturns: string;
   };
   products: {
     title: string;
@@ -178,6 +188,29 @@ export interface TranslationBundle {
     cancel: string;
     emptyTitle: string;
     emptySub: string;
+    exportCSV: string;
+    addProductSub: string;
+    dropImage: string;
+    imageHint: string;
+    uploadImage: string;
+    primary: string;
+    namePlaceholder: string;
+    pricePlaceholder: string;
+    quantity: string;
+    lowStockThreshold: string;
+    codEnabled: string;
+    quickOrderHint: string;
+    saveAndAdd: string;
+    categoryElectronics: string;
+    categoryAccessories: string;
+    categoryHome: string;
+    categoryClothing: string;
+    csvName: string;
+    csvSku: string;
+    csvCategory: string;
+    csvPrice: string;
+    csvCost: string;
+    csvStock: string;
   };
   delivery: {
     title: string;
@@ -255,6 +288,53 @@ export interface TranslationBundle {
     topWilayas: string;
     returns: string;
     noData: string;
+    months: string[];
+    comparedLastMonth: string;
+    improvement: string;
+    belowAverage: string;
+    acrossWilayas: string;
+    revenueLabel: string;
+    expensesLabel: string;
+    monthlySalesSub: string;
+    salesLabel: string;
+    topWilayasSub: string;
+    ordersLabel: string;
+    returnsCount: string;
+    noReturns: string;
+  };
+  customers: {
+    title: string;
+    subtitle: string;
+    filterAll: string;
+    filterRepeat: string;
+    filterNew: string;
+    filterRisk: string;
+    filterBlacklisted: string;
+    exportCSV: string;
+    searchPlaceholder: string;
+    count: string;
+    emptyTitle: string;
+    emptySub: string;
+    ordersCount: string;
+    deliveryReturns: string;
+    orders: string;
+    blacklisted: string;
+    addToBlacklist: string;
+    reasonOptional: string;
+    noOrders: string;
+    blacklistAdded: string;
+    segmentRepeat: string;
+    segmentNew: string;
+    segmentRisk: string;
+    segmentBlacklisted: string;
+    csvName: string;
+    csvPhone: string;
+    csvWilaya: string;
+    csvOrders: string;
+    csvSales: string;
+    csvDelivered: string;
+    csvReturns: string;
+    csvLastOrder: string;
   };
   team: {
     title: string;
@@ -493,6 +573,7 @@ const ar: TranslationBundle = {
     finish: "إنهاء",
     yes: "نعم",
     no: "لا",
+    error: "خطأ",
   },
   nav: {
     features: "المميزات",
@@ -627,6 +708,15 @@ const ar: TranslationBundle = {
     timelineSection: "الجدول الزمني",
     noEvents: "لا توجد أحداث",
     returnRecorded: "تم تسجيل المرتجع",
+    notesSaved: "تم حفظ الملاحظات",
+    returned: "مرتجع",
+    recordReturn: "تسجيل مرتجع",
+    restockHint: "لم يتم خصم هذا الطلب من المخزون",
+    blacklistReasonOptional: "السبب (اختياري)",
+    blacklistAddedFull: "تمت الإضافة إلى القائمة السوداء",
+    badgeDuplicate: "مكرر",
+    badgeBlacklist: "قائمة سوداء",
+    badgePreviousReturns: "مرتجعات سابقة",
   },
   products: {
     title: "المنتجات والمخزون",
@@ -652,6 +742,29 @@ const ar: TranslationBundle = {
     cancel: "إلغاء",
     emptyTitle: "لا توجد منتجات بعد",
     emptySub: "أضف منتجك الأول لتبدأ استقبال طلبات الدفع عند الاستلام.",
+    exportCSV: "تصدير CSV",
+    addProductSub: "أضف تفاصيل المنتج وصورته ليظهر مباشرة في مخزون متجر النخيل",
+    dropImage: "اسحب وأفلت صورة المنتج هنا",
+    imageHint: "PNG أو JPG بدقة عالية، الحد الأقصى 5 ميغابايت",
+    uploadImage: "رفع صورة",
+    primary: "رئيسية",
+    namePlaceholder: "مثال: ساعة ذكية رياضية X10",
+    pricePlaceholder: "4 800 دج",
+    quantity: "الكمية المتوفرة",
+    lowStockThreshold: "حد تنبيه النفاد",
+    codEnabled: "تفعيل الدفع عند الاستلام (COD)",
+    quickOrderHint: "إظهار المنتج تلقائياً في روابط الطلب السريع لـ 58 ولاية",
+    saveAndAdd: "حفظ وإضافة للمخزون",
+    categoryElectronics: "إلكترونيات",
+    categoryAccessories: "إكسسوارات",
+    categoryHome: "أجهزة منزلية",
+    categoryClothing: "ملابس وأحذية",
+    csvName: "اسم المنتج",
+    csvSku: "SKU",
+    csvCategory: "التصنيف",
+    csvPrice: "سعر البيع",
+    csvCost: "التكلفة",
+    csvStock: "المخزون",
   },
   delivery: {
     title: "التوصيل",
@@ -729,6 +842,53 @@ const ar: TranslationBundle = {
     topWilayas: "أعلى الولايات طلبًا",
     returns: "المرتجعات",
     noData: "لا توجد بيانات",
+    months: ["جوان", "جويلية", "أوت", "سبتمبر", "أكتوبر", "نوفمبر"],
+    comparedLastMonth: "مقارنة بالشهر الماضي",
+    improvement: "تحسن",
+    belowAverage: "أقل من المتوسط العام",
+    acrossWilayas: "عبر {count} ولاية",
+    revenueLabel: "إيرادات",
+    expensesLabel: "مصاريف",
+    monthlySalesSub: "إجمالي تحصيل الدفع عند الاستلام (بالألف دج)",
+    salesLabel: "المبيعات (دج)",
+    topWilayasSub: "توزيع الطلبات المؤكدة ونسبة نجاح التسليم",
+    ordersLabel: "الطلبات",
+    returnsCount: "عدد المرتجعات: {count}",
+    noReturns: "لا توجد مرتجعات",
+  },
+  customers: {
+    title: "الزبائن",
+    subtitle: "قائمة زبائنك وطلباتهم",
+    filterAll: "الكل",
+    filterRepeat: "متكررون",
+    filterNew: "جدد",
+    filterRisk: "مرتجعات مرتفعة",
+    filterBlacklisted: "محظورون",
+    exportCSV: "تصدير CSV",
+    searchPlaceholder: "ابحث بالاسم أو الهاتف أو الولاية...",
+    count: "{count} زبون",
+    emptyTitle: "لا توجد زبائن",
+    emptySub: "ستظهر الزبائن هنا بعد استقبال طلبات.",
+    ordersCount: "{count} طلبات",
+    deliveryReturns: "تسليم {delivered} • مرتجع {returned}",
+    orders: "الطلبات",
+    blacklisted: "محظور",
+    addToBlacklist: "إضافة إلى القائمة السوداء",
+    reasonOptional: "السبب (اختياري)",
+    noOrders: "لا توجد طلبات",
+    blacklistAdded: "تمت الإضافة إلى القائمة السوداء",
+    segmentRepeat: "متكرر",
+    segmentNew: "جديد",
+    segmentRisk: "مرتجعات مرتفعة",
+    segmentBlacklisted: "محظور",
+    csvName: "الاسم",
+    csvPhone: "الهاتف",
+    csvWilaya: "الولاية",
+    csvOrders: "الطلبات",
+    csvSales: "المبيعات",
+    csvDelivered: "التسليم",
+    csvReturns: "المرتجعات",
+    csvLastOrder: "آخر طلب",
   },
   team: {
     title: "الفريق",
@@ -967,6 +1127,7 @@ const fr: TranslationBundle = {
     finish: "Terminer",
     yes: "Oui",
     no: "Non",
+    error: "Erreur",
   },
   nav: {
     features: "Fonctionnalités",
@@ -1101,6 +1262,15 @@ const fr: TranslationBundle = {
     timelineSection: "Chronologie",
     noEvents: "Aucun événement",
     returnRecorded: "Retour enregistré",
+    notesSaved: "Notes enregistrées",
+    returned: "Retourné",
+    recordReturn: "Enregistrer un retour",
+    restockHint: "Cette commande n’a pas été déduite du stock",
+    blacklistReasonOptional: "Raison (facultatif)",
+    blacklistAddedFull: "Ajouté à la liste noire",
+    badgeDuplicate: "Doublon",
+    badgeBlacklist: "Liste noire",
+    badgePreviousReturns: "Retours précédents",
   },
   products: {
     title: "Produits & Stock",
@@ -1126,12 +1296,69 @@ const fr: TranslationBundle = {
     cancel: "Annuler",
     emptyTitle: "Aucun produit pour le moment",
     emptySub: "Ajoutez votre premier produit pour démarrer votre catalogue.",
+    exportCSV: "Exporter CSV",
+    addProductSub: "Ajoutez les détails et l’image du produit pour l’afficher dans le stock de votre boutique",
+    dropImage: "Glissez-déposez l’image du produit ici",
+    imageHint: "PNG ou JPG haute résolution, 5 Mo maximum",
+    uploadImage: "Téléverser une image",
+    primary: "Principale",
+    namePlaceholder: "Ex. : montre connectée X10",
+    pricePlaceholder: "4 800 DA",
+    quantity: "Quantité disponible",
+    lowStockThreshold: "Seuil d’alerte de stock",
+    codEnabled: "Activer le paiement à la livraison (COD)",
+    quickOrderHint: "Afficher automatiquement le produit dans les liens de commande rapide de 58 wilayas",
+    saveAndAdd: "Enregistrer et ajouter au stock",
+    categoryElectronics: "Électronique",
+    categoryAccessories: "Accessoires",
+    categoryHome: "Appareils ménagers",
+    categoryClothing: "Vêtements et chaussures",
+    csvName: "Nom du produit",
+    csvSku: "SKU",
+    csvCategory: "Catégorie",
+    csvPrice: "Prix de vente",
+    csvCost: "Coût",
+    csvStock: "Stock",
   },
   delivery: { title: "Livraison", subtitle: "Performance par transporteur", avg: "Moyenne", connected: "Connecté", ready: "Prêt", noShipments: "Aucune expédition" },
   shipments: { title: "Expéditions", subtitle: "Suivez vos expéditions", new: "Nouvelle", order: "Commande", carrier: "Transporteur", tracking: "Suivi", cod: "COD", status: "Statut", actions: "Actions", create: "Créer", selectOrder: "Choisir", trackingNumber: "N° de suivi", codAmount: "Montant COD", createBtn: "Créer", cancel: "Annuler", noShipments: "Aucune", pending: "En attente", shipped: "Expédié", inTransit: "En transit", delivered: "Livré", returned: "Retourné", canceled: "Annulé", ship: "Expédier", deliver: "Livrer", return: "Retourner", chooseOrder: "Choisir" },
   expenses: { title: "Dépenses et campagnes", subtitle: "Suivez vos dépenses", totalExpenses: "Total dépenses", totalAds: "Total pubs", addExpense: "Ajouter dépense", amount: "Montant", note: "Note", add: "Ajouter", category: "Catégorie", date: "Date", noExpenses: "Aucune", addCampaign: "Ajouter campagne", platform: "Plateforme", noCampaigns: "Aucune" },
   confirmation: { title: "Confirmation", pendingCalls: "En attente", confirmedToday: "Confirmées", confirmRate: "Taux", noPending: "Aucune en attente", confirm: "Confirmer", postpone: "Reporter", noAnswer: "Pas de réponse", refuse: "Refuser", attempt: "Tentative" },
-  analytics: { title: "Statistiques", netRevenue: "Revenus nets", deliveryRate: "Taux livraison", returnRate: "Taux retour", avgOrder: "Panier moyen", netProfit: "Bénéfice net", monthlySales: "Ventes mensuelles", last6Months: "6 mois", topWilayas: "Top wilayas", returns: "Retours", noData: "Aucune donnée" },
+  analytics: { title: "Statistiques", netRevenue: "Revenus nets", deliveryRate: "Taux livraison", returnRate: "Taux retour", avgOrder: "Panier moyen", netProfit: "Bénéfice net", monthlySales: "Ventes mensuelles", last6Months: "6 mois", topWilayas: "Top wilayas", returns: "Retours", noData: "Aucune donnée", months: ["Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre"], comparedLastMonth: "par rapport au mois dernier", improvement: "d’amélioration", belowAverage: "Sous la moyenne générale", acrossWilayas: "Dans {count} wilayas", revenueLabel: "Revenus", expensesLabel: "Dépenses", monthlySalesSub: "Total des encaissements COD (en milliers de DA)", salesLabel: "Ventes (DA)", topWilayasSub: "Répartition des commandes confirmées et taux de livraison", ordersLabel: "Commandes", returnsCount: "Nombre de retours : {count}", noReturns: "Aucun retour" },
+  customers: {
+    title: "Clients",
+    subtitle: "Vos clients et leurs commandes",
+    filterAll: "Tous",
+    filterRepeat: "Réguliers",
+    filterNew: "Nouveaux",
+    filterRisk: "Retours élevés",
+    filterBlacklisted: "Bloqués",
+    exportCSV: "Exporter CSV",
+    searchPlaceholder: "Rechercher par nom, téléphone ou wilaya...",
+    count: "{count} clients",
+    emptyTitle: "Aucun client",
+    emptySub: "Les clients apparaîtront ici après réception des commandes.",
+    ordersCount: "{count} commandes",
+    deliveryReturns: "Livrés {delivered} • Retours {returned}",
+    orders: "Commandes",
+    blacklisted: "Bloqué",
+    addToBlacklist: "Ajouter à la liste noire",
+    reasonOptional: "Raison (facultatif)",
+    noOrders: "Aucune commande",
+    blacklistAdded: "Ajouté à la liste noire",
+    segmentRepeat: "Régulier",
+    segmentNew: "Nouveau",
+    segmentRisk: "Retours élevés",
+    segmentBlacklisted: "Bloqué",
+    csvName: "Nom",
+    csvPhone: "Téléphone",
+    csvWilaya: "Wilaya",
+    csvOrders: "Commandes",
+    csvSales: "Ventes",
+    csvDelivered: "Livraisons",
+    csvReturns: "Retours",
+    csvLastOrder: "Dernière commande",
+  },
   team: { title: "Équipe", totalMembers: "Membres", activeAgents: "Agents actifs", pendingInvites: "Invitations", invite: "Inviter", all: "Tous", phone: "Téléphone", phoneConfirm: "Confirmation", shipping: "Préparation", inviteSent: "Invitation envoyée.", inviteMember: "Inviter", storeManager: "Gérant", agent: "Agent", stockKeeper: "Stock", active: "Actif", pending: "En attente" },
   settings: { title: "Paramètres", subtitle: "Personnalisez", storeIdentity: "Boutique", verified: "Vérifié", saveChanges: "Enregistrer", basicData: "Données", storeName: "Nom", defaultWilaya: "Wilaya", supportPhone: "Téléphone", preferences: "Préférences", autoConfirm: "Confirmation auto", autoConfirmHint: "Ignorer l'appel", smsOnDelivery: "SMS livraison", smsOnDeliveryHint: "Envoyer le suivi", lowStockAlert: "Alerte stock", lowStockAlertHint: "Notifier", accountMgmt: "Compte", accountMgmtSub: "Désactiver", pauseStore: "Mettre en pause" },
   inventory: { title: "Stock", subtitle: "Gérez le stock", totalProducts: "Produits", lowStock: "Stock faible", stockValue: "Valeur", searchPlaceholder: "Rechercher...", all: "Tous", low: "Faible", out: "Rupture", addProduct: "Ajouter", sku: "SKU", product: "Produit", category: "Catégorie", available: "Disponible", price: "Prix", status: "Statut", actions: "Actions", inStock: "En stock", lowStockLabel: "Stock faible", outOfStock: "Rupture", products: "Produits", movements: "Mouvements", noProducts: "Aucun", noMovements: "Aucun", adjustStock: "Ajuster", change: "Changement", reason: "Raison", time: "Heure", adjustTitle: "Ajuster", invalidQty: "Quantité invalide", stockAdjusted: "Ajusté", error: "Erreur" },
@@ -1189,6 +1416,7 @@ const en: TranslationBundle = {
     finish: "Finish",
     yes: "Yes",
     no: "No",
+    error: "Error",
   },
   nav: {
     features: "Features",
@@ -1323,6 +1551,15 @@ const en: TranslationBundle = {
     timelineSection: "Timeline",
     noEvents: "No events",
     returnRecorded: "Return recorded",
+    notesSaved: "Notes saved",
+    returned: "Returned",
+    recordReturn: "Record return",
+    restockHint: "This order was not deducted from stock",
+    blacklistReasonOptional: "Reason (optional)",
+    blacklistAddedFull: "Added to blacklist",
+    badgeDuplicate: "Duplicate",
+    badgeBlacklist: "Blacklist",
+    badgePreviousReturns: "Previous returns",
   },
   products: {
     title: "Products & Stock",
@@ -1348,12 +1585,69 @@ const en: TranslationBundle = {
     cancel: "Cancel",
     emptyTitle: "No products yet",
     emptySub: "Add your first product to start taking COD orders.",
+    exportCSV: "Export CSV",
+    addProductSub: "Add the product details and image to show it in your store’s stock",
+    dropImage: "Drag and drop the product image here",
+    imageHint: "High-resolution PNG or JPG, 5 MB max",
+    uploadImage: "Upload image",
+    primary: "Primary",
+    namePlaceholder: "e.g. X10 smart watch",
+    pricePlaceholder: "4 800 DA",
+    quantity: "Available quantity",
+    lowStockThreshold: "Low-stock alert threshold",
+    codEnabled: "Enable cash on delivery (COD)",
+    quickOrderHint: "Show the product automatically in quick-order links for 58 wilayas",
+    saveAndAdd: "Save and add to stock",
+    categoryElectronics: "Electronics",
+    categoryAccessories: "Accessories",
+    categoryHome: "Home appliances",
+    categoryClothing: "Clothing and shoes",
+    csvName: "Product name",
+    csvSku: "SKU",
+    csvCategory: "Category",
+    csvPrice: "Selling price",
+    csvCost: "Cost",
+    csvStock: "Stock",
   },
   delivery: { title: "Delivery", subtitle: "Delivery performance by carrier", avg: "Average", connected: "Connected", ready: "Ready", noShipments: "No shipments" },
   shipments: { title: "Shipments", subtitle: "Track your shipments and carriers", new: "New shipment", order: "Order", carrier: "Carrier", tracking: "Tracking", cod: "COD", status: "Status", actions: "Actions", create: "Create", selectOrder: "Select order", trackingNumber: "Tracking number", codAmount: "COD amount", createBtn: "Create", cancel: "Cancel", noShipments: "No shipments", pending: "Pending", shipped: "Shipped", inTransit: "In transit", delivered: "Delivered", returned: "Returned", canceled: "Canceled", ship: "Ship", deliver: "Deliver", return: "Return", chooseOrder: "Choose order" },
   expenses: { title: "Expenses & campaigns", subtitle: "Track your expenses and ads", totalExpenses: "Total expenses", totalAds: "Total ads", addExpense: "Add expense", amount: "Amount", note: "Note", add: "Add", category: "Category", date: "Date", noExpenses: "No expenses", addCampaign: "Add campaign", platform: "Platform", noCampaigns: "No campaigns" },
   confirmation: { title: "Confirmation", pendingCalls: "Pending calls", confirmedToday: "Confirmed today", confirmRate: "Confirmation rate", noPending: "No pending orders", confirm: "Confirm", postpone: "Postpone", noAnswer: "No answer", refuse: "Refuse", attempt: "Attempt" },
-  analytics: { title: "Analytics", netRevenue: "Net revenue (month)", deliveryRate: "Delivery rate", returnRate: "Return rate", avgOrder: "Avg order value", netProfit: "Net profit", monthlySales: "Monthly sales", last6Months: "Last 6 months", topWilayas: "Top wilayas", returns: "Returns", noData: "No data" },
+  analytics: { title: "Analytics", netRevenue: "Net revenue (month)", deliveryRate: "Delivery rate", returnRate: "Return rate", avgOrder: "Avg order value", netProfit: "Net profit", monthlySales: "Monthly sales", last6Months: "Last 6 months", topWilayas: "Top wilayas", returns: "Returns", noData: "No data", months: ["June", "July", "August", "September", "October", "November"], comparedLastMonth: "compared with last month", improvement: "improvement", belowAverage: "Below overall average", acrossWilayas: "Across {count} wilayas", revenueLabel: "Revenue", expensesLabel: "Expenses", monthlySalesSub: "Total COD collected (thousands of DA)", salesLabel: "Sales (DA)", topWilayasSub: "Confirmed orders and delivery success rate", ordersLabel: "Orders", returnsCount: "Returns: {count}", noReturns: "No returns" },
+  customers: {
+    title: "Customers",
+    subtitle: "Your customers and their orders",
+    filterAll: "All",
+    filterRepeat: "Repeat",
+    filterNew: "New",
+    filterRisk: "High returns",
+    filterBlacklisted: "Blacklisted",
+    exportCSV: "Export CSV",
+    searchPlaceholder: "Search by name, phone, or wilaya...",
+    count: "{count} customers",
+    emptyTitle: "No customers",
+    emptySub: "Customers will appear here after orders are received.",
+    ordersCount: "{count} orders",
+    deliveryReturns: "Delivered {delivered} • Returned {returned}",
+    orders: "Orders",
+    blacklisted: "Blacklisted",
+    addToBlacklist: "Add to blacklist",
+    reasonOptional: "Reason (optional)",
+    noOrders: "No orders",
+    blacklistAdded: "Added to blacklist",
+    segmentRepeat: "Repeat",
+    segmentNew: "New",
+    segmentRisk: "High returns",
+    segmentBlacklisted: "Blacklisted",
+    csvName: "Name",
+    csvPhone: "Phone",
+    csvWilaya: "Wilaya",
+    csvOrders: "Orders",
+    csvSales: "Sales",
+    csvDelivered: "Delivered",
+    csvReturns: "Returns",
+    csvLastOrder: "Last order",
+  },
   team: { title: "Team", totalMembers: "Total members", activeAgents: "Active agents", pendingInvites: "Pending invites", invite: "Invite member", all: "All", phone: "Phone", phoneConfirm: "Phone confirmation", shipping: "Shipping prep", inviteSent: "An invitation will be sent by email.", inviteMember: "Invite member", storeManager: "Store manager", agent: "Agent", stockKeeper: "Stock keeper", active: "Active", pending: "Pending" },
   settings: { title: "Settings", subtitle: "Customize your store", storeIdentity: "Your store", verified: "Verified", saveChanges: "Save changes", basicData: "Basic data", storeName: "Store name", defaultWilaya: "Default wilaya", supportPhone: "Support phone", preferences: "Confirmation & delivery preferences", autoConfirm: "Auto-confirm trusted customers", autoConfirmHint: "Skip call for 100% delivery customers", smsOnDelivery: "SMS on delivery", smsOnDeliveryHint: "Send tracking via SMS", lowStockAlert: "Low stock alert", lowStockAlertHint: "Notify under 10 units", accountMgmt: "Account management", accountMgmtSub: "Temporarily disable or close", pauseStore: "Pause store" },
   inventory: { title: "Inventory", subtitle: "Manage stock and movements", totalProducts: "Total products", lowStock: "Low stock", stockValue: "Stock value", searchPlaceholder: "Search by name or SKU...", all: "All", low: "Low", out: "Out of stock", addProduct: "Add product", sku: "SKU", product: "Product", category: "Category", available: "Available", price: "Selling price", status: "Status", actions: "Actions", inStock: "In stock", lowStockLabel: "Low stock", outOfStock: "Out of stock", products: "Products", movements: "Movements", noProducts: "No products", noMovements: "No movements", adjustStock: "Adjust stock", change: "Change", reason: "Reason", time: "Time", adjustTitle: "Adjust stock", invalidQty: "Invalid quantity", stockAdjusted: "Stock adjusted", error: "Error" },

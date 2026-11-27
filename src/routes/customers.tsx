@@ -13,7 +13,6 @@ import { LocalDate } from "@/components/local-date";
 import { wilayaLabel } from "@/lib/coddz";
 import { buildWhatsAppLink } from "@/lib/coddz";
 import { initials, customerSegment, segmentToneClass, segmentLabel } from "@/lib/avatar";
-import { formatDA } from "@/lib/coddz";
 
 export const Route = createFileRoute("/customers")({
   component: () => (
@@ -78,28 +77,28 @@ function CustomersPage() {
         reason: blacklistReason || null,
       });
       if (error) throw error;
-      toast.success("تمت الإضافة إلى القائمة السوداء");
+      toast.success(t.customers.blacklistAdded);
       setShowBlacklist(false);
       setBlacklistReason("");
     } catch (e: any) {
-      toast.error(e?.message ?? "خطأ");
+      toast.error(e?.message ?? t.common.error);
     }
   };
 
   const filters: { key: FilterKey; label: string; count: number }[] = [
-    { key: "all", label: "الكل", count: totalCustomers },
-    { key: "repeat", label: "متكررون", count: repeatCustomers },
-    { key: "new", label: "جدد", count: newCustomers },
-    { key: "risk", label: "مرتجعات مرتفعة", count: riskCustomers },
-    { key: "blacklisted", label: "محظورون", count: blacklistedCustomers },
+    { key: "all", label: t.customers.filterAll, count: totalCustomers },
+    { key: "repeat", label: t.customers.filterRepeat, count: repeatCustomers },
+    { key: "new", label: t.customers.filterNew, count: newCustomers },
+    { key: "risk", label: t.customers.filterRisk, count: riskCustomers },
+    { key: "blacklisted", label: t.customers.filterBlacklisted, count: blacklistedCustomers },
   ];
 
   return (
     <DashboardShell>
       <div className="flex flex-col gap-gutter-xl">
         <div>
-          <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">الزبائن</h1>
-          <p className="font-body text-body-md text-on-surface-variant">قائمة زبائنك وطلباتهم</p>
+          <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">{t.customers.title}</h1>
+          <p className="font-body text-body-md text-on-surface-variant">{t.customers.subtitle}</p>
         </div>
 
         {/* filters + export */}
@@ -124,7 +123,7 @@ function CustomersPage() {
             type="button"
             onClick={() => {
               const rows = [
-                ["الاسم", "الهاتف", "الولاية", "الطلبات", "المبيعات", "التسليم", "المرتجعات", "آخر طلب"],
+                [t.customers.csvName, t.customers.csvPhone, t.customers.csvWilaya, t.customers.csvOrders, t.customers.csvSales, t.customers.csvDelivered, t.customers.csvReturns, t.customers.csvLastOrder],
                 ...customers.map((c) => [c.name, c.phone, c.wilaya, String(c.orders), String(c.total), String(c.delivered), String(c.returned), c.lastDate]),
               ];
               const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
@@ -139,7 +138,7 @@ function CustomersPage() {
             className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
           >
             <span className="material-symbols-outlined text-[18px]">download</span>
-            تصدير CSV
+            {t.customers.exportCSV}
           </button>
         </div>
 
@@ -150,14 +149,14 @@ function CustomersPage() {
           </span>
           <input
             type="search"
-            placeholder="ابحث بالاسم أو الهاتف أو الولاية..."
+            placeholder={t.customers.searchPlaceholder}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-md border border-outline-variant bg-surface-container-lowest py-2 pl-3 pr-10 font-body text-body-md text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-primary"
           />
         </div>
 
-        <p className="font-body text-label-md text-on-surface-variant">{filtered.length} زبون</p>
+        <p className="font-body text-label-md text-on-surface-variant">{t.customers.count.replace("{count}", String(filtered.length))}</p>
 
         {isLoading ? (
           <div className="grid grid-cols-1 gap-gutter-lg lg:grid-cols-2">
@@ -166,7 +165,7 @@ function CustomersPage() {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <EmptyState title="لا توجد زبائن" subtitle="ستظهر الزبائن هنا بعد استقبال طلبات." illustration="customers-empty" />
+          <EmptyState title={t.customers.emptyTitle} subtitle={t.customers.emptySub} illustration="customers-empty" />
         ) : (
           <div className="grid grid-cols-1 gap-gutter-lg lg:grid-cols-2">
             {filtered.map((c) => {
@@ -197,14 +196,14 @@ function CustomersPage() {
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-1">
                       <span className={`rounded-full px-2.5 py-0.5 font-body text-label-sm ${seg === "blacklisted" ? "bg-error-container text-on-error-container" : seg === "risk" ? "bg-warning-container text-on-warning-container" : seg === "repeat" ? "bg-accent-container text-on-accent-container" : "bg-surface-container-low text-on-surface-variant"}`}>
-                        {segmentLabel(seg)}
+                        {segmentLabel(seg, lang)}
                       </span>
                       <Money value={c.total} className="font-headline text-title-md text-primary" />
-                      <span className="font-body text-label-sm text-on-surface-variant">{c.orders} طلبات</span>
+                      <span className="font-body text-label-sm text-on-surface-variant">{t.customers.ordersCount.replace("{count}", String(c.orders))}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between border-t border-outline-variant pt-2 text-on-surface-variant">
-                    <span className="font-body text-label-sm">تسليم {c.delivered} • مرتجع {c.returned}</span>
+                    <span className="font-body text-label-sm">{t.customers.deliveryReturns.replace("{delivered}", String(c.delivered)).replace("{returned}", String(c.returned))}</span>
                     <LocalDate value={c.lastDate} className="font-body text-label-sm" />
                   </div>
                 </button>
@@ -227,7 +226,7 @@ function CustomersPage() {
                 {selectedCustomer.phone && (
                   <a href={`tel:${selectedCustomer.phone}`} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary">
                     <span className="material-symbols-outlined text-[16px]">call</span>
-                    اتصال
+                    {t.common.call}
                   </a>
                 )}
                 {selectedCustomer.phone && (
@@ -242,19 +241,19 @@ function CustomersPage() {
               </div>
 
               {selectedCustomer.blacklisted ? (
-                <p className="mt-3 rounded-md bg-error-container px-3 py-2 font-body text-body-md text-on-error-container">محظور</p>
+                <p className="mt-3 rounded-md bg-error-container px-3 py-2 font-body text-body-md text-on-error-container">{t.customers.blacklisted}</p>
               ) : (
                 <div className="mt-3">
                   {!showBlacklist ? (
                     <button type="button" onClick={() => setShowBlacklist(true)} className="rounded-md bg-error-container px-3 py-1.5 font-headline text-label-md text-on-error-container">
-                      إضافة إلى القائمة السوداء
+                      {t.customers.addToBlacklist}
                     </button>
                   ) : (
                     <div className="flex flex-col gap-2">
                       <input
                         value={blacklistReason}
                         onChange={(e) => setBlacklistReason(e.target.value)}
-                        placeholder="السبب (اختياري)"
+                        placeholder={t.customers.reasonOptional}
                         className="w-full rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
                       />
                       <div className="flex gap-gutter-sm">
@@ -263,14 +262,14 @@ function CustomersPage() {
                           onClick={handleBlacklist}
                           className="rounded-md bg-error px-3 py-1.5 font-headline text-label-md text-on-error"
                         >
-                          تأكيد
+                          {t.common.confirm}
                         </button>
                         <button
                           type="button"
                           onClick={() => setShowBlacklist(false)}
                           className="rounded-md bg-surface-container-low px-3 py-1.5 font-headline text-label-md text-on-surface"
                         >
-                          إلغاء
+                          {t.common.cancel}
                         </button>
                       </div>
                     </div>
@@ -279,7 +278,7 @@ function CustomersPage() {
               )}
 
               <section className="mt-4">
-                <h3 className="font-headline text-title-md text-on-surface">الطلبات</h3>
+                <h3 className="font-headline text-title-md text-on-surface">{t.customers.orders}</h3>
                 <ul className="mt-2 flex flex-col gap-gutter-sm">
                   {customerOrders.map((o) => (
                     <li key={o.id} className="rounded-md border border-outline-variant bg-surface p-3">
@@ -294,7 +293,7 @@ function CustomersPage() {
                     </li>
                   ))}
                   {customerOrders.length === 0 && (
-                    <p className="font-body text-body-md text-on-surface-variant">لا توجد طلبات</p>
+                    <p className="font-body text-body-md text-on-surface-variant">{t.customers.noOrders}</p>
                   )}
                 </ul>
               </section>

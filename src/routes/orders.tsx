@@ -503,17 +503,17 @@ function OrdersPage() {
                             )}
                             {order.flags?.duplicate && (
                               <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">
-                                مكرر
+                                {t.orders.badgeDuplicate}
                               </span>
                             )}
                             {order.flags?.blacklisted && (
                               <span className="rounded-full bg-error-container px-2 py-0.5 font-body text-label-sm text-on-error-container">
-                                قائمة سوداء
+                                {t.orders.badgeBlacklist}
                               </span>
                             )}
                             {(order.flags?.previous_returns ?? 0) > 0 && (
                               <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">
-                                مرتجعات سابقة
+                                {t.orders.badgePreviousReturns}
                               </span>
                             )}
                           </div>
@@ -809,7 +809,7 @@ function OrdersPage() {
                     className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary"
                   >
                     <span className="material-symbols-outlined text-[16px]">call</span>
-                    اتصال
+                    {t.orders.call}
                   </a>
                 )}
                 {selectedOrder.phone && (
@@ -835,7 +835,7 @@ function OrdersPage() {
 
             {/* items */}
             <section className="mt-4">
-              <h3 className="font-headline text-title-md text-on-surface">المنتجات</h3>
+              <h3 className="font-headline text-title-md text-on-surface">{t.orders.productsSection}</h3>
               <p className="mt-1 font-body text-body-md text-on-surface-variant">
                 {selectedOrder.product}
               </p>
@@ -844,12 +844,12 @@ function OrdersPage() {
             {/* price breakdown */}
             <section className="mt-4 rounded-xl border border-outline-variant bg-surface p-4">
               <div className="flex justify-between font-body text-body-md text-on-surface">
-                <span>المجموع</span>
+                <span>{t.orders.total}</span>
                 <span className="tabular-nums"><Money value={selectedOrder.amount} /></span>
               </div>
               {selectedOrder.delivery_price != null && (
                 <div className="flex justify-between font-body text-body-md text-on-surface-variant">
-                  <span>التوصيل</span>
+                  <span>{t.orders.delivery}</span>
                   <span className="tabular-nums">
                     <Money value={selectedOrder.delivery_price ?? 0} />
                   </span>
@@ -862,17 +862,17 @@ function OrdersPage() {
               <div className="mt-4 flex flex-wrap gap-1">
                 {selectedOrder.flags.duplicate && (
                   <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">
-                    مكرر
+                    {t.orders.badgeDuplicate}
                   </span>
                 )}
                 {selectedOrder.flags.blacklisted && (
                   <span className="rounded-full bg-error-container px-2 py-0.5 font-body text-label-sm text-on-error-container">
-                    قائمة سوداء
+                    {t.orders.badgeBlacklist}
                   </span>
                 )}
                 {(selectedOrder.flags.previous_returns ?? 0) > 0 && (
                   <span className="rounded-full bg-warning-container px-2 py-0.5 font-body text-label-sm text-on-warning-container">
-                    مرتجعات سابقة
+                    {t.orders.badgePreviousReturns}
                   </span>
                 )}
               </div>
@@ -880,7 +880,7 @@ function OrdersPage() {
 
             {/* notes editable */}
             <section className="mt-4">
-              <h3 className="font-headline text-title-md text-on-surface">ملاحظات</h3>
+              <h3 className="font-headline text-title-md text-on-surface">{t.orders.notes}</h3>
               <textarea
                 rows={3}
                 value={notesDraft}
@@ -913,9 +913,9 @@ function OrdersPage() {
                       .eq("id", selectedOrder.id);
                     if (noteErr) throw noteErr;
                     qc.invalidateQueries({ queryKey: ["orders", storeId] });
-                    toast.success("تم حفظ الملاحظات");
+                    toast.success(t.orders.notesSaved);
                   } catch (e: any) {
-                    toast.error(e?.message ?? "خطأ");
+                    toast.error(e?.message ?? t.common.error);
                   }
                 }}
                 className="mt-2 rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary"
@@ -942,18 +942,18 @@ function OrdersPage() {
                 onClick={() => setShowReturn(true)}
                 className="rounded-md bg-error-container px-3 py-1.5 font-headline text-label-sm text-on-error-container"
               >
-                مرتجع
+                {t.orders.returned}
               </button>
             </section>
 
             {showReturn && (
               <section className="mt-4 rounded-xl border border-outline-variant bg-surface p-4">
-                <h3 className="font-headline text-title-md text-on-surface">تسجيل مرتجع</h3>
+                <h3 className="font-headline text-title-md text-on-surface">{t.orders.recordReturn}</h3>
                 <textarea
                   rows={2}
                   value={returnReason}
                   onChange={(e) => setReturnReason(e.target.value)}
-                  placeholder="السبب"
+                  placeholder={t.orders.reason}
                   className="mt-2 w-full rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
                 />
                 {selectedOrder.status === "shipped" || selectedOrder.status === "delivered" ? (
@@ -964,11 +964,11 @@ function OrdersPage() {
                       onChange={(e) => setRestock(e.target.checked)}
                       className="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
                     />
-                    إعادة للمخزون
+                    {t.orders.restock}
                   </label>
                 ) : (
                   <p className="mt-2 font-body text-body-md text-on-surface-variant">
-                    لم يتم خصم هذا الطلب من المخزون
+                    {t.orders.restockHint}
                   </p>
                 )}
                 <div className="mt-3 flex gap-gutter-sm">
@@ -984,17 +984,17 @@ function OrdersPage() {
                           reason: returnReason,
                           restock: canRestock ? restock : false,
                         });
-                        toast.success("تم تسجيل المرتجع");
+                        toast.success(t.orders.returnRecorded);
                         setShowReturn(false);
                         setReturnReason("");
                       } catch (e) {
-                        toast.error(e instanceof Error ? e.message : "خطأ");
+                        toast.error(e instanceof Error ? e.message : t.common.error);
                       }
                     }}
                     disabled={recordReturn.isPending}
                     className="rounded-md bg-error px-3 py-1.5 font-headline text-label-md text-on-error disabled:opacity-60"
                   >
-                    {recordReturn.isPending ? "..." : "تأكيد"}
+                    {recordReturn.isPending ? "..." : t.common.confirm}
                   </button>
                   <button
                     type="button"
@@ -1015,14 +1015,14 @@ function OrdersPage() {
                   onClick={() => setShowBlacklist(true)}
                   className="rounded-md bg-error-container px-3 py-1.5 font-headline text-label-md text-on-error-container"
                 >
-                  إضافة إلى القائمة السوداء
+                  {t.orders.blacklistAdd}
                 </button>
               ) : (
                 <div className="flex flex-col gap-2">
                   <input
                     value={blacklistReason}
                     onChange={(e) => setBlacklistReason(e.target.value)}
-                    placeholder="السبب (اختياري)"
+                    placeholder={t.orders.blacklistReasonOptional}
                     className="w-full rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
                   />
                   <div className="flex gap-gutter-sm">
@@ -1036,16 +1036,16 @@ function OrdersPage() {
                             reason: blacklistReason || null,
                           });
                           if (error) throw error;
-                          toast.success("تمت الإضافة إلى القائمة السوداء");
+                          toast.success(t.orders.blacklistAddedFull);
                           setShowBlacklist(false);
                           setBlacklistReason("");
                         } catch (e) {
-                          toast.error(e instanceof Error ? e.message : "خطأ");
+                          toast.error(e instanceof Error ? e.message : t.common.error);
                         }
                       }}
                       className="rounded-md bg-error px-3 py-1.5 font-headline text-label-md text-on-error"
                     >
-                      تأكيد
+                      {t.common.confirm}
                     </button>
                     <button
                       type="button"
@@ -1061,7 +1061,7 @@ function OrdersPage() {
 
             {/* timeline */}
             <section className="mt-4">
-              <h3 className="font-headline text-title-md text-on-surface">الجدول الزمني</h3>
+              <h3 className="font-headline text-title-md text-on-surface">{t.orders.timelineSection}</h3>
               <ul className="mt-2 flex flex-col gap-gutter-sm">
                 {events.map((ev) => (
                   <li
@@ -1090,7 +1090,7 @@ function OrdersPage() {
                   </li>
                 ))}
                 {events.length === 0 && (
-                  <p className="font-body text-body-md text-on-surface-variant">لا توجد أحداث</p>
+                  <p className="font-body text-body-md text-on-surface-variant">{t.orders.noEvents}</p>
                 )}
               </ul>
             </section>

@@ -41,8 +41,6 @@ export const Route = createFileRoute("/analytics")({
   head: () => ({ meta: [{ title: "Analytics — COD YOU" }] }),
 });
 
-const MONTHS_AR = ["جوان", "جويلية", "أوت", "سبتمبر", "أكتوبر", "نوفمبر"];
-
 function AnalyticsPage() {
   const { t, lang } = useLanguage();
   const { storeId } = useAuth();
@@ -120,7 +118,7 @@ function AnalyticsPage() {
         return `${c.getFullYear()}-${c.getMonth()}` === key;
       })
       .reduce((s, o) => s + o.amount, 0);
-    return { label: MONTHS_AR[i] ?? "", value: total, month: d.getMonth() };
+    return { label: t.analytics.months[i] ?? "", value: total, month: d.getMonth() };
   });
   const maxMonthly = Math.max(...monthly.map((m) => m.value), 1);
 
@@ -157,7 +155,7 @@ function AnalyticsPage() {
         <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-2 lg:grid-cols-5 items-stretch">
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">
-              صافي المداخيل (الشهر)
+              {t.analytics.netRevenue}
             </span>
             <span className="font-headline text-headline-md tabular-nums text-primary">
               <Money value={thisMonthRevenue || revenue} />
@@ -166,12 +164,12 @@ function AnalyticsPage() {
               className={`font-body text-label-sm tabular-nums ${revenueChange >= 0 ? "text-success" : "text-error"}`}
             >
               {revenueChange >= 0 ? "+" : ""}
-              {revenueChange.toFixed(1)}% مقارنة بالشهر الماضي
+              {revenueChange.toFixed(1)}% {t.analytics.comparedLastMonth}
             </span>
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">
-              نسبة التسليم الناجح
+              {t.analytics.deliveryRate}
             </span>
             <span className="font-headline text-headline-md tabular-nums text-on-surface">
               {deliveryRate.toFixed(1)}%
@@ -180,36 +178,36 @@ function AnalyticsPage() {
               className={`font-body text-label-sm tabular-nums ${deliveryChange >= 0 ? "text-success" : "text-error"}`}
             >
               {deliveryChange >= 0 ? "+" : ""}
-              {deliveryChange.toFixed(1)}% تحسن
+              {deliveryChange.toFixed(1)}% {t.analytics.improvement}
             </span>
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
-            <span className="font-body text-label-md text-on-surface-variant">نسبة المرتجعات</span>
+            <span className="font-body text-label-md text-on-surface-variant">{t.analytics.returnRate}</span>
             <span className="font-headline text-headline-md tabular-nums text-warning">
               {returnRate.toFixed(1)}%
             </span>
             <span className="font-body text-label-sm tabular-nums text-on-surface-variant">
-              أقل من المتوسط العام
+              {t.analytics.belowAverage}
             </span>
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">
-              متوسط قيمة الطلب
+              {t.analytics.avgOrder}
             </span>
             <span className="font-headline text-headline-md tabular-nums text-on-surface">
               <Money value={avgOrder} />
             </span>
             <span className="font-body text-label-sm tabular-nums text-on-surface-variant">
-              عبر {wilayaCount || 0} ولاية
+              {t.analytics.acrossWilayas.replace("{count}", String(wilayaCount || 0))}
             </span>
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
-            <span className="font-body text-label-md text-on-surface-variant">صافي الربح</span>
+            <span className="font-body text-label-md text-on-surface-variant">{t.analytics.netProfit}</span>
             <span className="font-headline text-headline-md tabular-nums text-primary">
               <Money value={kpis.netProfit} />
             </span>
             <span className="font-body text-label-sm tabular-nums text-on-surface-variant">
-              إيرادات <Money value={Number(stats?.revenue ?? revenue)} /> • مصاريف{" "}
+              {t.analytics.revenueLabel} <Money value={Number(stats?.revenue ?? revenue)} /> • {t.analytics.expensesLabel}{" "}
               <Money value={Number(stats?.expenses ?? 0) + Number(stats?.ad_spend ?? 0)} />
             </span>
           </article>
@@ -217,11 +215,11 @@ function AnalyticsPage() {
 
         {isLoading ? (
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-            جارٍ التحميل...
+            {t.common.loading}
           </div>
         ) : orders.length === 0 ? (
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-            لا توجد بيانات
+            {t.analytics.noData}
           </div>
         ) : (
           <section className="grid grid-cols-1 gap-gutter-lg lg:grid-cols-2 items-stretch">
@@ -229,14 +227,14 @@ function AnalyticsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-headline text-title-lg text-on-surface">
-                    تطور المبيعات الشهرية
+                    {t.analytics.monthlySales}
                   </h2>
                   <p className="font-body text-body-md text-on-surface-variant">
-                    إجمالي تحصيل الدفع عند الاستلام (بالألف دج)
+                    {t.analytics.monthlySalesSub}
                   </p>
                 </div>
                 <span className="rounded-full bg-accent-container px-3 py-1 font-headline text-label-sm text-on-accent-container">
-                  آخر 6 أشهر
+                  {t.analytics.last6Months}
                 </span>
               </div>
 
@@ -244,7 +242,7 @@ function AnalyticsPage() {
                 <ChartContainer
                   config={{
                     value: {
-                      label: "المبيعات (دج)",
+                      label: t.analytics.salesLabel,
                       color: "hsl(var(--primary))",
                     },
                   }}
@@ -290,9 +288,9 @@ function AnalyticsPage() {
 
             <article className="flex h-full flex-col justify-between gap-gutter-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
               <div>
-                <h2 className="font-headline text-title-lg text-on-surface">أعلى الولايات طلبًا</h2>
+                <h2 className="font-headline text-title-lg text-on-surface">{t.analytics.topWilayas}</h2>
                 <p className="font-body text-body-md text-on-surface-variant">
-                  توزيع الطلبات المؤكدة ونسبة نجاح التسليم
+                  {t.analytics.topWilayasSub}
                 </p>
               </div>
 
@@ -300,7 +298,7 @@ function AnalyticsPage() {
                 <ChartContainer
                   config={{
                     count: {
-                      label: "الطلبات",
+                      label: t.analytics.ordersLabel,
                       color: "hsl(var(--primary))",
                     },
                   }}
@@ -337,12 +335,12 @@ function AnalyticsPage() {
         )}
 
         <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
-          <h2 className="font-headline text-title-lg text-on-surface">المرتجعات</h2>
+          <h2 className="font-headline text-title-lg text-on-surface">{t.analytics.returns}</h2>
           <p className="font-body text-body-md text-on-surface-variant">
-            عدد المرتجعات: {orders.filter((o) => o.status === "returned").length}
+            {t.analytics.returnsCount.replace("{count}", String(orders.filter((o) => o.status === "returned").length))}
           </p>
           {returnEvents.length === 0 ? (
-            <p className="mt-3 font-body text-body-md text-on-surface-variant">لا توجد مرتجعات</p>
+            <p className="mt-3 font-body text-body-md text-on-surface-variant">{t.analytics.noReturns}</p>
           ) : (
             <ul className="mt-3 flex flex-col gap-gutter-sm">
               {returnEvents.map((ev: Database["public"]["Tables"]["order_events"]["Row"]) => (

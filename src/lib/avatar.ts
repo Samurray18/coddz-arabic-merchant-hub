@@ -1,3 +1,6 @@
+import type { Lang } from "@/lib/coddz";
+import { TRANSLATIONS } from "@/lib/i18n";
+
 export type CustomerSegment = "blacklisted" | "risk" | "repeat" | "new";
 
 export function initials(name: string): string {
@@ -26,15 +29,16 @@ export function segmentToneClass(seg: CustomerSegment): string {
   }
 }
 
-export function segmentLabel(seg: CustomerSegment): string {
+export function segmentLabel(seg: CustomerSegment, lang: Lang): string {
+  const labels = TRANSLATIONS[lang].customers;
   switch (seg) {
     case "repeat":
-      return "متكرر";
+      return labels.segmentRepeat;
     case "new":
-      return "جديد";
+      return labels.segmentNew;
     case "risk":
-      return "مرتجعات مرتفعة";
+      return labels.segmentRisk;
     case "blacklisted":
-      return "محظور";
+      return labels.segmentBlacklisted;
   }
 }

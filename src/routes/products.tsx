@@ -59,7 +59,7 @@ function ProductsPage() {
 
   const exportCSV = () => {
     const rows = [
-      ["اسم المنتج", "SKU", "التصنيف", "سعر البيع", "التكلفة", "المخزون"],
+      [t.products.csvName, t.products.csvSku, t.products.csvCategory, t.products.csvPrice, t.products.csvCost, t.products.csvStock],
       ...products.map((p) => [
         p.name,
         p.sku,
@@ -159,7 +159,7 @@ function ProductsPage() {
               className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
             >
               <span className="material-symbols-outlined text-[18px]">download</span>
-              تصدير CSV
+              {t.products.exportCSV}
             </button>
             <button
               type="button"
@@ -319,9 +319,9 @@ function ProductsPage() {
               </button>
               <div className="flex items-center gap-2">
                 <div>
-                  <h2 id="product-edit-title" className="font-headline text-title-lg text-on-surface">إضافة منتج جديد</h2>
+                  <h2 id="product-edit-title" className="font-headline text-title-lg text-on-surface">{t.products.addProduct}</h2>
                   <p className="font-body text-body-md text-on-surface-variant">
-                    أضف تفاصيل المنتج وصورته ليظهر مباشرة في مخزون متجر النخيل
+                    {t.products.addProductSub}
                   </p>
                 </div>
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent-container text-on-accent-container">
@@ -333,19 +333,19 @@ function ProductsPage() {
             {/* image upload dropzone */}
             <div className="mt-5">
               <div className="flex justify-between items-center mb-2">
-                <span className="font-body text-label-md text-on-surface">صورة المنتج</span>
+                <span className="font-body text-label-md text-on-surface">{t.products.image}</span>
               </div>
               <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-primary/40 bg-surface-container-low px-6 py-6 text-center">
                 <span className="material-symbols-outlined text-[32px] text-primary">
                   cloud_upload
                 </span>
-                <p className="font-body text-body-md text-on-surface">اسحب وأفلت صورة المنتج هنا</p>
+                <p className="font-body text-body-md text-on-surface">{t.products.dropImage}</p>
                 <p className="font-body text-label-sm text-on-surface-variant">
-                  PNG أو JPG بدقة عالية، الحد الأقصى 5 ميغابايت
+                  {t.products.imageHint}
                 </p>
                 <label className="mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-primary px-4 py-2 font-headline text-label-md text-on-primary transition-colors hover:bg-success">
                   <span className="material-symbols-outlined text-[18px]">upload</span>
-                  رفع صورة
+                  {t.products.uploadImage}
                   <input
                     type="file"
                     accept="image/*"
@@ -372,7 +372,7 @@ function ProductsPage() {
                   <div className="absolute inset-0 flex items-end justify-start p-1.5">
                     <div className="flex items-center gap-0.5 rounded-full bg-primary-container/20 px-2 py-0.5 font-body text-label-sm text-primary">
                       <span className="material-symbols-outlined text-[12px]">watch</span>
-                      رئيسية
+                      {t.products.primary}
                     </div>
                   </div>
                 </div>
@@ -388,16 +388,16 @@ function ProductsPage() {
             {/* 2-column form grid */}
             <div className="mt-5 grid grid-cols-1 gap-gutter-md sm:grid-cols-2">
               <label className="flex flex-col gap-1">
-                <span className="font-body text-label-md text-on-surface-variant">اسم المنتج</span>
+                <span className="font-body text-label-md text-on-surface-variant">{t.products.name}</span>
                 <input
                   className={fieldClass}
-                  placeholder="مثال: ساعة ذكية رياضية X10"
+                  placeholder={t.products.namePlaceholder}
                   value={form.name}
                   onChange={(event) => setForm({ ...form, name: event.target.value })}
                 />
               </label>
               <label className="flex flex-col gap-1">
-                <span className="font-body text-label-md text-on-surface-variant">رمز SKU</span>
+                <span className="font-body text-label-md text-on-surface-variant">{t.products.sku}</span>
                 <input
                   className={fieldClass}
                   dir="ltr"
@@ -407,35 +407,35 @@ function ProductsPage() {
                 />
               </label>
               <label className="flex flex-col gap-1">
-                <span className="font-body text-label-md text-on-surface-variant">التصنيف</span>
+                <span className="font-body text-label-md text-on-surface-variant">{t.products.category}</span>
                 <select
                   className={fieldClass}
                   value={form.category}
                   onChange={(event) => setForm({ ...form, category: event.target.value })}
                 >
-                  <option value="">إلكترونيات</option>
-                  <option value="إلكترونيات">إلكترونيات</option>
-                  <option value="إكسسوارات">إكسسوارات</option>
-                  <option value="أجهزة منزلية">أجهزة منزلية</option>
-                  <option value="ملابس وأحذية">ملابس وأحذية</option>
+                  <option value="">{t.products.categoryElectronics}</option>
+                  <option value="إلكترونيات">{t.products.categoryElectronics}</option>
+                  <option value="إكسسوارات">{t.products.categoryAccessories}</option>
+                  <option value="أجهزة منزلية">{t.products.categoryHome}</option>
+                  <option value="ملابس وأحذية">{t.products.categoryClothing}</option>
                 </select>
               </label>
               <label className="flex flex-col gap-1">
                 <span className="font-body text-label-md text-on-surface-variant">
-                  سعر البيع (دج)
+                  {t.products.price}
                 </span>
                 <input
                   type="number"
                   min="0"
                   className={fieldClass}
-                  placeholder="4 800 دج"
+                  placeholder={t.products.pricePlaceholder}
                   value={form.price}
                   onChange={(event) => setForm({ ...form, price: event.target.value })}
                 />
               </label>
               <label className="flex flex-col gap-1">
                 <span className="font-body text-label-md text-on-surface-variant">
-                  الكمية المتوفرة
+                  {t.products.quantity}
                 </span>
                 <input
                   type="number"
@@ -448,7 +448,7 @@ function ProductsPage() {
               </label>
               <label className="flex flex-col gap-1">
                 <span className="font-body text-label-md text-on-surface-variant">
-                  حد تنبيه النفاد
+                  {t.products.lowStockThreshold}
                 </span>
                 <input
                   type="number"
@@ -471,10 +471,10 @@ function ProductsPage() {
                 </span>
                 <div className="flex flex-col gap-0.5">
                   <span className="font-headline text-label-lg text-on-surface">
-                    تفعيل الدفع عند الاستلام (COD)
+                    {t.products.codEnabled}
                   </span>
                   <span className="font-body text-body-md text-on-surface-variant">
-                    إظهار المنتج تلقائياً في روابط الطلب السريع لـ 58 ولاية
+                    {t.products.quickOrderHint}
                   </span>
                 </div>
               </div>
@@ -493,7 +493,7 @@ function ProductsPage() {
                 onClick={() => setEditOpen(false)}
                 className="rounded-md bg-surface-container-low px-4 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container"
               >
-                إلغاء
+                {t.common.cancel}
               </button>
               <button
                 type="button"
@@ -502,7 +502,7 @@ function ProductsPage() {
                 className="inline-flex items-center gap-1.5 rounded-md bg-primary px-5 py-2.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success disabled:opacity-60"
               >
                 <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                حفظ وإضافة للمخزون
+                {t.products.saveAndAdd}
               </button>
             </div>
           </div>
