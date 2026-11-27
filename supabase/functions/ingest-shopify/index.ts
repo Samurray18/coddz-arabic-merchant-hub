@@ -33,21 +33,14 @@ Deno.serve(async (req) => {
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
-  // rate limit
-  const limited = await rateLimit(admin, storeId);
-  if (limited) {
-    return jsonError("Rate limit exceeded", 429, cors);
-  }
-
   // find integration
   const { data: integration } = await admin
     .from("integrations")
-    .select("id, status")
+    .select("id, store_id, status")
     .eq("store_id", storeId)
     .eq("type", "shopify")
     .maybeSingle();
   if (!integration || integration.status !== "active") {
-    await logIntake(admin, storeId, "shopify", "rejected", "Integration inactive", null, null);
     return jsonError("Integration inactive", 403, cors);
   }
 
@@ -59,34 +52,39 @@ Deno.serve(async (req) => {
     .maybeSingle();
   const secret = secretRow?.secret;
   if (!secret) {
-    await logIntake(admin, storeId, "shopify", "rejected", "Missing secret", null, null);
     return jsonError("Missing secret", 403, cors);
   }
 
   const rawBody = await req.text();
   const hmac = req.headers.get("x-shopify-hmac-sha256");
   if (!hmac) {
-    await logIntake(admin, storeId, "shopify", "rejected", "Missing HMAC", null, null);
     return jsonError("Missing HMAC", 401, cors);
   }
   const ok = await verifyHmacBase64(secret, rawBody, hmac);
   if (!ok) {
-    await logIntake(admin, storeId, "shopify", "rejected", "Invalid HMAC", null, null);
     return jsonError("Invalid signature", 401, cors);
+  }
+
+  const verifiedStoreId: string = integration.store_id;
+
+  // rate limit only after HMAC verification succeeds
+  const limited = await rateLimit(admin, verifiedStoreId);
+  if (limited) {
+    return jsonError("Rate limit exceeded", 429, cors);
   }
 
   let payload: any;
   try {
     payload = JSON.parse(rawBody);
   } catch {
-    await logIntake(admin, storeId, "shopify", "rejected", "Invalid JSON", null, null);
+    await logIntake(admin, verifiedStoreId, "shopify", "rejected", "Invalid JSON", null, null);
     return jsonError("Invalid JSON", 400, cors);
   }
 
   // topic handling: Shopify sends X-Shopify-Topic
   const topic = req.headers.get("x-shopify-topic") ?? payload?.topic ?? "orders/create";
   if (topic !== "orders/create") {
-    await logIntake(admin, storeId, "shopify", "accepted", null, payload, null);
+    await logIntake(admin, verifiedStoreId, "shopify", "accepted", null, payload, null);
     return jsonOk({ ok: true, ignored: topic }, 200, cors);
   }
 
@@ -101,13 +99,13 @@ Deno.serve(async (req) => {
   const phoneRaw = shipping.phone ?? billing.phone ?? customer.phone ?? customer.default_address?.phone;
   const phone = normalizePhone(String(phoneRaw ?? ""));
   if (!phone) {
-    await logIntake(admin, storeId, "shopify", "rejected", "Invalid phone", payload, null);
+    await logIntake(admin, verifiedStoreId, "shopify", "rejected", "Invalid phone", payload, null);
     return jsonError("Invalid phone", 400, cors);
   }
   const province = shipping.province ?? billing.province ?? shipping.province_code ?? billing.province_code;
   const wilaya = matchWilaya(province);
   if (!wilaya) {
-    await logIntake(admin, storeId, "shopify", "rejected", "Invalid wilaya", payload, null);
+    await logIntake(admin, verifiedStoreId, "shopify", "rejected", "Invalid wilaya", payload, null);
     return jsonError("Invalid wilaya", 400, cors);
   }
   const commune = shipping.city ?? billing.city;
@@ -140,18 +138,18 @@ Deno.serve(async (req) => {
 
   const validation = validateOrderBody(body);
   if (!validation.ok) {
-    await logIntake(admin, storeId, "shopify", "rejected", validation.message, payload, null);
+    await logIntake(admin, verifiedStoreId, "shopify", "rejected", validation.message, payload, null);
     return jsonError(validation.message, 400, cors);
   }
 
   try {
-    const result = await createOrder(admin, storeId, validation.order, "shopify", validation.externalId, payload);
+    const result = await createOrder(admin, verifiedStoreId, validation.order, "shopify", validation.externalId, payload);
     const status = result.duplicate ? "duplicate" : "accepted";
-    await logIntake(admin, storeId, "shopify", status, null, payload, result.order_id);
+    await logIntake(admin, verifiedStoreId, "shopify", status, null, payload, result.order_id);
     return jsonOk({ ok: true, order_id: result.order_id, order_number: result.order_number }, 200, cors);
   } catch (e: any) {
     const msg = e?.message ?? "Internal error";
-    await logIntake(admin, storeId, "shopify", "rejected", msg, payload, null);
+    await logIntake(admin, verifiedStoreId, "shopify", "rejected", msg, payload, null);
     return jsonError("Failed to create order", 500, cors);
   }
 });
