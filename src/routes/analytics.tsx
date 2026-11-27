@@ -67,9 +67,7 @@ function AnalyticsPage() {
     enabled: !!storeId,
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_dashboard_stats", {
-        _store_id: storeId,
-        _from: null,
-        _to: null,
+        _store_id: storeId!,
       });
       if (error) throw error;
       return Array.isArray(data) ? data[0] : data;

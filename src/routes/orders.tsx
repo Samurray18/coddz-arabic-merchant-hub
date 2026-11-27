@@ -870,7 +870,7 @@ function OrdersPage() {
                       .from("orders")
                       .update({ notes: notesDraft, payload: { ...{}, notes: notesDraft } })
                       .eq("id", selectedOrder.id)
-                      .eq("store_id", storeId);
+                      .eq("store_id", storeId!);
                     if (error) throw error;
                     // update payload notes too
                     const { data: cur } = await supabase
@@ -889,7 +889,7 @@ function OrdersPage() {
                     if (noteErr) throw noteErr;
                     qc.invalidateQueries({ queryKey: ["orders", storeId] });
                     toast.success("تم حفظ الملاحظات");
-                  } catch (e) {
+                  } catch (e: any) {
                     toast.error(e?.message ?? "خطأ");
                   }
                 }}
@@ -1006,7 +1006,7 @@ function OrdersPage() {
                       onClick={async () => {
                         try {
                           const { error } = await supabase.from("blacklist").insert({
-                            store_id: storeId,
+                            store_id: storeId!,
                             phone: selectedOrder.phone,
                             reason: blacklistReason || null,
                           });

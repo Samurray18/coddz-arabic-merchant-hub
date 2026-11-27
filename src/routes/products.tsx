@@ -295,7 +295,7 @@ function ProductsPage() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="w-full max-w-2xl rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-xl">
+          <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-xl">
             {/* header */}
             <div className="flex items-center justify-between gap-gutter-md">
               <button
