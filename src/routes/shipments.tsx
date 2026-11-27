@@ -7,6 +7,7 @@ import { useOrders, useShipments, useCreateShipment, useUpdateShipment } from "@
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
+import { Money } from "@/components/money";
 
 export const Route = createFileRoute("/shipments")({
   component: () => (
@@ -115,7 +116,7 @@ function ShipmentsPage() {
                     <td className="px-4 py-3.5 font-mono text-mono-md tabular-nums text-on-surface">#{s.order_id?.slice(0, 8)}</td>
                     <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{s.carrier}</td>
                     <td className="px-4 py-3.5 font-mono text-mono-md text-on-surface-variant" dir="ltr">{s.tracking_number || "—"}</td>
-                    <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface">{formatDA(Number(s.cod_amount))}</td>
+                    <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface"><Money value={Number(s.cod_amount)} /></td>
                     <td className="px-4 py-3.5">
                       <span className={`rounded-full px-2.5 py-0.5 font-body text-label-sm ${STATUS_CLASS[s.status] ?? "bg-surface-container-low text-on-surface-variant"}`}>
                         {STATUS_LABEL[s.status] ?? s.status}
@@ -168,7 +169,7 @@ function ShipmentsPage() {
                     <option value="">اختر طلبًا</option>
                     {shippableOrders.map((o) => (
                       <option key={o.id} value={o.id}>
-                        #{o.number} — {o.name} ({formatDA(o.amount)})
+                        #{o.number} — {o.name} (<Money value={o.amount} />)
                       </option>
                     ))}
                   </select>

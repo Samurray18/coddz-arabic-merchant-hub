@@ -8,6 +8,7 @@ import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
 import { computeDashboardKpis } from "@/lib/kpi";
+import { Money } from "@/components/money";
 
 export const Route = createFileRoute("/analytics")({
   component: () => (
@@ -124,7 +125,7 @@ function AnalyticsPage() {
         <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-2 lg:grid-cols-5 items-stretch">
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">صافي المداخيل (الشهر)</span>
-            <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(thisMonthRevenue || revenue)}</span>
+            <span className="font-headline text-headline-md tabular-nums text-primary"><Money value={thisMonthRevenue || revenue} /></span>
             <span className={`font-body text-label-sm tabular-nums ${revenueChange >= 0 ? "text-success" : "text-error"}`}>
               {revenueChange >= 0 ? "+" : ""}{revenueChange.toFixed(1)}% مقارنة بالشهر الماضي
             </span>
@@ -143,14 +144,14 @@ function AnalyticsPage() {
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">متوسط قيمة الطلب</span>
-            <span className="font-headline text-headline-md tabular-nums text-on-surface">{formatDA(avgOrder)}</span>
+            <span className="font-headline text-headline-md tabular-nums text-on-surface"><Money value={avgOrder} /></span>
             <span className="font-body text-label-sm tabular-nums text-on-surface-variant">عبر {wilayaCount || 0} ولاية</span>
           </article>
           <article className="flex h-full flex-col gap-2 rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <span className="font-body text-label-md text-on-surface-variant">صافي الربح</span>
-            <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(kpis.netProfit)}</span>
+            <span className="font-headline text-headline-md tabular-nums text-primary"><Money value={kpis.netProfit} /></span>
             <span className="font-body text-label-sm tabular-nums text-on-surface-variant">
-              إيرادات {formatDA(Number(stats?.revenue ?? revenue))} • مصاريف {formatDA(Number(stats?.expenses ?? 0) + Number(stats?.ad_spend ?? 0))}
+              إيرادات <Money value={Number(stats?.revenue ?? revenue)} /> • مصاريف <Money value={Number(stats?.expenses ?? 0) + Number(stats?.ad_spend ?? 0)} />
             </span>
           </article>
         </section>

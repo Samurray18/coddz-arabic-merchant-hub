@@ -7,6 +7,7 @@ import { useProducts, useStockMovements, useAdjustStock } from "@/hooks/use-data
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
+import { Money } from "@/components/money";
 
 export const Route = createFileRoute("/inventory")({
   component: () => (
@@ -134,7 +135,7 @@ function InventoryPage() {
               <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
                 <div className="flex flex-col gap-1">
                   <span className="font-body text-label-md text-on-surface-variant">قيمة المخزون الحالية</span>
-                  <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(stockValue)}</span>
+                  <span className="font-headline text-headline-md tabular-nums text-primary"><Money value={stockValue} /></span>
                 </div>
                 <span className="flex h-10 w-10 items-center justify-center rounded-md bg-accent-container text-on-accent-container">
                   <span className="material-symbols-outlined text-[20px]">payments</span>
@@ -226,7 +227,7 @@ function InventoryPage() {
                           </td>
                           <td className="px-5 py-4 font-body text-body-md text-on-surface-variant">{product.category}</td>
                           <td className={`px-5 py-4 font-headline text-label-lg tabular-nums ${status.color}`}>{product.stock} قطعة</td>
-                          <td className="px-5 py-4 font-headline text-label-lg tabular-nums text-primary">{formatDA(product.price)}</td>
+                          <td className="px-5 py-4 font-headline text-label-lg tabular-nums text-primary"><Money value={product.price} /></td>
                           <td className="px-5 py-4">
                             <span className={`inline-flex items-center rounded-full px-2.5 py-1 font-body text-label-sm ${status.className}`}>
                               {status.label}

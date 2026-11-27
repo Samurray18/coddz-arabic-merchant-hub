@@ -4,6 +4,7 @@ import {
   isValidAlgerianPhone,
   formatDA,
   buildWhatsAppLink,
+  wilayaLabel,
 } from "@/lib/coddz";
 import { TRANSLATIONS } from "@/lib/i18n";
 
@@ -26,8 +27,25 @@ describe("Algerian phone validation", () => {
 
 describe("formatDA", () => {
   it("formats with thousands separators", () => {
-    expect(formatDA(4500)).toBe("4 500 DA");
-    expect(formatDA(0)).toBe("0 DA");
+    expect(formatDA(5000)).toBe("5\u202F000\u202Fدج");
+    expect(formatDA(482500)).toBe("482\u202F500\u202Fدج");
+    expect(formatDA(0)).toBe("0\u202Fدج");
+    expect(formatDA(-1234)).toBe("-1\u202F234\u202Fدج");
+    expect(formatDA(NaN)).toBe("0\u202Fدج");
+  });
+  it("uses DA in French and English", () => {
+    expect(formatDA(5000, "fr")).toBe("5\u202F000\u202FDA");
+    expect(formatDA(5000, "en")).toBe("5\u202F000\u202FDA");
+  });
+});
+
+describe("wilayaLabel", () => {
+  it("matches Latin, code, and Arabic", () => {
+    expect(wilayaLabel("Alger", "ar")).toBe("الجزائر");
+    expect(wilayaLabel("16", "ar")).toBe("الجزائر");
+    expect(wilayaLabel("الجزائر", "ar")).toBe("الجزائر");
+    expect(wilayaLabel("Bejaia", "fr")).toBe("Béjaïa");
+    expect(wilayaLabel("unknown", "ar")).toBe("unknown");
   });
 });
 

@@ -7,6 +7,7 @@ import { useExpenses, useAdSpend, useAddExpense, useAddAdSpend } from "@/hooks/u
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { formatDA } from "@/lib/coddz";
+import { Money } from "@/components/money";
 
 export const Route = createFileRoute("/expenses")({
   component: () => (
@@ -65,7 +66,7 @@ function ExpensesPage() {
           <article className="flex items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
               <span className="font-body text-label-md text-on-surface-variant">إجمالي المصاريف</span>
-              <span className="font-headline text-headline-md tabular-nums text-error">{formatDA(totalExpenses)}</span>
+              <span className="font-headline text-headline-md tabular-nums text-error"><Money value={totalExpenses} /></span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-error-container text-on-error-container">
               <span className="material-symbols-outlined text-[20px]">receipt</span>
@@ -74,7 +75,7 @@ function ExpensesPage() {
           <article className="flex items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
               <span className="font-body text-label-md text-on-surface-variant">إجمالي الإعلانات</span>
-              <span className="font-headline text-headline-md tabular-nums text-warning">{formatDA(totalAds)}</span>
+              <span className="font-headline text-headline-md tabular-nums text-warning"><Money value={totalAds} /></span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-warning-container text-on-warning-container">
               <span className="material-symbols-outlined text-[20px]">campaign</span>
@@ -117,7 +118,7 @@ function ExpensesPage() {
                   <tbody className="divide-y divide-outline-variant">
                     {expenses.map((e: any) => (
                       <tr key={e.id}>
-                        <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface">{formatDA(Number(e.amount))}</td>
+                        <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface"><Money value={Number(e.amount)} /></td>
                         <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{e.category}</td>
                         <td className="px-4 py-3.5 font-body text-body-md text-on-surface-variant">{e.note ?? "—"}</td>
                         <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant">{new Date(e.created_at).toLocaleDateString()}</td>
@@ -158,7 +159,7 @@ function ExpensesPage() {
                   <tbody className="divide-y divide-outline-variant">
                     {adspend.map((a: any) => (
                       <tr key={a.id}>
-                        <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface">{formatDA(Number(a.amount))}</td>
+                        <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface"><Money value={Number(a.amount)} /></td>
                         <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{a.platform}</td>
                         <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant">{a.date}</td>
                       </tr>

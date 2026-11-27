@@ -117,11 +117,14 @@ export const WILAYAS: readonly Wilaya[] = [
   { code: "58", ar: "المنيعة", latin: "El Meniaa" },
 ] as const;
 
-export function formatDA(amount: number): string {
+export type Lang3 = "ar" | "fr" | "en";
+
+export function formatDA(amount: number, lang: Lang3 = "ar"): string {
   const safe = Number.isFinite(amount) ? Math.round(amount) : 0;
   const sign = safe < 0 ? "-" : "";
-  const abs = Math.abs(safe).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  return `${sign}${abs} DA`;
+  const abs = Math.abs(safe).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\u202F");
+  const currency = lang === "ar" ? "دج" : "DA";
+  return `${sign}${abs}\u202F${currency}`;
 }
 
 export function normalizeAlgerianPhone(raw: string): string | null {
@@ -134,6 +137,49 @@ export function normalizeAlgerianPhone(raw: string): string | null {
 
 export function isValidAlgerianPhone(raw: string): boolean {
   return normalizeAlgerianPhone(raw) !== null;
+}
+
+function stripAccentsWilaya(s: string): string {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+export function wilayaLabel(value: string | null | undefined, lang: Lang3 = "ar"): string {
+  const raw = String(value ?? "").trim();
+  if (!raw) return "";
+  // numeric code
+  if (/^\d{1,2}$/.test(raw)) {
+    const code = raw.padStart(2, "0");
+    const w = WILAYAS.find((x) => x.code === code);
+    if (w) return lang === "ar" ? w.ar : w.latin;
+  }
+  const norm = stripAccentsWilaya(raw).toLowerCase().replace(/^al\\s+/i, "").replace(/^el\\s+/i, "").replace(/^ال/, "").trim();
+  // try exact match on ar or latin
+  for (const w of WILAYAS) {
+    const arN = stripAccentsWilaya(w.ar).toLowerCase().replace(/^ال/, "").trim();
+    const latN = stripAccentsWilaya(w.latin).toLowerCase().trim();
+    if (norm === arN || norm === latN) return lang === "ar" ? w.ar : w.latin;
+  }
+  // contains match
+  for (const w of WILAYAS) {
+    const arN = stripAccentsWilaya(w.ar).toLowerCase().replace(/^ال/, "").trim();
+    const latN = stripAccentsWilaya(w.latin).toLowerCase().trim();
+    if (arN.includes(norm) || norm.includes(arN) || latN.includes(norm) || norm.includes(latN)) {
+      return lang === "ar" ? w.ar : w.latin;
+    }
+  }
+  return raw;
+}
+
+export function formatDate(value: string | Date | null | undefined, lang: Lang3 = "ar"): string {
+  if (!value) return "";
+  const d = value instanceof Date ? value : new Date(value);
+  if (isNaN(d.getTime())) return String(value);
+  const locale = lang === "ar" ? "ar-DZ" : lang === "fr" ? "fr-DZ" : "en-GB";
+  try {
+    return new Intl.DateTimeFormat(locale, { year: "numeric", month: "2-digit", day: "2-digit", numberingSystem: "latn" }).format(d);
+  } catch {
+    return d.toISOString().slice(0, 10);
+  }
 }
 
 export function buildWhatsAppLink(phone: string, message: string): string {

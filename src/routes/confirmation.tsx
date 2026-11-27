@@ -3,6 +3,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { useOrders, useUpdateOrderStatus, useRecordConfirmation } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { Money } from "@/components/money";
 import { formatDA } from "@/lib/coddz";
 import { toast } from "sonner";
 
@@ -116,7 +117,7 @@ function ConfirmationPage() {
                       {CONFIRMATION_LABEL[order.confirmation_status ?? "pending"] ?? "بانتظار الاتصال"}
                     </span>
                   </div>
-                  <span className="font-headline text-title-md tabular-nums text-primary">{formatDA(order.amount)}</span>
+                  <span className="font-headline text-title-md tabular-nums text-primary"><Money value={order.amount} /></span>
                 </header>
                 <div className="flex flex-col gap-1.5">
                   <h2 className="font-headline text-title-md text-on-surface">{order.name}</h2>

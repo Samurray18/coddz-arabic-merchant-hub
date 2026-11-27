@@ -9,9 +9,10 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
 import { buildWhatsAppLink, formatDA, STATUS_BADGE_CLASS, type OrderStatus } from "@/lib/coddz";
 import { Check } from "lucide-react";
+import { Money } from "@/components/money";
 import type { Order } from "@/lib/domain";
 import { computeDashboardKpis } from "@/lib/kpi";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 export const Route = createFileRoute("/dashboard")({
   component: () => (
@@ -30,7 +31,7 @@ function KpiCard({
   hint,
 }: {
   label: string;
-  value: string;
+  value: ReactNode;
   icon: string;
   iconClass: string;
   hint?: string;
@@ -264,7 +265,7 @@ function DashboardPage() {
         </div>
 
         <section className="grid grid-cols-2 gap-gutter-md lg:grid-cols-5">
-          <KpiCard label={t.dashboard.revenue} value={formatDA(revenue)} icon="payments" iconClass="bg-accent-container text-on-accent-container" />
+          <KpiCard label={t.dashboard.revenue} value={<Money value={revenue} />} icon="payments" iconClass="bg-accent-container text-on-accent-container" />
           <KpiCard label={t.dashboard.awaitingConfirmation} value={`${awaiting}`} icon="call" iconClass="bg-warning-container text-on-warning-container" hint={t.dashboard.todayOrders} />
           <KpiCard label={t.dashboard.inDelivery} value={`${inDelivery}`} icon="local_shipping" iconClass="bg-primary-container text-on-primary-container" />
           <KpiCard label={t.dashboard.deliveryRate} value={`${deliveryRate}%`} icon="task_alt" iconClass="bg-success-container text-on-success-container" />
@@ -299,7 +300,7 @@ function DashboardPage() {
                   <p className="font-body text-label-md text-on-surface-variant">{t.dashboard.deliveryRate}</p>
                 </div>
                 <span className="shrink-0 font-headline text-headline-md text-primary tabular-nums">
-                  {formatDA(revenue)}
+                  <Money value={revenue} />
                 </span>
               </div>
               <div className="h-3 w-full overflow-hidden rounded-full bg-surface-container-low">

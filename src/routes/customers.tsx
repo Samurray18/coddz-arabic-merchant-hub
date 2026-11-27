@@ -4,7 +4,9 @@ import { useLanguage } from "@/hooks/use-language";
 import { useOrders } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { formatDA } from "@/lib/coddz";
+import { formatDA, wilayaLabel } from "@/lib/coddz";
+import { Money } from "@/components/money";
+import { LocalDate } from "@/components/local-date";
 
 export const Route = createFileRoute("/customers")({
   component: () => (
@@ -27,7 +29,7 @@ interface Customer {
 }
 
 function CustomersPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { data: ordersData, isLoading } = useOrders();
   const orders = ordersData?.pages.flat() ?? [];
   const [search, setSearch] = useState("");
@@ -124,7 +126,7 @@ function CustomersPage() {
           <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
               <span className="font-body text-label-md text-on-surface-variant">إجمالي المبيعات</span>
-              <span className="font-headline text-headline-md tabular-nums text-primary">{formatDA(totalRevenue)}</span>
+              <span className="font-headline text-headline-md tabular-nums text-primary"><Money value={totalRevenue} /></span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-accent-container text-on-accent-container">
               <span className="material-symbols-outlined text-[20px]">payments</span>
@@ -168,12 +170,12 @@ function CustomersPage() {
                   <tr key={c.phone} className="transition-colors hover:bg-surface-container-low">
                     <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{c.name}</td>
                     <td className="px-4 py-3.5 font-mono text-mono-md tabular-nums text-on-surface-variant" dir="ltr">{c.phone}</td>
-                    <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{c.wilaya}</td>
+                    <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{wilayaLabel(c.wilaya, lang as any)}</td>
                     <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface">{c.orders}</td>
-                    <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-primary">{formatDA(c.total)}</td>
+                    <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-primary"><Money value={c.total} /></td>
                     <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant">{c.delivered}</td>
                     <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant">{c.returned}</td>
-                    <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant">{c.lastDate}</td>
+                    <td className="px-4 py-3.5 font-body text-label-sm text-on-surface-variant"><LocalDate value={c.lastDate} /></td>
                   </tr>
                 ))}
               </tbody>

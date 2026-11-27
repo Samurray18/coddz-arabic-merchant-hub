@@ -6,6 +6,8 @@ import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { useOrders, useSaveOrder, useUpdateOrderStatus, useRecordReturn } from "@/hooks/use-data";
+import { Money } from "@/components/money";
+import { LocalDate } from "@/components/local-date";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
@@ -18,6 +20,7 @@ import {
   ORDER_STATUSES,
   STATUS_BADGE_CLASS,
   WILAYAS,
+  wilayaLabel,
   type OrderStatus,
 } from "@/lib/coddz";
 
@@ -82,6 +85,8 @@ function OrdersPage() {
   const [showReturn, setShowReturn] = useState(false);
   const [returnReason, setReturnReason] = useState("");
   const [restock, setRestock] = useState(true);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkStatus, setBulkStatus] = useState<OrderStatus>("confirmed");
 
   const selectedOrder = orders.find((o) => o.id === selectedId) ?? null;
 
@@ -134,6 +139,59 @@ function OrdersPage() {
     }
     return true;
   });
+
+  const selectedCount = selectedIds.size;
+  const canBulkConfirm = selectedCount > 0 && filtered.some((o) => selectedIds.has(o.id) && (o.status === "new" || o.status === "confirmed"));
+  const canBulkShip = selectedCount > 0 && filtered.some((o) => selectedIds.has(o.id) && (o.status === "new" || o.status === "confirmed"));
+
+  const toggleSelectAll = () => {
+    if (selectedCount === filtered.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filtered.map((o) => o.id)));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    const next = new Set(selectedIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelectedIds(next);
+  };
+
+  const bulkUpdateStatus = async (status: OrderStatus) => {
+    const ids = Array.from(selectedIds).filter((id) => {
+      const order = filtered.find((o) => o.id === id);
+      return order && (order.status === "new" || order.status === "confirmed");
+    });
+    if (!ids.length) return;
+    try {
+      await Promise.all(ids.map((id) => updateStatus.mutateAsync({ id, status })));
+      toast.success(`${ids.length} ${t.orders.confirmAndSend}`);
+      setSelectedIds(new Set());
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error));
+    }
+  };
+
+  const bulkExportCSV = () => {
+    const selectedOrders = filtered.filter((o) => selectedIds.has(o.id));
+    if (!selectedOrders.length) return;
+    const rows = [
+      ["رقم الطلب", "الزبون", "الهاتف", "الولاية", "المنتج", "المبلغ", "الحالة", "الناقل", "التاريخ"],
+      ...selectedOrders.map((o) => [
+        o.number, o.name, o.phone, o.wilaya, o.product, String(o.amount), o.status, o.carrier, o.date,
+      ]),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `orders-${selectedOrders.length}-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const handleCreate = async () => {
     if (!form.name.trim()) {
@@ -259,10 +317,61 @@ function OrdersPage() {
           <EmptyState title={t.orders.emptyTitle} subtitle={t.orders.emptySub} />
         ) : (
           <>
+          {selectedCount > 0 && (
+            <div className="flex items-center justify-between gap-gutter-md rounded-xl border border-accent bg-accent-container px-4 py-3">
+              <div className="flex items-center gap-3">
+                <span className="font-body text-body-md text-on-accent-container">
+                  {selectedCount} {t.orders.selected}
+                </span>
+                <select
+                  value={bulkStatus}
+                  onChange={(e) => setBulkStatus(e.target.value as OrderStatus)}
+                  className="rounded-md border border-outline-variant bg-surface-container-lowest px-3 py-1.5 font-body text-label-md text-on-surface focus:border-primary focus:outline-none"
+                >
+                  <option value="confirmed">{t.status.confirmed}</option>
+                  <option value="shipped">{t.status.shipped}</option>
+                </select>
+                <button
+                  type="button"
+                  onClick={() => bulkUpdateStatus(bulkStatus)}
+                  disabled={updateStatus.isPending || !canBulkConfirm}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success disabled:opacity-60"
+                >
+                  <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                  {t.orders.confirmAndSend}
+                </button>
+                <button
+                  type="button"
+                  onClick={bulkExportCSV}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3 py-1.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
+                >
+                  <span className="material-symbols-outlined text-[16px]">download</span>
+                  {t.orders.exportSelected}
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedIds(new Set())}
+                className="text-on-accent-container hover:text-on-surface"
+                aria-label="Clear selection"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+          )}
           <div className="w-full overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
             <table className="w-full border-collapse text-right">
               <thead className="border-b border-outline-variant bg-surface-container-low">
                 <tr>
+                  <th scope="col" className="px-4 py-3.5 font-body text-label-md text-on-surface-variant w-12">
+                    <input
+                      type="checkbox"
+                      checked={selectedCount === filtered.length && filtered.length > 0}
+                      onChange={toggleSelectAll}
+                      className="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
+                      aria-label="Select all"
+                    />
+                  </th>
                   {[
                     t.orders.statusCol,
                     t.orders.customer,
@@ -282,6 +391,15 @@ function OrdersPage() {
               <tbody className="divide-y divide-outline-variant">
                 {filtered.map((order) => (
                   <tr key={order.id} className="transition-colors duration-state-change hover:bg-surface-container-low">
+                    <td className="px-4 py-3.5">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(order.id)}
+                        onChange={() => toggleSelect(order.id)}
+                        className="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
+                        aria-label={`Select order ${order.number}`}
+                      />
+                    </td>
                     <td className="px-4 py-3.5">
                       <div className="flex flex-col gap-1">
                         <span className="font-mono text-mono-md tabular-nums text-on-surface">#{order.number || "—"}</span>
@@ -319,9 +437,9 @@ function OrdersPage() {
                     <td className="px-4 py-3.5 font-mono text-mono-md tabular-nums text-on-surface-variant" dir="ltr">
                       {order.phone}
                     </td>
-                    <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{order.wilaya}</td>
+                    <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{wilayaLabel(order.wilaya, lang as any)}</td>
                     <td className="px-4 py-3.5 font-body text-body-md text-on-surface">{order.product}</td>
-                    <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface">{formatDA(order.amount)}</td>
+                    <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface"><Money value={order.amount} /></td>
                     <td className="px-4 py-3.5">
                       <span className={`inline-flex rounded-full px-2.5 py-0.5 font-body text-label-sm ${STATUS_BADGE_CLASS[order.status]}`}>
                         {t.status[order.status as OrderStatus]}
@@ -506,7 +624,7 @@ function OrdersPage() {
               <h3 className="font-headline text-title-md text-on-surface">{selectedOrder.name}</h3>
               <p className="font-mono text-mono-md tabular-nums text-on-surface-variant" dir="ltr">{selectedOrder.phone}</p>
               <p className="font-body text-body-md text-on-surface-variant">
-                {selectedOrder.wilaya}{selectedOrder.commune ? ` • ${selectedOrder.commune}` : ""}
+                {wilayaLabel(selectedOrder.wilaya, lang as any)}{selectedOrder.commune ? ` • ${selectedOrder.commune}` : ""}
               </p>
               {selectedOrder.address && <p className="font-body text-body-md text-on-surface-variant">{selectedOrder.address}</p>}
               <div className="mt-3 flex gap-gutter-sm">
@@ -546,7 +664,7 @@ function OrdersPage() {
               {selectedOrder.delivery_price != null && (
                 <div className="flex justify-between font-body text-body-md text-on-surface-variant">
                   <span>التوصيل</span>
-                  <span className="tabular-nums">{formatDA(selectedOrder.delivery_price)}</span>
+                  <span className="tabular-nums"><Money value={selectedOrder.delivery_price ?? 0} /></span>
                 </div>
               )}
             </section>

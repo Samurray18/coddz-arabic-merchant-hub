@@ -7,6 +7,7 @@ import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
 import { formatDA, getProductImage, PRODUCT_IMAGES } from "@/lib/coddz";
+import { Money } from "@/components/money";
 import type { Product } from "@/lib/domain";
 
 export const Route = createFileRoute("/products")({
@@ -207,11 +208,11 @@ function ProductsPage() {
                   <div className="grid grid-cols-3 gap-2">
                     <div>
                       <p className="font-body text-label-sm text-on-surface-variant">{t.products.price}</p>
-                      <p className="font-headline text-label-md tabular-nums text-on-surface">{formatDA(product.price)}</p>
+                      <p className="font-headline text-label-md tabular-nums text-on-surface"><Money value={product.price} /></p>
                     </div>
                     <div>
                       <p className="font-body text-label-sm text-on-surface-variant">{t.products.cost}</p>
-                      <p className="font-headline text-label-md tabular-nums text-on-surface">{formatDA(product.cost)}</p>
+                      <p className="font-headline text-label-md tabular-nums text-on-surface"><Money value={product.cost} /></p>
                     </div>
                     <div>
                       <p className="font-body text-label-sm text-on-surface-variant">{t.products.margin}</p>
