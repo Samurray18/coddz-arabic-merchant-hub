@@ -115,6 +115,8 @@ export interface TranslationBundle {
     allCarriers: string;
     bulkMark: string;
     exportSelected: string;
+    exportCSV: string;
+    orderNumber: string;
     selected: string;
     customer: string;
     phone: string;
@@ -137,6 +139,18 @@ export interface TranslationBundle {
     emptySub: string;
     invalidPhone: string;
     whatsappTemplate: string;
+    productDetails: string;
+    productsSection: string;
+    total: string;
+    delivery: string;
+    reason: string;
+    restock: string;
+    restockNotDeducted: string;
+    blacklistAdd: string;
+    blacklistReason: string;
+    blacklistAdded: string;
+    timelineSection: string;
+    noEvents: string;
   };
   products: {
     title: string;
@@ -595,6 +609,20 @@ const ar: TranslationBundle = {
     emptySub: "جرّب تغيير الفلاتر أو أضف أول طلب لمتجرك الآن.",
     invalidPhone: "أدخل رقم هاتف جزائري صحيح (05 / 06 / 07 أو +213)",
     whatsappTemplate: "مرحباً {name}، نؤكد معك طلبك رقم {number} ({product}) بمبلغ {amount} إلى ولاية {wilaya}.",
+    orderNumber: "رقم الطلب",
+    exportCSV: "تصدير CSV",
+    productDetails: "تفاصيل المنتج",
+    productsSection: "المنتجات",
+    total: "المجموع",
+    delivery: "التوصيل",
+    reason: "السبب",
+    restock: "إعادة المخزون",
+    restockNotDeducted: "غير محسوب",
+    blacklistAdd: "إضافة إلى القائمة السوداء",
+    blacklistReason: "السبب",
+    blacklistAdded: "تم الإضافة",
+    timelineSection: "الجدول الزمني",
+    noEvents: "لا توجد أحداث",
   },
   products: {
     title: "المنتجات والمخزون",
@@ -1053,6 +1081,20 @@ const fr: TranslationBundle = {
     emptySub: "Modifiez vos filtres ou créez une nouvelle commande.",
     invalidPhone: "Numéro algérien invalide (05 / 06 / 07 ou +213)",
     whatsappTemplate: "Bonjour {name}, nous confirmons votre commande {number} ({product}) de {amount} vers {wilaya}.",
+    orderNumber: "Numéro de commande",
+    exportCSV: "Exporter CSV",
+    productDetails: "Détails du produit",
+    productsSection: "Produits",
+    total: "Total",
+    delivery: "Livraison",
+    reason: "Raison",
+    restock: "Remettre en stock",
+    restockNotDeducted: "Non déduit du stock",
+    blacklistAdd: "Ajouter à la liste noire",
+    blacklistReason: "Raison",
+    blacklistAdded: "Ajouté à la liste noire",
+    timelineSection: "Chronologie",
+    noEvents: "Aucun événement",
   },
   products: {
     title: "Produits & Stock",
@@ -1259,6 +1301,20 @@ const en: TranslationBundle = {
     emptySub: "Adjust your filters or add a new order to get started.",
     invalidPhone: "Enter a valid Algerian phone (05 / 06 / 07 or +213)",
     whatsappTemplate: "Hello {name}, confirming your order {number} ({product}) for {amount} to {wilaya}.",
+    orderNumber: "Order number",
+    exportCSV: "Export CSV",
+    productDetails: "Product details",
+    productsSection: "Products",
+    total: "Total",
+    delivery: "Delivery",
+    reason: "Reason",
+    restock: "Restock",
+    restockNotDeducted: "Not deducted from stock",
+    blacklistAdd: "Add to blacklist",
+    blacklistReason: "Reason",
+    blacklistAdded: "Added to blacklist",
+    timelineSection: "Timeline",
+    noEvents: "No events",
   },
   products: {
     title: "Products & Stock",

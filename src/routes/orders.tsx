@@ -73,15 +73,15 @@ function OrdersPage() {
   const exportCSV = () => {
     const rows = [
       [
-        "رقم الطلب",
-        "الزبون",
-        "الهاتف",
-        "الولاية",
-        "المنتج",
-        "المبلغ",
-        "الحالة",
-        "الناقل",
-        "التاريخ",
+        t.orders.orderNumber,
+        t.orders.customer,
+        t.orders.phone,
+        t.orders.wilaya,
+        t.orders.product,
+        t.orders.amount,
+        t.orders.statusCol,
+        t.orders.carrier,
+        t.orders.date,
       ],
       ...orders.map((o) => [
         o.number,
@@ -211,15 +211,15 @@ function OrdersPage() {
     if (!selectedOrders.length) return;
     const rows = [
       [
-        "رقم الطلب",
-        "الزبون",
-        "الهاتف",
-        "الولاية",
-        "المنتج",
-        "المبلغ",
-        "الحالة",
-        "الناقل",
-        "التاريخ",
+        t.orders.orderNumber,
+        t.orders.customer,
+        t.orders.phone,
+        t.orders.wilaya,
+        t.orders.product,
+        t.orders.amount,
+        t.orders.statusCol,
+        t.orders.carrier,
+        t.orders.date,
       ],
       ...selectedOrders.map((o) => [
         o.number,
@@ -307,7 +307,7 @@ function OrdersPage() {
               className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
             >
               <span className="material-symbols-outlined text-[18px]">download</span>
-              تصدير CSV
+              {t.orders.exportCSV}
             </button>
             <button
               type="button"
@@ -481,11 +481,11 @@ function OrdersPage() {
                             {order.source && order.source !== "manual" && (
                               <span className="rounded-full bg-primary-container px-2 py-0.5 font-body text-label-sm text-on-primary-container">
                                 {order.source === "api"
-                                  ? "API"
+                                  ? t.integrations.api
                                   : order.source === "shopify"
-                                    ? "Shopify"
+                                    ? t.integrations.shopify
                                     : order.source === "woocommerce"
-                                      ? "WooCommerce"
+                                      ? t.integrations.woocommerce
                                       : order.source}
                               </span>
                             )}
@@ -634,7 +634,7 @@ function OrdersPage() {
                 </span>
                 <input
                   className={fieldClass}
-                  placeholder="مثال: محمد قاسمي"
+                  placeholder={t.orders.customer}
                   value={form.name}
                   onChange={(event) => setForm({ ...form, name: event.target.value })}
                 />
@@ -699,7 +699,7 @@ function OrdersPage() {
                   </span>
                   <input
                     className={fieldClass}
-                    placeholder="مثال: ساعة ذكية Ultra"
+                    placeholder={t.orders.product}
                     value={form.product}
                     onChange={(event) => setForm({ ...form, product: event.target.value })}
                   />
@@ -712,7 +712,7 @@ function OrdersPage() {
                     type="number"
                     min="0"
                     className={fieldClass}
-                    placeholder="4 800 دج"
+                    placeholder={t.orders.amount}
                     value={form.amount}
                     onChange={(event) => setForm({ ...form, amount: event.target.value })}
                   />
@@ -725,7 +725,7 @@ function OrdersPage() {
                 <textarea
                   rows={3}
                   className={fieldClass}
-                  placeholder="مثال: الزبون طلب التوصيل بعد الساعة 17:00..."
+                  placeholder={t.orders.notesPlaceholder}
                   value={form.notes}
                   onChange={(event) => setForm({ ...form, notes: event.target.value })}
                 />
@@ -736,7 +736,7 @@ function OrdersPage() {
                   onClick={() => setCreateOpen(false)}
                   className="rounded-md bg-surface-container-low px-4 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container"
                 >
-                  إلغاء
+                  {t.orders.cancel}
                 </button>
                 <button
                   type="button"
@@ -745,7 +745,7 @@ function OrdersPage() {
                   className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success disabled:opacity-60"
                 >
                   <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                  حفظ وإضافة للمخزون
+                  {t.orders.save}
                 </button>
               </div>
             </div>
@@ -762,7 +762,7 @@ function OrdersPage() {
           <div className="h-full w-full max-w-md overflow-y-auto bg-surface-container-lowest p-5 shadow-xl">
             <div className="flex items-center justify-between">
               <h2 className="font-headline text-title-lg text-on-surface">
-                تفاصيل الطلب #{selectedOrder.number}
+                {t.orders.productDetails} #{selectedOrder.number}
               </h2>
               <button
                 type="button"

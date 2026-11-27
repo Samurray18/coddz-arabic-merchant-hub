@@ -123,7 +123,6 @@ function ProductsPage() {
         sku: form.sku,
         image: form.image,
         variants: form.variants,
-        lowStockThreshold: form.lowStockThreshold ? Number(form.lowStockThreshold) : undefined,
       });
       setEditOpen(false);
       toast.success(t.products.save);
