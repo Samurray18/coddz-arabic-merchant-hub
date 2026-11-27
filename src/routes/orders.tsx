@@ -605,20 +605,27 @@ function OrdersPage() {
         >
           <div className="w-full max-w-lg rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-xl">
             <div className="mb-4 flex items-center justify-between gap-gutter-md">
-              <div>
-                <h2 className="font-headline text-title-lg text-on-surface">{t.orders.newOrder}</h2>
-                <p className="font-body text-label-md text-on-surface-variant">
-                  {t.orders.subtitle}
-                </p>
-              </div>
               <button
                 type="button"
                 onClick={() => setCreateOpen(false)}
                 aria-label="close"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md text-on-surface-variant hover:bg-surface-container-low"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low"
               >
                 <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
+              <div className="flex items-center gap-2">
+                <div>
+                  <h2 className="font-headline text-title-lg text-on-surface">
+                    {t.orders.newOrder}
+                  </h2>
+                  <p className="font-body text-body-md text-on-surface-variant">
+                    {t.orders.subtitle}
+                  </p>
+                </div>
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent-container text-on-accent-container">
+                  <span className="material-symbols-outlined text-[20px]">add_box</span>
+                </span>
+              </div>
             </div>
             <div className="grid gap-gutter-md">
               <label className="flex flex-col gap-1">
@@ -627,6 +634,7 @@ function OrdersPage() {
                 </span>
                 <input
                   className={fieldClass}
+                  placeholder="مثال: محمد قاسمي"
                   value={form.name}
                   onChange={(event) => setForm({ ...form, name: event.target.value })}
                 />
@@ -691,6 +699,7 @@ function OrdersPage() {
                   </span>
                   <input
                     className={fieldClass}
+                    placeholder="مثال: ساعة ذكية Ultra"
                     value={form.product}
                     onChange={(event) => setForm({ ...form, product: event.target.value })}
                   />
@@ -703,6 +712,7 @@ function OrdersPage() {
                     type="number"
                     min="0"
                     className={fieldClass}
+                    placeholder="4 800 دج"
                     value={form.amount}
                     onChange={(event) => setForm({ ...form, amount: event.target.value })}
                   />
@@ -715,6 +725,7 @@ function OrdersPage() {
                 <textarea
                   rows={3}
                   className={fieldClass}
+                  placeholder="مثال: الزبون طلب التوصيل بعد الساعة 17:00..."
                   value={form.notes}
                   onChange={(event) => setForm({ ...form, notes: event.target.value })}
                 />
@@ -722,19 +733,19 @@ function OrdersPage() {
               <div className="flex items-center gap-gutter-md border-t border-outline-variant pt-3">
                 <button
                   type="button"
+                  onClick={() => setCreateOpen(false)}
+                  className="rounded-md bg-surface-container-low px-4 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container"
+                >
+                  إلغاء
+                </button>
+                <button
+                  type="button"
                   onClick={() => void handleCreate()}
                   disabled={saveOrder.isPending}
                   className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success disabled:opacity-60"
                 >
-                  <span className="material-symbols-outlined text-[18px]">save</span>
-                  {t.orders.save}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCreateOpen(false)}
-                  className="rounded-md bg-surface-container-low px-4 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container"
-                >
-                  {t.orders.cancel}
+                  <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                  حفظ وإضافة للمخزون
                 </button>
               </div>
             </div>
