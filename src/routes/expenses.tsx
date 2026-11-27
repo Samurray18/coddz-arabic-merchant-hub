@@ -19,6 +19,7 @@ export const Route = createFileRoute("/expenses")({
 });
 
 function ExpensesPage() {
+  const { t } = useLanguage();
   const { storeId } = useAuth();
   const { data: expenses = [], isLoading: expLoading } = useExpenses();
   const { data: adspend = [], isLoading: adLoading } = useAdSpend();
@@ -58,8 +59,8 @@ function ExpensesPage() {
     <DashboardShell>
       <div className="flex flex-col gap-gutter-xl">
         <div>
-          <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">المصاريف والحملات</h1>
-          <p className="font-body text-body-md text-on-surface-variant">تتبع المصاريف وإعلاناتك</p>
+          <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">{t.expenses.title}</h1>
+          <p className="font-body text-body-md text-on-surface-variant">{t.expenses.subtitle}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-2">

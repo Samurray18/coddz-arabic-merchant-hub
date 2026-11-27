@@ -27,6 +27,7 @@ const CARRIERS = [
 ];
 
 function DeliveryPage() {
+  const { t } = useLanguage();
   const { storeId } = useAuth();
   const { data: shipments = [] } = useQuery({
     queryKey: ["shipments", storeId],

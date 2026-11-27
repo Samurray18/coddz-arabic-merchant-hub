@@ -38,6 +38,7 @@ const STATUS_CLASS: Record<string, string> = {
 function ShipmentsPage() {
   const { t } = useLanguage();
   const { storeId } = useAuth();
+  const statusLabel = (s: string) => (t.shipments as any)[s] ?? s;
   const { data: shipments = [], isLoading } = useShipments();
   const { data: ordersData } = useOrders();
   const orders = ordersData?.pages.flat() ?? [];
@@ -54,7 +55,7 @@ function ShipmentsPage() {
 
   const handleCreate = async () => {
     if (!orderId) {
-      toast.error("يرجى اختيار طلب");
+      toast.error(t.shipments.selectOrder);
       return;
     }
     try {
@@ -105,7 +106,7 @@ function ShipmentsPage() {
             <table className="w-full border-collapse text-right">
               <thead className="border-b border-outline-variant bg-surface-container-low">
                 <tr>
-                  {["الطلب", "الناقل", "رقم التتبع", "COD", "الحالة", "إجراءات"].map((h) => (
+                  {[t.shipments.order, t.shipments.carrier, t.shipments.tracking, "COD", t.shipments.status, t.shipments.actions].map((h) => (
                     <th key={h} className="px-4 py-3.5 font-body text-label-md text-on-surface-variant">{h}</th>
                   ))}
                 </tr>
@@ -119,7 +120,7 @@ function ShipmentsPage() {
                     <td className="px-4 py-3.5 font-headline text-label-lg tabular-nums text-on-surface"><Money value={Number(s.cod_amount)} /></td>
                     <td className="px-4 py-3.5">
                       <span className={`rounded-full px-2.5 py-0.5 font-body text-label-sm ${STATUS_CLASS[s.status] ?? "bg-surface-container-low text-on-surface-variant"}`}>
-                        {STATUS_LABEL[s.status] ?? s.status}
+                        {statusLabel(s.status)}
                       </span>
                     </td>
                     <td className="px-4 py-3.5">

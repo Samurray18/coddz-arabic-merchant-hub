@@ -39,6 +39,7 @@ function initials(name: string) {
 }
 
 function TeamPage() {
+  const { t } = useLanguage();
   const { storeId, user } = useAuth();
   const { data: invites = [] } = useQuery({
     queryKey: ["team_invites", storeId],

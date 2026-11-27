@@ -52,6 +52,7 @@ function copy(text: string) {
 }
 
 function IntegrationsPage() {
+  const { t } = useLanguage();
   const { storeId, user } = useAuth();
   const { data: role } = useQuery({
     queryKey: ["user_role", storeId, user?.id],
