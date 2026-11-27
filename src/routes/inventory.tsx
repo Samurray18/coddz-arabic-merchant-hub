@@ -77,7 +77,7 @@ function InventoryPage() {
       <div className="flex flex-col gap-gutter-xl">
         <div className="flex items-center justify-between gap-gutter-md">
           <div>
-            <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">المخزون</h1>
+            <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">{t.inventory.title}</h1>
             <p className="font-body text-body-md text-on-surface-variant">أدر المخزون والحركات</p>
           </div>
           <Link

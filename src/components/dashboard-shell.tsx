@@ -21,6 +21,7 @@ const NAV = [
   { to: "/team", icon: "group", labelKey: "team", soon: true },
   { to: "/integrations", icon: "hub", labelKey: "integrations", soon: true },
   { to: "/settings", icon: "settings", labelKey: "settings", soon: true },
+
 ] as const;
 
 type NavItem = (typeof NAV)[number];

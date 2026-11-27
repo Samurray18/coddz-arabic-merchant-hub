@@ -82,7 +82,7 @@ function SettingsPage() {
       <div className="flex flex-col gap-gutter-xl">
         <header className="flex items-center justify-between gap-gutter-md">
           <div>
-            <h1 className="font-headline text-headline-lg text-on-surface">إعدادات المتجر</h1>
+            <h1 className="font-headline text-headline-lg text-on-surface">{t.settings.title}</h1>
             <p className="font-body text-body-md text-on-surface-variant">
               تخصيص بيانات {displayName} وتفضيلات التأكيد والشحن
             </p>
