@@ -163,6 +163,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytics': typeof AnalyticsRoute
+  '/apps': typeof AppsRoute
   '/auth': typeof AuthRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/confirmation': typeof ConfirmationRoute

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
 import { useProducts, useSaveProduct, useDeleteProduct } from "@/hooks/use-data";
@@ -48,6 +48,14 @@ function ProductsPage() {
   const [form, setForm] = useState({ ...emptyForm });
   const [codEnabled, setCodEnabled] = useState(true);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setEditOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const exportCSV = () => {
     const rows = [
@@ -296,6 +304,7 @@ function ProductsPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
           role="dialog"
           aria-modal="true"
+          aria-labelledby="product-edit-title"
         >
           <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-xl">
             {/* header */}
@@ -310,7 +319,7 @@ function ProductsPage() {
               </button>
               <div className="flex items-center gap-2">
                 <div>
-                  <h2 className="font-headline text-title-lg text-on-surface">إضافة منتج جديد</h2>
+                  <h2 id="product-edit-title" className="font-headline text-title-lg text-on-surface">إضافة منتج جديد</h2>
                   <p className="font-body text-body-md text-on-surface-variant">
                     أضف تفاصيل المنتج وصورته ليظهر مباشرة في مخزون متجر النخيل
                   </p>

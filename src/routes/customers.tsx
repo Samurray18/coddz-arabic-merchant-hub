@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
@@ -35,6 +35,14 @@ function CustomersPage() {
 
   const [filter, setFilter] = useState<FilterKey>("all");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedPhone(null);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
   const [selectedPhone, setSelectedPhone] = useState<string | null>(null);
   const [blacklistReason, setBlacklistReason] = useState("");
   const [showBlacklist, setShowBlacklist] = useState(false);
@@ -206,10 +214,10 @@ function CustomersPage() {
         )}
 
         {selectedCustomer && (
-          <div className="fixed inset-0 z-50 flex justify-end bg-black/40" role="dialog" aria-modal="true">
+          <div className="fixed inset-0 z-50 flex justify-end bg-black/40" role="dialog" aria-modal="true" aria-labelledby="customer-detail-title">
             <div className="h-full w-full max-w-md overflow-y-auto bg-surface-container-lowest p-5 shadow-xl">
               <div className="flex items-center justify-between">
-                <h2 className="font-headline text-title-lg text-on-surface">{selectedCustomer.name || selectedCustomer.phone}</h2>
+                <h2 id="customer-detail-title" className="font-headline text-title-lg text-on-surface">{selectedCustomer.name || selectedCustomer.phone}</h2>
                 <button type="button" onClick={() => { setSelectedPhone(null); setShowBlacklist(false); }} className="text-on-surface-variant hover:text-on-surface">
                   <span className="material-symbols-outlined text-[20px]">close</span>
                 </button>

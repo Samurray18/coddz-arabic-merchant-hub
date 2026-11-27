@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
@@ -50,6 +50,14 @@ function ShipmentsPage() {
   const [carrier, setCarrier] = useState("Yalidine");
   const [tracking, setTracking] = useState("");
   const [cod, setCod] = useState("");
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const exportCSV = () => {
     const rows = [

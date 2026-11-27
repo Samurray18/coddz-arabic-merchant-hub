@@ -149,6 +149,18 @@ function OrdersPage() {
   useEffect(() => {
     if (window.location.hash === "#new-order") setCreateOpen(true);
   }, []);
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setCreateOpen(false);
+        setSelectedId(null);
+        setShowReturn(false);
+        setShowBlacklist(false);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const counts = ORDER_STATUSES.reduce(
     (acc, status) => {
@@ -602,6 +614,7 @@ function OrdersPage() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
           role="dialog"
           aria-modal="true"
+          aria-labelledby="orders-create-title"
         >
           <div className="w-full max-w-lg rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-xl">
             <div className="mb-4 flex items-center justify-between gap-gutter-md">
@@ -615,7 +628,7 @@ function OrdersPage() {
               </button>
               <div className="flex items-center gap-2">
                 <div>
-                  <h2 className="font-headline text-title-lg text-on-surface">
+                  <h2 id="orders-create-title" className="font-headline text-title-lg text-on-surface">
                     {t.orders.newOrder}
                   </h2>
                   <p className="font-body text-body-md text-on-surface-variant">
@@ -758,10 +771,11 @@ function OrdersPage() {
           className="fixed inset-0 z-50 flex justify-end bg-black/40"
           role="dialog"
           aria-modal="true"
+          aria-labelledby="orders-detail-title"
         >
           <div className="h-full w-full max-w-md overflow-y-auto bg-surface-container-lowest p-5 shadow-xl">
             <div className="flex items-center justify-between">
-              <h2 className="font-headline text-title-lg text-on-surface">
+              <h2 id="orders-detail-title" className="font-headline text-title-lg text-on-surface">
                 {t.orders.productDetails} #{selectedOrder.number}
               </h2>
               <button
