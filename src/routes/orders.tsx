@@ -517,7 +517,7 @@ function OrdersPage() {
                         {order.phone}
                       </td>
                       <td className="px-4 py-3.5 font-body text-body-md text-on-surface">
-                        {wilayaLabel(order.wilaya, lang as any)}
+                        {wilayaLabel(order.wilaya, lang as import("@/lib/coddz").Lang)}
                       </td>
                       <td className="px-4 py-3.5 font-body text-body-md text-on-surface">
                         {order.product}
@@ -769,7 +769,7 @@ function OrdersPage() {
                 {selectedOrder.phone}
               </p>
               <p className="font-body text-body-md text-on-surface-variant">
-                {wilayaLabel(selectedOrder.wilaya, lang as any)}
+                {wilayaLabel(selectedOrder.wilaya, lang as import("@/lib/coddz").Lang)}
                 {selectedOrder.commune ? ` • ${selectedOrder.commune}` : ""}
               </p>
               {selectedOrder.address && (
@@ -866,27 +866,27 @@ function OrdersPage() {
                 type="button"
                 onClick={async () => {
                   try {
-                    const { error } = await (supabase as any)
+                    const { error } = await supabase
                       .from("orders")
                       .update({ notes: notesDraft, payload: { ...{}, notes: notesDraft } })
                       .eq("id", selectedOrder.id)
                       .eq("store_id", storeId);
                     if (error) throw error;
                     // update payload notes too
-                    const { data: cur } = await (supabase as any)
+                    const { data: cur } = await supabase
                       .from("orders")
                       .select("payload")
                       .eq("id", selectedOrder.id)
                       .single();
-                    const pl = { ...((cur?.payload as any) ?? {}), notes: notesDraft };
-                    const { error: noteErr } = await (supabase as any)
+                    const pl = { ...((cur?.payload as Record<string, unknown>) ?? {}), notes: notesDraft };
+                    const { error: noteErr } = await supabase
                       .from("orders")
                       .update({ payload: pl, notes: notesDraft })
                       .eq("id", selectedOrder.id);
                     if (noteErr) throw noteErr;
                     qc.invalidateQueries({ queryKey: ["orders", storeId] });
                     toast.success("تم حفظ الملاحظات");
-                  } catch (e: any) {
+                  } catch (e) {
                     toast.error(e?.message ?? "خطأ");
                   }
                 }}
