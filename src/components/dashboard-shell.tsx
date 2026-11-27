@@ -4,6 +4,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { useRealtime } from "@/components/realtime-provider";
 import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
+import { GlobalSearch } from "@/components/global-search";
 import { BrandMark } from "@/components/brand-logo";
 
 const NAV = [
@@ -208,6 +209,9 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
               <p className="font-body text-body-md text-on-surface-variant">
                 {brand} • {displayWilaya}
               </p>
+            </div>
+            <div className="flex-1 max-w-md mx-6">
+              <GlobalSearch />
             </div>
             <div className="flex items-center gap-gutter-md">
               <LiveBadge />
