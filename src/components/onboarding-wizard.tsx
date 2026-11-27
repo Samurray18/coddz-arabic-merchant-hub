@@ -1,4 +1,5 @@
 import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
+import { BrandMark } from "@/components/brand-logo";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
@@ -336,9 +337,7 @@ export function OnboardingWizard() {
       <Card className="w-full max-w-md lg:max-w-lg">
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
-            <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-[22px]">monitoring</span>
-            </div>
+            <BrandMark size={40} />
             <span className="font-headline text-title-lg text-on-surface">{brand}</span>
           </div>
           <CardTitle className="font-headline text-headline-md text-on-surface">إعداد متجرك</CardTitle>

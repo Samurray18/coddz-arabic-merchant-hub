@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
 import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
+import { BrandMark } from "@/components/brand-logo";
 import { PLANS } from "@/config/plans";
 
 const CARRIERS = [
@@ -128,9 +129,7 @@ export function LandingPage() {
       <header className="sticky top-0 z-30 bg-surface border-b border-outline-variant">
         <div className="max-w-6xl mx-auto px-gutter-xl py-4 flex items-center justify-between gap-gutter-lg">
           <div className="flex items-center gap-gutter-sm">
-            <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-[22px]">monitoring</span>
-            </div>
+            <BrandMark size={40} />
             <span className="font-display text-title-lg text-on-surface" style={{ fontWeight: 800 }}>{brand}</span>
           </div>
           <nav className="hidden md:flex items-center gap-gutter-xl">

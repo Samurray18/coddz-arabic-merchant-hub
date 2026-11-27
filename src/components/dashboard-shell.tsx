@@ -4,6 +4,7 @@ import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { useRealtime } from "@/components/realtime-provider";
 import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
+import { BrandMark } from "@/components/brand-logo";
 
 const NAV = [
   { to: "/dashboard", icon: "dashboard", labelKey: "home", mobile: true },
@@ -147,9 +148,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
         <aside className="hidden min-h-screen flex-col justify-between border-l border-outline-variant bg-surface-container-lowest p-5 lg:flex">
           <div className="flex flex-col gap-gutter-xl">
             <div className="flex items-center gap-gutter-sm px-2">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-on-primary">
-                <span className="material-symbols-outlined text-[22px]">monitoring</span>
-              </div>
+              <BrandMark size={40} />
               <div className="flex min-w-0 flex-col">
                 <span className="truncate font-headline text-title-md text-on-surface">{displayName}</span>
                 <span className="truncate font-body text-label-sm text-on-surface-variant">
@@ -268,9 +267,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
             <div className="flex flex-col gap-gutter-xl">
               <div className="flex items-center justify-between gap-gutter-sm">
                 <div className="flex items-center gap-gutter-sm">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-on-primary">
-                    <span className="material-symbols-outlined text-[20px]">monitoring</span>
-                  </div>
+                  <BrandMark size={36} />
                   <span className="font-headline text-title-md">{brand}</span>
                 </div>
                 <button

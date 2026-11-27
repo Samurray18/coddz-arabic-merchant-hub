@@ -1,4 +1,5 @@
 import { BRAND_NAME } from "@/lib/coddz";
+import { BrandMark } from "@/components/brand-logo";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
 import { useLanguage } from "@/hooks/use-language";
@@ -205,9 +206,7 @@ export function SignupWizard() {
       <Card className="w-full max-w-md lg:max-w-lg">
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
-            <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-[22px]">monitoring</span>
-            </div>
+            <BrandMark size={40} />
             <span className="font-headline text-title-lg text-on-surface">{BRAND_NAME}</span>
           </div>
           <CardTitle className="font-headline text-headline-md text-on-surface">إنشاء متجرك</CardTitle>

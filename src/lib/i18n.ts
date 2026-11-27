@@ -57,6 +57,7 @@ export interface TranslationBundle {
     comingSoon: string;
     comingSoonSub: string;
     yourStore: string;
+    apps: string;
   };
   hero: {
     eyebrow: string;
@@ -151,6 +152,7 @@ export interface TranslationBundle {
     blacklistAdded: string;
     timelineSection: string;
     noEvents: string;
+    returnRecorded: string;
   };
   products: {
     title: string;
@@ -522,6 +524,7 @@ const ar: TranslationBundle = {
     comingSoon: "قريبًا",
     comingSoonSub: "هذه الصفحة قيد التطوير. سنضيفها قريبًا.",
     yourStore: "متجرك",
+    apps: "التطبيقات",
   },
   hero: {
     eyebrow: "مصمم خصيصاً للتجارة الإلكترونية في الجزائر",
@@ -623,6 +626,7 @@ const ar: TranslationBundle = {
     blacklistAdded: "تم الإضافة",
     timelineSection: "الجدول الزمني",
     noEvents: "لا توجد أحداث",
+    returnRecorded: "تم تسجيل المرتجع",
   },
   products: {
     title: "المنتجات والمخزون",
@@ -994,6 +998,7 @@ const fr: TranslationBundle = {
     comingSoon: "Bientôt",
     comingSoonSub: "Cette page est en cours de développement. Elle arrivera bientôt.",
     yourStore: "Votre boutique",
+    apps: "Applications",
   },
   hero: {
     eyebrow: "Conçu pour l’e-commerce COD en Algérie",
@@ -1095,6 +1100,7 @@ const fr: TranslationBundle = {
     blacklistAdded: "Ajouté à la liste noire",
     timelineSection: "Chronologie",
     noEvents: "Aucun événement",
+    returnRecorded: "Retour enregistré",
   },
   products: {
     title: "Produits & Stock",
@@ -1214,6 +1220,7 @@ const en: TranslationBundle = {
     comingSoon: "Coming soon",
     comingSoonSub: "This page is under development. It will be available soon.",
     yourStore: "Your store",
+    apps: "Apps",
   },
   hero: {
     eyebrow: "Built for Algerian Cash-on-Delivery merchants",
@@ -1315,6 +1322,7 @@ const en: TranslationBundle = {
     blacklistAdded: "Added to blacklist",
     timelineSection: "Timeline",
     noEvents: "No events",
+    returnRecorded: "Return recorded",
   },
   products: {
     title: "Products & Stock",

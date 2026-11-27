@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/hooks/use-language";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND_NAME, BRAND_NAME_AR } from "@/lib/coddz";
+import { BrandMark } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -63,9 +64,7 @@ function ResetPasswordPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
-            <div className="w-10 h-10 rounded-md bg-primary text-on-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-[22px]">monitoring</span>
-            </div>
+            <BrandMark size={40} />
             <span className="font-display text-title-lg text-on-surface" style={{ fontWeight: 800 }}>{brand}</span>
           </div>
           <CardTitle className="font-headline text-headline-md text-on-surface">{t.auth.resetTitle}</CardTitle>
