@@ -16,7 +16,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const { t, lang } = useLanguage();
-  const { user, onboardingCompleted } = useAuth();
+  const { user, onboardingCompleted, storeLoaded } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -27,8 +27,10 @@ function AuthPage() {
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
 
   useEffect(() => {
-    if (user) navigate({ to: onboardingCompleted ? "/dashboard" : "/onboarding" });
-  }, [user, onboardingCompleted, navigate]);
+    if (user && storeLoaded) {
+      navigate({ to: onboardingCompleted ? "/dashboard" : "/onboarding", replace: true });
+    }
+  }, [user, storeLoaded, onboardingCompleted, navigate]);
 
   const handleGoogle = async () => {
     setGoogleLoading(true);
@@ -44,33 +46,42 @@ function AuthPage() {
   };
 
   const handleSignIn = async () => {
-    setLoading(true);
-    setError("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setLoading(false);
-      const msg = error.message.toLowerCase();
-      if (msg.includes("invalid")) setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
-      else if (msg.includes("email not confirmed")) setError("يرجى تأكيد بريدك الإلكتروني أولاً");
-      else if (msg.includes("too many")) setError("محاولات كثيرة، حاول لاحقًا");
-      else setError(error.message);
+    if (!email.trim() || !password) {
+      setError("يرجى إدخال البريد الإلكتروني وكلمة المرور");
       return;
     }
-    // refresh store to get onboarding status
-    const { data: userData } = await supabase.auth.getUser();
-    const userId = userData.user?.id;
-    let completed = false;
-    if (userId) {
-      const { data: store } = await supabase
-        .from("stores")
-        .select("onboarding_completed")
-        .eq("owner_id", userId)
-        .limit(1)
-        .maybeSingle();
-      completed = (store as any)?.onboarding_completed ?? false;
+    setLoading(true);
+    setError("");
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) {
+        const msg = error.message.toLowerCase();
+        if (msg.includes("invalid")) setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
+        else if (msg.includes("email not confirmed")) setError("يرجى تأكيد بريدك الإلكتروني أولاً");
+        else if (msg.includes("too many")) setError("محاولات كثيرة، حاول لاحقًا");
+        else setError(error.message);
+        return;
+      }
+      // refresh store to get onboarding status
+      const { data: userData } = await supabase.auth.getUser();
+      const userId = userData.user?.id;
+      let completed = false;
+      if (userId) {
+        const { data: store } = await supabase
+          .from("stores")
+          .select("onboarding_completed")
+          .eq("owner_id", userId)
+          .limit(1)
+          .maybeSingle();
+        completed = (store as any)?.onboarding_completed ?? false;
+      }
+      navigate({ to: completed ? "/dashboard" : "/onboarding", replace: true });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "";
+      setError(msg || "حدث خطأ، حاول مرة أخرى");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    navigate({ to: completed ? "/dashboard" : "/onboarding" });
   };
 
   return (
@@ -86,31 +97,39 @@ function AuthPage() {
           <CardTitle className="font-headline text-headline-md text-on-surface">{t.auth.signInTitle}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <Label>{t.auth.email}</Label>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div>
-            <Label>{t.auth.password}</Label>
-            <div className="relative">
-              <Input
-                type={showPw ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPw((v) => !v)}
-                className="absolute end-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
-              >
-                <span className="material-symbols-outlined text-[20px]">{showPw ? "visibility_off" : "visibility"}</span>
-              </button>
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void handleSignIn();
+            }}
+          >
+            <div>
+              <Label>{t.auth.email}</Label>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
-          </div>
-          {error && <div className="text-sm text-error bg-error-container/40 rounded-md p-2">{error}</div>}
-          <Button className="w-full" onClick={handleSignIn} disabled={loading}>
-            {loading ? "..." : t.auth.signInBtn}
-          </Button>
+            <div>
+              <Label>{t.auth.password}</Label>
+              <div className="relative">
+                <Input
+                  type={showPw ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPw((v) => !v)}
+                  className="absolute end-3 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                >
+                  <span className="material-symbols-outlined text-[20px]">{showPw ? "visibility_off" : "visibility"}</span>
+                </button>
+              </div>
+            </div>
+            {error && <div className="text-sm text-error bg-error-container/40 rounded-md p-2">{error}</div>}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "..." : t.auth.signInBtn}
+            </Button>
+          </form>
           <div className="relative flex items-center gap-2">
             <span className="h-px flex-1 bg-outline-variant" />
             <span className="font-body text-label-sm text-on-surface-variant">أو</span>

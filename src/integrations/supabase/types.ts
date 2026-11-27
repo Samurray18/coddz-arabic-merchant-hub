@@ -55,6 +55,57 @@ export type Database = {
           },
         ]
       }
+      api_keys: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          revoked_at: string | null
+          store_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name?: string
+          revoked_at?: string | null
+          store_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          revoked_at?: string | null
+          store_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "api_keys_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blacklist: {
         Row: {
           created_at: string
@@ -121,6 +172,118 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "expenses_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      intake_logs: {
+        Row: {
+          created_at: string
+          error: string | null
+          id: string
+          order_id: string | null
+          payload: Json | null
+          source: string
+          status: string
+          store_id: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          order_id?: string | null
+          payload?: Json | null
+          source: string
+          status: string
+          store_id: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          order_id?: string | null
+          payload?: Json | null
+          source?: string
+          status?: string
+          store_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intake_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "intake_logs_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integration_secrets: {
+        Row: {
+          integration_id: string
+          updated_at: string
+          webhook_secret: string
+        }
+        Insert: {
+          integration_id: string
+          updated_at?: string
+          webhook_secret: string
+        }
+        Update: {
+          integration_id?: string
+          updated_at?: string
+          webhook_secret?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_secrets_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: true
+            referencedRelation: "integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integrations: {
+        Row: {
+          created_at: string
+          id: string
+          settings: Json
+          status: string
+          store_id: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          settings?: Json
+          status?: string
+          store_id: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          settings?: Json
+          status?: string
+          store_id?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integrations_store_id_fkey"
             columns: ["store_id"]
             isOneToOne: false
             referencedRelation: "stores"
@@ -262,10 +425,10 @@ export type Database = {
           number: string | null
           payload: Json
           phone: string | null
+          return_restock: boolean
           source: string
           status: string
           store_id: string
-          return_restock: boolean
           total: number
           tracking_number: string | null
           updated_at: string
@@ -288,10 +451,10 @@ export type Database = {
           number?: string | null
           payload?: Json
           phone?: string | null
+          return_restock?: boolean
           source?: string
           status?: string
           store_id: string
-          return_restock?: boolean
           total?: number
           tracking_number?: string | null
           updated_at?: string
@@ -314,10 +477,10 @@ export type Database = {
           number?: string | null
           payload?: Json
           phone?: string | null
+          return_restock?: boolean
           source?: string
           status?: string
           store_id?: string
-          return_restock?: boolean
           total?: number
           tracking_number?: string | null
           updated_at?: string
@@ -576,14 +739,14 @@ export type Database = {
           business_type: string | null
           created_at: string
           id: string
-          monthly_orders: number | null
+          monthly_orders: string | null
           name: string
           onboarding_completed: boolean
           onboarding_step: number
           owner_id: string
           phone: string | null
-          sales_channels: string[] | null
-          team_size: number | null
+          sales_channels: string[]
+          team_size: string | null
           updated_at: string
           wilaya: string | null
         }
@@ -591,14 +754,14 @@ export type Database = {
           business_type?: string | null
           created_at?: string
           id?: string
-          monthly_orders?: number | null
+          monthly_orders?: string | null
           name?: string
           onboarding_completed?: boolean
           onboarding_step?: number
           owner_id: string
           phone?: string | null
-          sales_channels?: string[] | null
-          team_size?: number | null
+          sales_channels?: string[]
+          team_size?: string | null
           updated_at?: string
           wilaya?: string | null
         }
@@ -606,14 +769,14 @@ export type Database = {
           business_type?: string | null
           created_at?: string
           id?: string
-          monthly_orders?: number | null
+          monthly_orders?: string | null
           name?: string
           onboarding_completed?: boolean
           onboarding_step?: number
           owner_id?: string
           phone?: string | null
-          sales_channels?: string[] | null
-          team_size?: number | null
+          sales_channels?: string[]
+          team_size?: string | null
           updated_at?: string
           wilaya?: string | null
         }
@@ -691,132 +854,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      },
-      api_keys: {
-        Row: {
-          created_at: string;
-          id: string;
-          key_hash: string;
-          key_prefix: string;
-          last_used_at: string | null;
-          name: string;
-          revoked_at: string | null;
-          store_id: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          key_hash: string;
-          key_prefix: string;
-          last_used_at?: string | null;
-          name: string;
-          revoked_at?: string | null;
-          store_id: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          key_hash?: string;
-          key_prefix?: string;
-          last_used_at?: string | null;
-          name?: string;
-          revoked_at?: string | null;
-          store_id?: string;
-        };
-        Relationships: [];
-      },
-      integrations: {
-        Row: {
-          created_at: string;
-          id: string;
-          status: string;
-          store_id: string;
-          type: string;
-          updated_at: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          status?: string;
-          store_id: string;
-          type: string;
-          updated_at?: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          status?: string;
-          store_id?: string;
-          type?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      },
-      integration_secrets: {
-        Row: {
-          created_at: string;
-          id: string;
-          secret: string;
-          store_id: string;
-          type: string;
-          updated_at: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          secret: string;
-          store_id: string;
-          type: string;
-          updated_at?: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          secret?: string;
-          store_id?: string;
-          type?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      },
-      intake_logs: {
-        Row: {
-          created_at: string;
-          error: string | null;
-          id: string;
-          order_id: string | null;
-          payload: any;
-          source: string;
-          status: string;
-          store_id: string;
-        };
-        Insert: {
-          created_at?: string;
-          error?: string | null;
-          id?: string;
-          order_id?: string | null;
-          payload?: any;
-          source: string;
-          status: string;
-          store_id: string;
-        };
-        Update: {
-          created_at?: string;
-          error?: string | null;
-          id?: string;
-          order_id?: string | null;
-          payload?: any;
-          source?: string;
-          status?: string;
-          store_id?: string;
-        };
-        Relationships: [];
-      },
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      adjust_stock: {
+        Args: { p_change: number; p_product_id: string; p_reason?: string }
+        Returns: number
+      }
+      create_api_key: {
+        Args: { p_name?: string; p_store_id: string }
+        Returns: Json
+      }
       get_dashboard_stats: {
         Args: { _from?: string; _store_id: string; _to?: string }
         Returns: {
@@ -830,16 +881,8 @@ export type Database = {
           total_orders: number
         }[]
       }
-      create_api_key: {
-        Args: { p_name: string; p_store_id: string }
-        Returns: { api_key: string; key_prefix: string }
-      }
       set_integration_secret: {
         Args: { p_secret: string; p_store_id: string; p_type: string }
-        Returns: undefined
-      }
-      adjust_stock: {
-        Args: { p_delta: number; p_product_id: string }
         Returns: undefined
       }
     }
