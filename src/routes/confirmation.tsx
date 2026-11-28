@@ -15,16 +15,15 @@ export const Route = createFileRoute("/confirmation")({
   head: () => ({ meta: [{ title: "Confirmation — COD YOU" }] }),
 });
 
-const CONFIRMATION_LABEL: Record<string, string> = {
-  pending: "بانتظار الاتصال",
-  answered: "تم التأكيد",
-  no_answer: "لا يرد",
-  postponed: "مؤجل",
-  refused: "مرفوض",
-};
-
 function ConfirmationPage() {
   const { t } = useLanguage();
+  const CONFIRMATION_LABEL: Record<string, string> = {
+    pending: t.confirmation.pendingCalls,
+    answered: t.confirmation.answered,
+    no_answer: t.confirmation.noAnswer,
+    postponed: t.confirmation.postponed,
+    refused: t.confirmation.refused,
+  };
   const { data: ordersData, isLoading } = useOrders();
   const orders = ordersData?.pages.flat() ?? [];
   const updateStatus = useUpdateOrderStatus();
@@ -37,26 +36,26 @@ function ConfirmationPage() {
   const handleConfirm = (id: string) => {
     recordConfirmation.mutate(
       { id, result: "answered" },
-      { onSuccess: () => toast.success("تم تأكيد الطلب") },
+      { onSuccess: () => toast.success(t.confirmation.orderConfirmed) },
     );
     updateStatus.mutate({ id, status: "confirmed" });
   };
   const handlePostpone = (id: string) => {
     recordConfirmation.mutate(
       { id, result: "postponed" },
-      { onSuccess: () => toast("تم التأجيل") },
+      { onSuccess: () => toast(t.confirmation.postponeRecorded) },
     );
   };
   const handleNoAnswer = (id: string) => {
     recordConfirmation.mutate(
       { id, result: "no_answer" },
-      { onSuccess: () => toast("تم تسجيل: لا يرد") },
+      { onSuccess: () => toast(t.confirmation.noAnswerRecorded) },
     );
   };
   const handleRefuse = (id: string) => {
     recordConfirmation.mutate(
       { id, result: "refused" },
-      { onSuccess: () => toast("تم رفض الطلب") },
+      { onSuccess: () => toast(t.confirmation.orderRefused) },
     );
     updateStatus.mutate({ id, status: "canceled" });
   };
@@ -67,8 +66,8 @@ function ConfirmationPage() {
         <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-3 items-stretch">
           <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">بانتظار الاتصال</span>
-              <span className="font-headline text-headline-md tabular-nums text-on-surface">{pending.length} طلبًا</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.confirmation.pendingCalls}</span>
+              <span className="font-headline text-headline-md tabular-nums text-on-surface">{t.confirmation.ordersCount.replace("{count}", String(pending.length))}</span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-warning-container text-on-warning-container">
               <span className="material-symbols-outlined text-[20px]">phone_callback</span>
@@ -76,8 +75,8 @@ function ConfirmationPage() {
           </article>
           <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">مؤكدة اليوم</span>
-              <span className="font-headline text-headline-md tabular-nums text-primary">{confirmedToday} طلبًا</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.confirmation.confirmedToday}</span>
+              <span className="font-headline text-headline-md tabular-nums text-primary">{t.confirmation.ordersCount.replace("{count}", String(confirmedToday))}</span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-accent-container text-on-accent-container">
               <span className="material-symbols-outlined text-[20px]">check_circle</span>
@@ -85,7 +84,7 @@ function ConfirmationPage() {
           </article>
           <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">معدل التأكيد</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.confirmation.confirmRate}</span>
               <span className="font-headline text-headline-md tabular-nums text-on-surface">{rate}%</span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-container text-on-primary-container">
@@ -113,7 +112,7 @@ function ConfirmationPage() {
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-mono-md text-on-surface">#{order.number || "—"}</span>
                     <span className="rounded-full bg-warning-container px-2.5 py-0.5 font-body text-label-sm text-on-warning-container">
-                      {CONFIRMATION_LABEL[order.confirmation_status ?? "pending"] ?? "بانتظار الاتصال"}
+                      {CONFIRMATION_LABEL[order.confirmation_status ?? "pending"] ?? t.confirmation.pendingCalls}
                     </span>
                   </div>
                   <span className="font-headline text-title-md tabular-nums text-primary"><Money value={order.amount} /></span>
@@ -122,7 +121,7 @@ function ConfirmationPage() {
                   <h2 className="font-headline text-title-md text-on-surface">{order.name}</h2>
                   <p className="font-mono text-mono-md tabular-nums text-on-surface-variant" dir="ltr">{order.phone}</p>
                   <p className="font-body text-body-md text-on-surface-variant">
-                    {order.wilaya} • عبر {order.carrier || "Yalidine"}
+                    {order.wilaya} • {t.confirmation.via} {order.carrier || "Yalidine"}
                   </p>
                 </div>
                 <footer className="flex flex-wrap items-center gap-2 border-t border-outline-variant pt-3">
@@ -133,7 +132,7 @@ function ConfirmationPage() {
                     className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-primary py-2.5 px-3 font-headline text-label-md text-on-primary transition-colors hover:bg-success disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">check_circle</span>
-                    تأكيد الطلب
+                    {t.confirmation.confirm}
                   </button>
                   <button
                     type="button"
@@ -142,7 +141,7 @@ function ConfirmationPage() {
                     className="inline-flex items-center justify-center gap-1 rounded-md bg-surface-container-low px-3 py-2.5 font-body text-label-md text-on-surface transition-colors hover:bg-surface-container disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">schedule</span>
-                    تأجيل
+                    {t.confirmation.postpone}
                   </button>
                   <button
                     type="button"
@@ -151,7 +150,7 @@ function ConfirmationPage() {
                     className="inline-flex items-center justify-center gap-1 rounded-md bg-warning-container px-3 py-2.5 font-body text-label-md text-on-warning-container disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">phone_missed</span>
-                    لا يرد
+                    {t.confirmation.noAnswer}
                   </button>
                   <button
                     type="button"
@@ -160,7 +159,7 @@ function ConfirmationPage() {
                     className="inline-flex items-center justify-center gap-1 rounded-md bg-error-container px-3 py-2.5 font-body text-label-md text-on-error-container disabled:opacity-60"
                   >
                     <span className="material-symbols-outlined text-[16px]">cancel</span>
-                    إلغاء
+                    {t.confirmation.refuse}
                   </button>
                 </footer>
               </article>

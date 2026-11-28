@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Lang } from "@/lib/coddz";
-import { TRANSLATIONS } from "@/lib/i18n";
+import { getStoredLang, LANGUAGE_STORAGE_KEY, TRANSLATIONS } from "@/lib/i18n";
 
 interface LanguageContextValue {
   lang: Lang;
@@ -11,19 +11,13 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-const STORAGE_KEY = "coddz_lang";
-
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window === "undefined") return "ar";
-    const stored = window.localStorage.getItem(STORAGE_KEY) as Lang | null;
-    return stored === "ar" || stored === "fr" || stored === "en" ? stored : "ar";
-  });
+  const [lang, setLangState] = useState<Lang>(getStoredLang);
 
   const setLang = (next: Lang) => {
     setLangState(next);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem(STORAGE_KEY, next);
+      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, next);
     }
   };
 

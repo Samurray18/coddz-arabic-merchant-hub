@@ -78,17 +78,17 @@ function DeliveryPage() {
         <section className="flex flex-col gap-gutter-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-headline text-title-lg text-on-surface">أداء التسليم حسب شركة التوصيل</h2>
-              <p className="font-body text-label-md text-on-surface-variant">نسبة الطرود المسلمة بنجاح</p>
+              <h2 className="font-headline text-title-lg text-on-surface">{t.delivery.subtitle}</h2>
+              <p className="font-body text-label-md text-on-surface-variant">{t.delivery.successRate}</p>
             </div>
             <span className="rounded-full bg-accent-container px-3 py-1 font-headline text-label-md tabular-nums text-on-accent-container">
-              متوسط {avgRate}%
+              {t.delivery.avg} {avgRate}%
             </span>
           </div>
 
           {!hasData ? (
             <p className="py-6 text-center font-body text-body-md text-on-surface-variant">
-              لا توجد شحنات بعد. أرسل طلباتك لشركات التوصيل لتظهر الإحصائيات.
+              {t.delivery.noData}
             </p>
           ) : (
             <div className="overflow-x-auto">
@@ -128,13 +128,15 @@ function DeliveryPage() {
                       live ? "bg-success-container text-on-success-container" : "bg-surface-container-low text-on-surface-variant"
                     }`}
                   >
-                    {live ? "متصل" : "جاهز للربط"}
+                    {live ? t.delivery.connected : t.delivery.ready}
                   </span>
                 </div>
                 <div>
                   <h3 className="font-headline text-title-md text-on-surface">{c.name}</h3>
                   <p className="font-body text-label-sm tabular-nums text-on-surface-variant">
-                    {total > 0 ? `${total} شحنة • ${rate}% تسليم` : "لا توجد شحنات"}
+                    {total > 0
+                      ? t.delivery.shipmentRate.replace("{count}", String(total)).replace("{rate}", String(rate))
+                      : t.delivery.noShipments}
                   </p>
                 </div>
               </article>

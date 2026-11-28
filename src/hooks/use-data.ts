@@ -2,6 +2,7 @@ import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from "@tansta
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { rowToProduct, rowToOrder, productToPayload, orderToPayload, type Product, type Order } from "@/lib/domain";
+import { getStoredT } from "@/lib/i18n";
 import { toast } from "sonner";
 
 const ownOrderIds = new Set<string>();
@@ -130,6 +131,7 @@ export function useSaveOrder() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (order: (Partial<Order> & { id?: string; productId?: string | null; quantity?: number; delivery_type?: string; delivery_price?: number; commune?: string; address?: string }) ) => {
+      const t = getStoredT();
       if (!storeId) throw new Error("No store");
       const payload = orderToPayload(order);
       const status = order.status ?? "new";
@@ -236,7 +238,7 @@ export function useSaveOrder() {
         to_status: "new",
         user_id: user?.id ?? null,
       });
-      if (evErr) toast.warning(evErr.message ?? "خطأ في تسجيل الحدث");
+      if (evErr) toast.warning(evErr.message ?? t.common.eventLogError);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
@@ -249,6 +251,7 @@ export function useRecordConfirmation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, result }: { id: string; result: string }) => {
+      const t = getStoredT();
       if (!storeId) throw new Error("No store");
       const { error } = await (supabase as any)
         .from("orders")
@@ -263,7 +266,7 @@ export function useRecordConfirmation() {
         note: result,
         user_id: user?.id ?? null,
       });
-      if (evErr) toast.warning(evErr.message ?? "خطأ في تسجيل الحدث");
+      if (evErr) toast.warning(evErr.message ?? t.common.eventLogError);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
@@ -445,6 +448,7 @@ export function useAdjustStock() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input: { productId: string; delta: number; reason: string }) => {
+      const t = getStoredT();
       if (!storeId) throw new Error("No store");
       const { error } = await (supabase as any).rpc("adjust_stock", {
         p_product_id: input.productId,
@@ -458,7 +462,7 @@ export function useAdjustStock() {
         reason: input.reason || "adjustment",
         created_by: user?.id ?? null,
       });
-      if (mvErr) toast.warning(mvErr.message ?? "خطأ في تسجيل الحركة");
+      if (mvErr) toast.warning(mvErr.message ?? t.common.movementLogError);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products", storeId] });
@@ -546,6 +550,7 @@ export function useRecordReturn() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input: { id: string; reason: string; restock: boolean }) => {
+      const t = getStoredT();
       if (!storeId) throw new Error("No store");
       // update order status to returned
       const { data: current } = await (supabase as any)
@@ -571,16 +576,18 @@ export function useRecordReturn() {
         to_status: "returned",
         user_id: user?.id ?? null,
       });
-      if (evErr1) toast.warning(evErr1.message ?? "خطأ في تسجيل الحدث");
+      if (evErr1) toast.warning(evErr1.message ?? t.common.eventLogError);
+      const returnReason = input.reason || t.orders.returned;
+      const restockNote = input.restock ? t.orders.restockNote : t.orders.noRestockNote;
       const { error: evErr2 } = await (supabase as any).from("order_events").insert({
         order_id: input.id,
         store_id: storeId,
         type: "return",
-        note: `${input.reason || "مرتجع"}${input.restock ? " (إعادة للمخزون)" : " (بدون إعادة)"}`,
+        note: `${returnReason} ${restockNote}`,
         to_status: "returned",
         user_id: user?.id ?? null,
       });
-      if (evErr2) toast.warning(evErr2.message ?? "خطأ في تسجيل الحدث");
+      if (evErr2) toast.warning(evErr2.message ?? t.common.eventLogError);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });
@@ -593,6 +600,7 @@ export function useUpdateOrderStatus() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: Order["status"] }) => {
+      const t = getStoredT();
       if (!storeId) throw new Error("No store");
       const { data: current } = await (supabase as any)
         .from("orders")
@@ -616,7 +624,7 @@ export function useUpdateOrderStatus() {
         to_status: status,
         user_id: user?.id ?? null,
       });
-      if (evErr) toast.warning(evErr.message ?? "خطأ في تسجيل الحدث");
+      if (evErr) toast.warning(evErr.message ?? t.common.eventLogError);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders", storeId] });

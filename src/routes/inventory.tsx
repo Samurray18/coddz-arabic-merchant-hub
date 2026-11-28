@@ -18,10 +18,10 @@ export const Route = createFileRoute("/inventory")({
   head: () => ({ meta: [{ title: "Inventory — COD YOU" }] }),
 });
 
-function statusFor(stock: number) {
-  if (stock <= 0) return { label: "نفذت الكمية", className: "bg-error-container text-on-error-container", color: "text-error" };
-  if (stock < 10) return { label: "مخزون منخفض", className: "bg-warning-container text-on-warning-container", color: "text-warning" };
-  return { label: "متوفر", className: "bg-accent-container text-on-accent-container", color: "text-on-surface" };
+function statusFor(stock: number, t: ReturnType<typeof useLanguage>["t"]["inventory"]) {
+  if (stock <= 0) return { label: t.outOfStock, className: "bg-error-container text-on-error-container", color: "text-error" };
+  if (stock < 10) return { label: t.lowStockLabel, className: "bg-warning-container text-on-warning-container", color: "text-warning" };
+  return { label: t.inStock, className: "bg-accent-container text-on-accent-container", color: "text-on-surface" };
 }
 
 function InventoryPage() {
@@ -57,18 +57,18 @@ function InventoryPage() {
     if (!adjustProduct) return;
     const delta = Number(adjustDelta);
     if (!Number.isFinite(delta) || delta === 0) {
-      toast.error("أدخل كمية صحيحة");
+      toast.error(t.inventory.invalidQty);
       return;
     }
     try {
       await adjustStock.mutateAsync({ productId: adjustProduct.id, delta, reason: adjustReason });
-      toast.success("تم تعديل المخزون");
+      toast.success(t.inventory.stockAdjusted);
       setAdjustOpen(false);
       setAdjustDelta("");
       setAdjustReason("");
       setAdjustProduct(null);
     } catch (e: any) {
-      toast.error(e?.message ?? "خطأ");
+      toast.error(e?.message ?? t.inventory.error);
     }
   };
 
@@ -78,14 +78,14 @@ function InventoryPage() {
         <div className="flex items-center justify-between gap-gutter-md">
           <div>
             <h1 className="font-headline text-headline-lg-mobile text-on-surface lg:text-headline-lg">{t.inventory.title}</h1>
-            <p className="font-body text-body-md text-on-surface-variant">أدر المخزون والحركات</p>
+            <p className="font-body text-body-md text-on-surface-variant">{t.inventory.subtitle}</p>
           </div>
           <Link
             to="/products"
             className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 font-headline text-label-md text-on-primary transition-colors hover:bg-success"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
-            إضافة منتج
+            {t.inventory.addProduct}
           </Link>
         </div>
 
@@ -98,7 +98,7 @@ function InventoryPage() {
               tab === "products" ? "bg-accent-container text-on-accent-container" : "text-on-surface-variant hover:bg-surface-container-low"
             }`}
           >
-            المنتجات
+            {t.inventory.products}
           </button>
           <button
             type="button"
@@ -107,7 +107,7 @@ function InventoryPage() {
               tab === "movements" ? "bg-accent-container text-on-accent-container" : "text-on-surface-variant hover:bg-surface-container-low"
             }`}
           >
-            الحركات
+            {t.inventory.movements}
           </button>
         </div>
 
@@ -116,8 +116,8 @@ function InventoryPage() {
             <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-3 items-stretch">
               <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
                 <div className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">إجمالي المنتجات</span>
-                  <span className="font-headline text-headline-md tabular-nums text-on-surface">{total} منتجًا</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.inventory.totalProducts}</span>
+                  <span className="font-headline text-headline-md tabular-nums text-on-surface">{t.inventory.productsCount.replace("{count}", String(total))}</span>
                 </div>
                 <span className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-container text-on-primary-container">
                   <span className="material-symbols-outlined text-[20px]">inventory_2</span>
@@ -125,8 +125,8 @@ function InventoryPage() {
               </article>
               <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
                 <div className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">مخزون منخفض</span>
-                  <span className="font-headline text-headline-md tabular-nums text-warning">{low} منتجات</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.inventory.lowStock}</span>
+                  <span className="font-headline text-headline-md tabular-nums text-warning">{t.inventory.lowProductsCount.replace("{count}", String(low))}</span>
                 </div>
                 <span className="flex h-10 w-10 items-center justify-center rounded-md bg-warning-container text-on-warning-container">
                   <span className="material-symbols-outlined text-[20px]">warning</span>
@@ -134,7 +134,7 @@ function InventoryPage() {
               </article>
               <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
                 <div className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">قيمة المخزون الحالية</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.inventory.stockValue}</span>
                   <span className="font-headline text-headline-md tabular-nums text-primary"><Money value={stockValue} /></span>
                 </div>
                 <span className="flex h-10 w-10 items-center justify-center rounded-md bg-accent-container text-on-accent-container">
@@ -150,8 +150,8 @@ function InventoryPage() {
                 </span>
                 <input
                   type="search"
-                  aria-label="بحث في المخزون"
-                  placeholder="ابحث باسم المنتج أو رمز SKU..."
+                  aria-label={t.inventory.searchAriaLabel}
+                  placeholder={t.inventory.searchPlaceholder}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="w-full rounded-md border border-outline-variant bg-surface-container-lowest py-2 pl-3 pr-10 font-body text-body-md text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-primary"
@@ -165,7 +165,7 @@ function InventoryPage() {
                     filter === "all" ? "bg-primary text-on-primary" : "border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low"
                   }`}
                 >
-                  الكل ({total})
+                  {t.inventory.all} ({total})
                 </button>
                 <button
                   type="button"
@@ -174,7 +174,7 @@ function InventoryPage() {
                     filter === "low" ? "bg-primary text-on-primary" : "border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low"
                   }`}
                 >
-                  منخفض ({low})
+                  {t.inventory.low} ({low})
                 </button>
                 <button
                   type="button"
@@ -183,7 +183,7 @@ function InventoryPage() {
                     filter === "out" ? "bg-primary text-on-primary" : "border border-outline-variant bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low"
                   }`}
                 >
-                  نفذت الكمية ({products.filter((p: any) => p.stock === 0).length})
+                  {t.inventory.out} ({products.filter((p: any) => p.stock === 0).length})
                 </button>
               </div>
             </section>
@@ -194,25 +194,25 @@ function InventoryPage() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-                لا توجد منتجات
+                {t.inventory.noProducts}
               </div>
             ) : (
               <section className="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
                 <table className="min-w-[720px] w-full table-fixed border-collapse text-right">
                   <thead>
                     <tr className="border-b border-outline-variant bg-surface-container-low">
-                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">رمز SKU</th>
-                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">المنتج</th>
-                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">التصنيف</th>
-                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">المتوفر</th>
-                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">سعر البيع</th>
-                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">الحالة</th>
-                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">إجراءات</th>
+                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">{t.inventory.sku}</th>
+                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">{t.inventory.product}</th>
+                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">{t.inventory.category}</th>
+                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">{t.inventory.available}</th>
+                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">{t.inventory.price}</th>
+                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">{t.inventory.status}</th>
+                      <th className="px-5 py-3.5 font-headline text-label-md text-on-surface-variant">{t.inventory.actions}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-outline-variant">
                     {filtered.map((product: any, index: number) => {
-                      const status = statusFor(product.stock);
+                      const status = statusFor(product.stock, t.inventory);
                       const ICONS_LOCAL = ["watch", "headphones", "blender", "backpack", "lightbulb"];
                       return (
                         <tr key={product.id} className="transition-colors duration-state-change hover:bg-surface-container-low">
@@ -226,7 +226,7 @@ function InventoryPage() {
                             </div>
                           </td>
                           <td className="px-5 py-4 font-body text-body-md text-on-surface-variant">{product.category}</td>
-                          <td className={`px-5 py-4 font-headline text-label-lg tabular-nums ${status.color}`}>{product.stock} قطعة</td>
+                          <td className={`px-5 py-4 font-headline text-label-lg tabular-nums ${status.color}`}>{product.stock} {t.inventory.pieces}</td>
                           <td className="px-5 py-4 font-headline text-label-lg tabular-nums text-primary"><Money value={product.price} /></td>
                           <td className="px-5 py-4">
                             <span className={`inline-flex items-center rounded-full px-2.5 py-1 font-body text-label-sm ${status.className}`}>
@@ -239,7 +239,7 @@ function InventoryPage() {
                               onClick={() => { setAdjustProduct(product); setAdjustOpen(true); }}
                               className="rounded-md bg-surface-container-low px-3 py-1.5 font-headline text-label-sm text-on-surface transition-colors hover:bg-surface-container"
                             >
-                              تعديل المخزون
+                              {t.inventory.adjustStock}
                             </button>
                           </td>
                         </tr>
@@ -255,18 +255,18 @@ function InventoryPage() {
         {tab === "movements" && (
           movementsLoading ? (
             <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-              جارٍ التحميل...
+              {t.common.loading}
             </div>
           ) : movements.length === 0 ? (
             <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 text-center font-body text-body-md text-on-surface-variant">
-              لا توجد حركات
+              {t.inventory.noMovements}
             </div>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
               <table className="w-full border-collapse text-right">
                 <thead className="border-b border-outline-variant bg-surface-container-low">
                   <tr>
-                    {["المنتج", "التغيير", "السبب", "الوقت"].map((h) => (
+                    {[t.inventory.product, t.inventory.change, t.inventory.reason, t.inventory.time].map((h) => (
                       <th key={h} className="px-4 py-3.5 font-body text-label-md text-on-surface-variant">{h}</th>
                     ))}
                   </tr>
@@ -294,10 +294,10 @@ function InventoryPage() {
         {adjustOpen && adjustProduct && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
             <div className="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-xl">
-              <h2 className="font-headline text-title-lg text-on-surface">تعديل المخزون — {adjustProduct.name}</h2>
+              <h2 className="font-headline text-title-lg text-on-surface">{t.inventory.adjustTitle} — {adjustProduct.name}</h2>
               <div className="mt-4 flex flex-col gap-gutter-md">
                 <label className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">التغيير (موجب/سالب)</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.inventory.signedChange}</span>
                   <input
                     type="number"
                     value={adjustDelta}
@@ -306,7 +306,7 @@ function InventoryPage() {
                   />
                 </label>
                 <label className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">السبب</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.inventory.reason}</span>
                   <input
                     value={adjustReason}
                     onChange={(e) => setAdjustReason(e.target.value)}
@@ -320,14 +320,14 @@ function InventoryPage() {
                     disabled={adjustStock.isPending}
                     className="flex-1 rounded-md bg-primary py-2 font-headline text-label-md text-on-primary disabled:opacity-60"
                   >
-                    {adjustStock.isPending ? "..." : "حفظ"}
+                    {adjustStock.isPending ? "..." : t.common.save}
                   </button>
                   <button
                     type="button"
                     onClick={() => { setAdjustOpen(false); setAdjustProduct(null); }}
                     className="rounded-md bg-surface-container-low px-4 py-2 font-headline text-label-md text-on-surface"
                   >
-                    إلغاء
+                    {t.common.cancel}
                   </button>
                 </div>
               </div>

@@ -26,33 +26,30 @@ const LOGO_EXT: Record<string, string> = {
 
 const TOTAL_STEPS_BASE = 5;
 
-const BUSINESS_TYPES = [
-  { key: "retail", label: "تجزئة" },
-  { key: "wholesale", label: "جملة" },
-  { key: "dropshipping", label: "دروبشيبينغ" },
-  { key: "services", label: "خدمات" },
-  { key: "other", label: "أخرى" },
-];
-
-const SALES_CHANNELS = [
-  { key: "facebook", label: "Facebook / Instagram", icon: "facebook" },
-  { key: "tiktok", label: "TikTok", icon: "music_note" },
-  { key: "website", label: "موقع إلكتروني", icon: "language" },
-  { key: "shopify", label: "Shopify", icon: "storefront" },
-  { key: "woocommerce", label: "WooCommerce", icon: "shopping_bag" },
-  { key: "whatsapp", label: "WhatsApp / هاتف", icon: "chat" },
-];
-
-const MONTHLY_ORDERS = [
-  { key: "lt50", label: "أقل من 50" },
-  { key: "50-200", label: "50 - 200" },
-  { key: "200-500", label: "200 - 500" },
-  { key: "500-1000", label: "500 - 1000" },
-  { key: "gt1000", label: "أكثر من 1000" },
-];
-
 export function OnboardingWizard() {
   const { t, lang } = useLanguage();
+  const BUSINESS_TYPES = [
+    { key: "retail", label: t.onboarding.businessRetail },
+    { key: "wholesale", label: t.onboarding.businessWholesale },
+    { key: "dropshipping", label: t.onboarding.businessDropshipping },
+    { key: "services", label: t.onboarding.businessServices },
+    { key: "other", label: t.onboarding.businessOther },
+  ];
+  const SALES_CHANNELS = [
+    { key: "facebook", label: "Facebook / Instagram", icon: "facebook" },
+    { key: "tiktok", label: "TikTok", icon: "music_note" },
+    { key: "website", label: t.onboarding.channelWebsite, icon: "language" },
+    { key: "shopify", label: "Shopify", icon: "storefront" },
+    { key: "woocommerce", label: "WooCommerce", icon: "shopping_bag" },
+    { key: "whatsapp", label: t.onboarding.channelWhatsapp, icon: "chat" },
+  ];
+  const MONTHLY_ORDERS = [
+    { key: "lt50", label: t.onboarding.ordersUnder50 },
+    { key: "50-200", label: "50 - 200" },
+    { key: "200-500", label: "200 - 500" },
+    { key: "500-1000", label: "500 - 1000" },
+    { key: "gt1000", label: t.onboarding.ordersOver1000 },
+  ];
   const { user, storeId, storeName, storeWilaya, onboardingCompleted, onboardingStep, refreshStore, loading: authLoading, storeLoaded } = useAuth();
   const navigate = useNavigate();
   const brand = lang === "ar" ? BRAND_NAME_AR : BRAND_NAME;
@@ -122,7 +119,7 @@ export function OnboardingWizard() {
       if (upErr) throw upErr;
       await refreshStore();
     } catch (e: any) {
-      setError(e?.message ?? "حدث خطأ، حاول مرة أخرى");
+      setError(e?.message ?? t.common.genericError);
       throw e;
     } finally {
       setLoading(false);
@@ -141,7 +138,7 @@ export function OnboardingWizard() {
       await refreshStore();
       await finish();
     } catch (e: any) {
-      setError(e?.message ?? "حدث خطأ");
+      setError(e?.message ?? t.common.errorOccurred);
     } finally {
       setLoading(false);
     }
@@ -164,11 +161,11 @@ export function OnboardingWizard() {
     // Step 1 (conditional): store info
     if (needsStoreSetup && step === 1) {
       if (!form.storeName.trim()) {
-        setError("اسم المتجر مطلوب");
+        setError(t.onboarding.storeNameRequired);
         return;
       }
       if (!form.wilaya) {
-        setError("يرجى اختيار الولاية");
+        setError(t.onboarding.selectWilaya);
         return;
       }
       try {
@@ -180,7 +177,7 @@ export function OnboardingWizard() {
               .upsert(form.carriers.map((c) => ({ store_id: storeId, company: c })), { onConflict: "store_id,company", ignoreDuplicates: true });
             if (insErr) throw insErr;
           } catch (e: any) {
-            setError(e?.message ?? "خطأ في حفظ شركات التوصيل");
+            setError(e?.message ?? t.onboarding.saveError);
             return;
           }
         }
@@ -194,11 +191,11 @@ export function OnboardingWizard() {
 
     if (os === 1) {
       if (form.phone && !isValidAlgerianPhone(form.phone)) {
-        setError("رقم هاتف غير صالح");
+        setError(t.onboarding.invalidPhone);
         return;
       }
       if (!form.businessType) {
-        setError("يرجى اختيار نوع النشاط");
+        setError(t.onboarding.selectBusinessType);
         return;
       }
       try {
@@ -222,7 +219,7 @@ export function OnboardingWizard() {
     }
     if (os === 3) {
       if (!form.monthlyOrders) {
-        setError("يرجى اختيار حجم الطلبات");
+        setError(t.onboarding.selectMonthlyOrders);
         return;
       }
       try {
@@ -272,7 +269,7 @@ export function OnboardingWizard() {
         await refreshStore();
         await finish();
       } catch (e: any) {
-        setError(e?.message ?? "حدث خطأ");
+        setError(e?.message ?? t.common.errorOccurred);
       } finally {
         setLoading(false);
       }
@@ -295,22 +292,22 @@ export function OnboardingWizard() {
       <div className="min-h-screen bg-surface flex items-center justify-center p-4">
         <div className="flex flex-col items-center gap-gutter-md">
           <span className="h-10 w-10 animate-spin rounded-full border-2 border-outline-variant border-t-primary" />
-          <span className="font-body text-body-md text-on-surface-variant">جارٍ التحميل...</span>
+          <span className="font-body text-body-md text-on-surface-variant">{t.common.loading}</span>
         </div>
       </div>
     );
   }
 
   if (finishing) {
-    const items = ["إعداد متجرك", "تجهيز المنتجات", "ربط التوصيل", "تخصيص لوحة التحكم"];
+    const items = t.onboarding.steps;
     return (
       <div className="min-h-screen bg-surface flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 space-y-4">
             <div className="text-center space-y-2">
               <Illustration name="success" className="mx-auto h-32 w-44" />
-              <h2 className="font-headline text-headline-md text-on-surface">جارٍ إعداد مساحة عملك</h2>
-              <p className="font-body text-body-md text-on-surface-variant">يرجى الانتظار قليلاً...</p>
+              <h2 className="font-headline text-headline-md text-on-surface">{t.onboarding.preparing}</h2>
+              <p className="font-body text-body-md text-on-surface-variant">{t.onboarding.preparingSub}</p>
             </div>
             <ul className="space-y-2">
               {items.map((label, i) => (
@@ -340,7 +337,7 @@ export function OnboardingWizard() {
             <BrandMark size={40} />
             <span className="font-headline text-title-lg text-on-surface">{brand}</span>
           </div>
-          <CardTitle className="font-headline text-headline-md text-on-surface">إعداد متجرك</CardTitle>
+          <CardTitle className="font-headline text-headline-md text-on-surface">{t.onboarding.title}</CardTitle>
           <div className="flex items-center justify-center gap-2">
             {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((n) => (
               <div key={n} className="flex items-center gap-2">
@@ -366,14 +363,14 @@ export function OnboardingWizard() {
           {needsStoreSetup && step === 1 && (
             <div className="space-y-3">
               <div>
-                <Label>اسم المتجر</Label>
+                <Label>{t.onboarding.storeName}</Label>
                 <Input
                   value={form.storeName}
                   onChange={(e) => setForm({ ...form, storeName: e.target.value })}
                 />
               </div>
               <div className="relative">
-                <Label>الولاية</Label>
+                <Label>{t.orders.wilaya}</Label>
                 <Input
                   value={form.wilaya ? form.wilaya : form.wilayaSearch}
                   onChange={(e) => {
@@ -381,7 +378,7 @@ export function OnboardingWizard() {
                     setForm((f) => ({ ...f, showWilayaList: true }));
                   }}
                   onFocus={() => setForm((f) => ({ ...f, showWilayaList: true }))}
-                  placeholder="ابحث عن ولاية..."
+                  placeholder={t.onboarding.searchWilaya}
                 />
                 {form.showWilayaList && (
                   <div className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-md border border-outline-variant bg-surface-container-lowest shadow-sm">
@@ -403,7 +400,7 @@ export function OnboardingWizard() {
                 )}
               </div>
               <div>
-                <Label>شركات التوصيل (اختياري)</Label>
+                <Label>{t.onboarding.deliveryCompanies}</Label>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                   {CARRIER_OPTIONS.map((c) => {
                     const ext = LOGO_EXT[c.key];
@@ -446,7 +443,7 @@ export function OnboardingWizard() {
           {(needsStoreSetup ? step - 1 : step) === 1 && (
             <div className="space-y-3">
               <div>
-                <Label>رقم الهاتف (WhatsApp)</Label>
+                <Label>{t.onboarding.phone}</Label>
                 <Input
                   type="tel"
                   dir="ltr"
@@ -456,7 +453,7 @@ export function OnboardingWizard() {
                 />
               </div>
               <div>
-                <Label>نوع النشاط</Label>
+                <Label>{t.onboarding.businessType}</Label>
                 <div className="flex flex-wrap gap-2">
                   {BUSINESS_TYPES.map((b) => (
                     <button
@@ -479,7 +476,7 @@ export function OnboardingWizard() {
 
           {(needsStoreSetup ? step - 1 : step) === 2 && (
             <div className="space-y-3">
-              <p className="text-sm text-on-surface-variant">قنوات البيع (اختيار متعدد)</p>
+              <p className="text-sm text-on-surface-variant">{t.onboarding.salesChannels}</p>
               <div className="grid grid-cols-2 gap-3">
                 {SALES_CHANNELS.map((c) => {
                   const selected = form.salesChannels.includes(c.key);
@@ -504,7 +501,7 @@ export function OnboardingWizard() {
 
           {(needsStoreSetup ? step - 1 : step) === 3 && (
             <div className="space-y-3">
-              <p className="text-sm text-on-surface-variant">عدد الطلبات شهريًا</p>
+              <p className="text-sm text-on-surface-variant">{t.onboarding.monthlyOrders}</p>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {MONTHLY_ORDERS.map((m) => (
                   <button
@@ -526,7 +523,7 @@ export function OnboardingWizard() {
 
           {(needsStoreSetup ? step - 1 : step) === 4 && (
             <div className="space-y-3">
-              <p className="text-sm text-on-surface-variant">فريق العمل</p>
+              <p className="text-sm text-on-surface-variant">{t.onboarding.team}</p>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
@@ -536,7 +533,7 @@ export function OnboardingWizard() {
                   }`}
                 >
                   <Users className="w-6 h-6" />
-                  <span className="font-headline text-title-md text-on-surface">أنا فقط</span>
+                  <span className="font-headline text-title-md text-on-surface">{t.onboarding.solo}</span>
                 </button>
                 <button
                   type="button"
@@ -546,12 +543,12 @@ export function OnboardingWizard() {
                   }`}
                 >
                   <Users className="w-6 h-6" />
-                  <span className="font-headline text-title-md text-on-surface">مع فريق</span>
+                  <span className="font-headline text-title-md text-on-surface">{t.onboarding.withTeam}</span>
                 </button>
               </div>
               {form.teamMode === "team" && (
                 <div>
-                  <Label>عدد الموظفين</Label>
+                  <Label>{t.onboarding.agentsCount}</Label>
                   <Input
                     type="number"
                     min={1}
@@ -566,11 +563,11 @@ export function OnboardingWizard() {
           {(needsStoreSetup ? step - 1 : step) === 5 && (
             <div className="space-y-3">
               <div>
-                <Label>شعار المتجر (اختياري)</Label>
+                <Label>{t.onboarding.logo}</Label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-outline-variant bg-surface-container-lowest p-4">
                   <Upload className="w-5 h-5 text-on-surface-variant" />
                   <span className="font-body text-body-md text-on-surface-variant">
-                    {form.logoFile ? form.logoFile.name : "اختر صورة"}
+                    {form.logoFile ? form.logoFile.name : t.onboarding.chooseImage}
                   </span>
                   <input
                     type="file"
@@ -581,7 +578,7 @@ export function OnboardingWizard() {
                 </label>
               </div>
               <div>
-                <Label>نوع التوصيل الافتراضي</Label>
+                <Label>{t.onboarding.defaultDelivery}</Label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
@@ -590,7 +587,7 @@ export function OnboardingWizard() {
                       form.defaultDelivery === "home" ? "border-primary bg-accent-container" : "border-outline-variant bg-surface-container-lowest"
                     }`}
                   >
-                    <span className="font-headline text-title-md text-on-surface">توصيل للمنزل</span>
+                    <span className="font-headline text-title-md text-on-surface">{t.onboarding.homeDelivery}</span>
                   </button>
                   <button
                     type="button"
@@ -599,7 +596,7 @@ export function OnboardingWizard() {
                       form.defaultDelivery === "desk" ? "border-primary bg-accent-container" : "border-outline-variant bg-surface-container-lowest"
                     }`}
                   >
-                    <span className="font-headline text-title-md text-on-surface">توصيل للمكتب</span>
+                    <span className="font-headline text-title-md text-on-surface">{t.onboarding.deskDelivery}</span>
                   </button>
                 </div>
               </div>
@@ -610,7 +607,7 @@ export function OnboardingWizard() {
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={back} disabled={step === 1 || loading}>
                 <ChevronRight className="w-4 h-4 ms-1" />
-                رجوع
+                {t.common.back}
               </Button>
               <button
                 type="button"
@@ -618,11 +615,11 @@ export function OnboardingWizard() {
                 disabled={loading}
                 className="text-xs text-on-surface-variant underline"
               >
-                تخطي
+                {t.common.skip}
               </button>
             </div>
             <Button onClick={next} disabled={loading}>
-              {loading ? "..." : step < TOTAL_STEPS ? "التالي" : "إنهاء"}
+              {loading ? "..." : step < TOTAL_STEPS ? t.common.next : t.common.finish}
               {step < TOTAL_STEPS && <ChevronLeft className="w-4 h-4 me-1" />}
             </Button>
           </div>

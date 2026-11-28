@@ -61,18 +61,18 @@ export function GlobalSearch() {
           value={query}
           onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
-          placeholder="بحث في الطلبات، المنتجات، الزبائن..."
+          placeholder={t.search.placeholder}
           className="w-full rounded-md border border-outline-variant bg-surface-container-lowest py-2 pl-3 pr-10 font-body text-body-md text-on-surface placeholder:text-on-surface-variant focus:border-primary focus:ring-primary"
         />
       </div>
       {open && q && (
         <div className="absolute z-50 mt-1 w-full rounded-xl border border-outline-variant bg-surface-container-lowest shadow-lg">
           {!hasResults && (
-            <p className="p-4 text-center font-body text-body-md text-on-surface-variant">لا توجد نتائج</p>
+            <p className="p-4 text-center font-body text-body-md text-on-surface-variant">{t.search.noResults}</p>
           )}
           {orderResults.length > 0 && (
             <div className="p-2">
-              <p className="px-2 py-1 font-body text-label-sm text-on-surface-variant">الطلبات</p>
+              <p className="px-2 py-1 font-body text-label-sm text-on-surface-variant">{t.search.orders}</p>
               {orderResults.map((o) => (
                 <button
                   key={o.id}
@@ -88,7 +88,7 @@ export function GlobalSearch() {
           )}
           {productResults.length > 0 && (
             <div className="p-2">
-              <p className="px-2 py-1 font-body text-label-sm text-on-surface-variant">المنتجات</p>
+              <p className="px-2 py-1 font-body text-label-sm text-on-surface-variant">{t.search.products}</p>
               {productResults.map((p) => (
                 <button
                   key={p.id}
@@ -104,7 +104,7 @@ export function GlobalSearch() {
           )}
           {customerResults.length > 0 && (
             <div className="p-2">
-              <p className="px-2 py-1 font-body text-label-sm text-on-surface-variant">الزبائن</p>
+              <p className="px-2 py-1 font-body text-label-sm text-on-surface-variant">{t.search.customers}</p>
               {customerResults.map((c) => (
                 <button
                   key={c.phone}

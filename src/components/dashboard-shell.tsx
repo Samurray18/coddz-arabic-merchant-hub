@@ -117,7 +117,7 @@ export function DashboardShell({ children }: { children?: React.ReactNode }) {
         className="flex w-full items-center gap-gutter-sm rounded-lg border border-outline-variant bg-surface-container-low p-3 text-start"
       >
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-headline text-label-md text-on-primary">
-          {(user?.email?.[0] ?? "م").toUpperCase()}
+          {(user?.email?.[0] ?? t.common.unknownInitial).toUpperCase()}
         </span>
         <span className="flex min-w-0 flex-col">
           <span className="truncate font-headline text-label-md text-on-surface">{user?.email ?? t.nav.yourStore}</span>

@@ -18,14 +18,6 @@ export const Route = createFileRoute("/shipments")({
   head: () => ({ meta: [{ title: "Shipments — COD YOU" }] }),
 });
 
-const STATUS_LABEL: Record<string, string> = {
-  pending: "قيد الانتظار",
-  shipped: "تم الشحن",
-  in_transit: "قيد التوصيل",
-  delivered: "تم التسليم",
-  returned: "مرتجع",
-  canceled: "ملغى",
-};
 const STATUS_CLASS: Record<string, string> = {
   pending: "bg-warning-container text-on-warning-container",
   shipped: "bg-primary-container text-on-primary-container",
@@ -61,7 +53,7 @@ function ShipmentsPage() {
 
   const exportCSV = () => {
     const rows = [
-      ["الطلب", "الناقل", "رقم التتبع", "COD", "الحالة"],
+      [t.shipments.order, t.shipments.carrier, t.shipments.tracking, t.shipments.cod, t.shipments.status],
       ...shipments.map((s: any) => [s.order_id, s.carrier, s.tracking_number ?? "", String(s.cod_amount), s.status]),
     ];
     downloadCsv("shipments.csv", rows);
@@ -80,13 +72,13 @@ function ShipmentsPage() {
         trackingNumber: tracking,
         codAmount: Number(cod) || 0,
       });
-      toast.success("تم إنشاء الشحنة");
+      toast.success(t.shipments.created);
       setOpen(false);
       setOrderId("");
       setTracking("");
       setCod("");
     } catch (e: any) {
-      toast.error(e?.message ?? "خطأ");
+      toast.error(e?.message ?? t.common.error);
     }
   };
 
@@ -105,7 +97,7 @@ function ShipmentsPage() {
               className="inline-flex items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
             >
               <span className="material-symbols-outlined text-[18px]">download</span>
-              تصدير CSV
+              {t.orders.exportCSV}
             </button>
             <button
               type="button"
@@ -113,7 +105,7 @@ function ShipmentsPage() {
               className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md bg-primary px-3.5 py-2.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success"
             >
               <span className="material-symbols-outlined text-[18px]">add</span>
-              شحنة جديدة
+              {t.shipments.new}
             </button>
           </div>
         </div>
@@ -155,21 +147,21 @@ function ShipmentsPage() {
                           onClick={() => updateShipment.mutate({ id: s.id, status: "shipped" })}
                           className="rounded-md bg-primary px-2.5 py-1.5 font-headline text-label-sm text-on-primary"
                         >
-                          شحن
+                          {t.shipments.ship}
                         </button>
                         <button
                           type="button"
                           onClick={() => updateShipment.mutate({ id: s.id, status: "delivered", collected: true })}
                           className="rounded-md bg-accent-container px-2.5 py-1.5 font-headline text-label-sm text-on-accent-container"
                         >
-                          تسليم
+                          {t.shipments.deliver}
                         </button>
                         <button
                           type="button"
                           onClick={() => updateShipment.mutate({ id: s.id, status: "returned" })}
                           className="rounded-md bg-error-container px-2.5 py-1.5 font-headline text-label-sm text-on-error-container"
                         >
-                          إرجاع
+                          {t.shipments.return}
                         </button>
                       </div>
                     </td>
@@ -183,16 +175,16 @@ function ShipmentsPage() {
         {open && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
             <div className="w-full max-w-md rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-xl">
-              <h2 className="font-headline text-title-lg text-on-surface">شحنة جديدة</h2>
+              <h2 className="font-headline text-title-lg text-on-surface">{t.shipments.new}</h2>
               <div className="mt-4 flex flex-col gap-gutter-md">
                 <label className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">الطلب</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.shipments.order}</span>
                   <select
                     value={orderId}
                     onChange={(e) => setOrderId(e.target.value)}
                     className="w-full rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none"
                   >
-                    <option value="">اختر طلبًا</option>
+                    <option value="">{t.shipments.selectOrder}</option>
                     {shippableOrders.map((o) => (
                       <option key={o.id} value={o.id}>
                         #{o.number} — {o.name} (<Money value={o.amount} />)
@@ -201,7 +193,7 @@ function ShipmentsPage() {
                   </select>
                 </label>
                 <label className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">الناقل</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.shipments.carrier}</span>
                   <select
                     value={carrier}
                     onChange={(e) => setCarrier(e.target.value)}
@@ -213,7 +205,7 @@ function ShipmentsPage() {
                   </select>
                 </label>
                 <label className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">رقم التتبع</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.shipments.trackingNumber}</span>
                   <input
                     value={tracking}
                     onChange={(e) => setTracking(e.target.value)}
@@ -221,7 +213,7 @@ function ShipmentsPage() {
                   />
                 </label>
                 <label className="flex flex-col gap-1">
-                  <span className="font-body text-label-md text-on-surface-variant">مبلغ COD</span>
+                  <span className="font-body text-label-md text-on-surface-variant">{t.shipments.codAmount}</span>
                   <input
                     type="number"
                     value={cod}
@@ -236,14 +228,14 @@ function ShipmentsPage() {
                     disabled={createShipment.isPending}
                     className="flex-1 rounded-md bg-primary py-2 font-headline text-label-md text-on-primary disabled:opacity-60"
                   >
-                    {createShipment.isPending ? "..." : "إنشاء"}
+                    {createShipment.isPending ? "..." : t.shipments.create}
                   </button>
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
                     className="rounded-md bg-surface-container-low px-4 py-2 font-headline text-label-md text-on-surface"
                   >
-                    إلغاء
+                    {t.shipments.cancel}
                   </button>
                 </div>
               </div>

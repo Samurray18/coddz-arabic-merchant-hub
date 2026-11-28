@@ -27,20 +27,20 @@ interface Member {
   metric?: string | undefined;
 }
 
-const ROLE_LABEL: Record<string, string> = {
-  owner: "مدير المتجر",
-  manager: "مدير",
-  agent: "تأكيد الطلبات",
-  stock_keeper: "تجهيز الشحنات",
-};
-
-function initials(name: string) {
-  return (name.trim()[0] ?? "م").toUpperCase();
+function initials(name: string, fallback: string) {
+  return (name.trim()[0] ?? fallback).toUpperCase();
 }
 
 function TeamPage() {
   const { t } = useLanguage();
   const { storeId, user } = useAuth();
+
+  const ROLE_LABEL: Record<string, string> = {
+    owner: t.team.storeManager,
+    manager: t.team.manager,
+    agent: t.team.agent,
+    stock_keeper: t.team.stockKeeper,
+  };
   const { data: invites = [] } = useQuery({
     queryKey: ["team_invites", storeId],
     enabled: !!storeId,
@@ -78,12 +78,12 @@ function TeamPage() {
   const ownerConfirmations = user?.id ? (confirmationsByUser.get(user.id) ?? 0) : 0;
   members.push({
     id: "owner",
-    name: user?.email?.split("@")[0] ?? "المدير",
-    role: "مدير المتجر",
+    name: user?.email?.split("@")[0] ?? t.team.ownerName,
+    role: t.team.storeManager,
     phone: user?.email ?? "",
     status: "active",
     tone: "primary",
-    metric: ownerConfirmations > 0 ? `${ownerConfirmations} تأكيد` : undefined,
+    metric: ownerConfirmations > 0 ? t.team.confirmationsCount.replace("{count}", String(ownerConfirmations)) : undefined,
   });
   for (const invite of invites as any[]) {
     members.push({
@@ -97,7 +97,7 @@ function TeamPage() {
   }
 
   const total = members.length;
-  const activeAgents = members.filter((m) => m.role === "تأكيد الطلبات" && m.status === "active").length;
+  const activeAgents = members.filter((m) => m.role === t.team.agent && m.status === "active").length;
   const pending = members.filter((m) => m.status === "pending").length;
 
   const toneClass = (tone: Member["tone"]) =>
@@ -111,13 +111,13 @@ function TeamPage() {
 
   const statusBadge = (m: Member) => {
     if (m.status === "pending") return "bg-warning-container text-on-warning-container";
-    if (m.role === "مدير المتجر") return "bg-accent-container text-on-accent-container";
+    if (m.role === t.team.storeManager) return "bg-accent-container text-on-accent-container";
     return "bg-accent-container text-on-accent-container";
   };
   const statusLabel = (m: Member) => {
-    if (m.status === "pending") return "دعوة معلقة";
-    if (m.role === "مدير المتجر") return "نشط";
-    return "نشط";
+    if (m.status === "pending") return t.team.pending;
+    if (m.role === t.team.storeManager) return t.team.active;
+    return t.team.active;
   };
 
   return (
@@ -126,8 +126,8 @@ function TeamPage() {
         <section className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-3 items-stretch">
           <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">إجمالي الأعضاء</span>
-              <span className="font-headline text-headline-md tabular-nums text-on-surface">{total} أعضاء</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.team.totalMembers}</span>
+              <span className="font-headline text-headline-md tabular-nums text-on-surface">{t.team.membersCount.replace("{count}", String(total))}</span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-primary-container text-on-primary-container">
               <span className="material-symbols-outlined text-[20px]">group</span>
@@ -135,8 +135,8 @@ function TeamPage() {
           </article>
           <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">فريق التأكيد النشط</span>
-              <span className="font-headline text-headline-md tabular-nums text-primary">{activeAgents} موظفين</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.team.activeAgents}</span>
+              <span className="font-headline text-headline-md tabular-nums text-primary">{t.team.activeAgentsCount.replace("{count}", String(activeAgents))}</span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-accent-container text-on-accent-container">
               <span className="material-symbols-outlined text-[20px]">support_agent</span>
@@ -144,9 +144,9 @@ function TeamPage() {
           </article>
           <article className="flex h-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">دعوات معلقة</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.team.pendingInvites}</span>
               <span className="font-headline text-headline-md tabular-nums text-warning">
-                {pending === 1 ? "دعوة واحدة" : `${pending} دعوات`}
+                {pending === 1 ? t.team.oneInvite : t.team.invitesCount.replace("{count}", String(pending))}
               </span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-warning-container text-on-warning-container">
@@ -157,17 +157,17 @@ function TeamPage() {
 
         <section className="flex items-center justify-between gap-gutter-md">
           <div className="flex items-center gap-gutter-sm">
-            <button type="button" className="rounded-full bg-primary px-4 py-2 font-headline text-label-md text-on-primary">الكل</button>
-            <button type="button" className="rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 font-body text-label-md text-on-surface-variant hover:bg-surface-container-low">التأكيد الهاتفي</button>
-            <button type="button" className="rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 font-body text-label-md text-on-surface-variant hover:bg-surface-container-low">تجهيز الشحنات</button>
+            <button type="button" className="rounded-full bg-primary px-4 py-2 font-headline text-label-md text-on-primary">{t.team.all}</button>
+            <button type="button" className="rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 font-body text-label-md text-on-surface-variant hover:bg-surface-container-low">{t.team.phone}</button>
+            <button type="button" className="rounded-full border border-outline-variant bg-surface-container-lowest px-4 py-2 font-body text-label-md text-on-surface-variant hover:bg-surface-container-low">{t.team.shipping}</button>
           </div>
           <button
             type="button"
-            onClick={() => toast("دعوة عضو جديد", { description: "سيتم إرسال دعوة بالبريد الإلكتروني." })}
+            onClick={() => toast(t.team.inviteMember, { description: t.team.inviteSent })}
             className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 font-headline text-label-md text-on-primary transition-colors hover:bg-success"
           >
             <span className="material-symbols-outlined text-[18px]">person_add</span>
-            دعوة عضو جديد
+            {t.team.invite}
           </button>
         </section>
 
@@ -179,7 +179,7 @@ function TeamPage() {
             >
               <div className="flex items-center gap-gutter-md">
                 <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-headline text-title-md ${toneClass(m.tone)}`}>
-                  {initials(m.name)}
+                  {initials(m.name, t.team.initialFallback)}
                 </span>
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
@@ -187,9 +187,9 @@ function TeamPage() {
                     <span className="rounded-full bg-surface-container-low px-2.5 py-0.5 font-body text-label-sm text-on-surface-variant">
                       {m.role}
                     </span>
-                    {m.role === "مدير المتجر" && (
+                    {m.role === t.team.storeManager && (
                       <span className="rounded-full bg-primary-container px-2.5 py-0.5 font-body text-label-sm text-on-primary-container">
-                        مدير المتجر
+                        {t.team.storeManager}
                       </span>
                     )}
                   </div>
@@ -197,7 +197,7 @@ function TeamPage() {
                 </div>
               </div>
               {m.metric ? (
-                <span className="font-headline text-label-md tabular-nums text-primary">{m.metric} اليوم</span>
+                <span className="font-headline text-label-md tabular-nums text-primary">{m.metric} {t.team.today}</span>
               ) : (
                 <span className={`rounded-full px-3 py-1 font-body text-label-sm ${statusBadge(m)}`}>{statusLabel(m)}</span>
               )}

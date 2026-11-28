@@ -68,27 +68,27 @@ export function SignupWizard() {
     setError("");
     if (step === 1) {
       if (!form.firstName || !form.lastName || !form.email) {
-        setError("يرجى ملء جميع الحقول");
+        setError(t.auth.fillAllFields);
         return false;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-        setError("بريد إلكتروني غير صالح");
+        setError(t.auth.invalidEmail);
         return false;
       }
     }
     if (step === 2) {
       if (form.password.length < 8) {
-        setError("كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+        setError(t.auth.passwordMinLength);
         return false;
       }
       if (form.password !== form.confirm) {
-        setError("كلمتا المرور غير متطابقتين");
+        setError(t.auth.passwordsMismatch);
         return false;
       }
     }
     if (step === 3) {
       if (!form.storeName || !form.wilaya) {
-        setError("يرجى إدخال اسم المتجر واختيار الولاية");
+        setError(t.auth.storeAndWilayaRequired);
         return false;
       }
     }
@@ -143,7 +143,7 @@ export function SignupWizard() {
       });
       if (se) throw se;
       const user = data.user;
-      if (!user) throw new Error("فشل إنشاء الحساب");
+      if (!user) throw new Error(t.auth.accountCreationFailed);
       if (!data.session) {
         setDone(true);
         setLoading(false);
@@ -174,9 +174,9 @@ export function SignupWizard() {
       navigate({ to: "/onboarding" });
     } catch (e: any) {
       const msg = e?.message ?? "";
-      if (msg.toLowerCase().includes("already")) setError("هذا البريد الإلكتروني مستخدم بالفعل");
-      else if (msg.toLowerCase().includes("network")) setError("خطأ في الاتصال بالشبكة");
-      else setError(msg || "حدث خطأ، حاول مرة أخرى");
+      if (msg.toLowerCase().includes("already")) setError(t.auth.emailAlreadyUsed);
+      else if (msg.toLowerCase().includes("network")) setError(t.auth.networkError);
+      else setError(msg || t.common.genericError);
     } finally {
       setLoading(false);
     }
@@ -190,11 +190,11 @@ export function SignupWizard() {
             <div className="w-16 h-16 mx-auto rounded-full bg-accent-container text-on-accent-container flex items-center justify-center">
               <Check className="w-8 h-8" />
             </div>
-            <h2 className="font-headline text-headline-md text-on-surface">تحقق من بريدك الإلكتروني</h2>
+            <h2 className="font-headline text-headline-md text-on-surface">{t.auth.checkEmailTitle}</h2>
             <p className="font-body text-body-md text-on-surface-variant">
-              لقد أرسلنا رابط تأكيد إلى {form.email}. يرجى تأكيد حسابك قبل تسجيل الدخول.
+              {t.auth.confirmationEmailSent.replace("{email}", form.email)}
             </p>
-            <Button onClick={() => navigate({ to: "/auth" })} className="w-full">العودة لتسجيل الدخول</Button>
+            <Button onClick={() => navigate({ to: "/auth" })} className="w-full">{t.auth.backToSignIn}</Button>
           </CardContent>
         </Card>
       </div>
@@ -209,7 +209,7 @@ export function SignupWizard() {
             <BrandMark size={40} />
             <span className="font-headline text-title-lg text-on-surface">{BRAND_NAME}</span>
           </div>
-          <CardTitle className="font-headline text-headline-md text-on-surface">إنشاء متجرك</CardTitle>
+          <CardTitle className="font-headline text-headline-md text-on-surface">{t.auth.createYourStore}</CardTitle>
           <div className="flex items-center justify-center gap-2">
             {[1, 2, 3, 4].map((n) => (
               <div key={n} className="flex items-center gap-2">
@@ -246,10 +246,10 @@ export function SignupWizard() {
                 </svg>
                 {googleLoading ? "..." : t.auth.continueWithGoogle}
               </Button>
-              <p className="text-center text-xs text-on-surface-variant">ستكمل بقية المعلومات بعد تسجيل الدخول</p>
+              <p className="text-center text-xs text-on-surface-variant">{t.auth.completeInfoAfterLogin}</p>
               <div className="relative flex items-center gap-2">
                 <span className="h-px flex-1 bg-outline-variant" />
-                <span className="font-body text-label-sm text-on-surface-variant">أو</span>
+                <span className="font-body text-label-sm text-on-surface-variant">{t.common.or}</span>
                 <span className="h-px flex-1 bg-outline-variant" />
               </div>
             </>
@@ -259,15 +259,15 @@ export function SignupWizard() {
           {step === 1 && (
             <div className="space-y-3">
               <div>
-                <Label>الاسم</Label>
+                <Label>{t.auth.firstName}</Label>
                 <Input value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} />
               </div>
               <div>
-                <Label>اللقب</Label>
+                <Label>{t.auth.lastName}</Label>
                 <Input value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
               </div>
               <div>
-                <Label>البريد الإلكتروني</Label>
+                <Label>{t.auth.email}</Label>
                 <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
               </div>
             </div>
@@ -276,7 +276,7 @@ export function SignupWizard() {
           {step === 2 && (
             <div className="space-y-3">
               <div>
-                <Label>كلمة المرور</Label>
+                <Label>{t.auth.password}</Label>
                 <div className="relative">
                   <Input
                     type={showPw ? "text" : "password"}
@@ -299,7 +299,7 @@ export function SignupWizard() {
                 </div>
               </div>
               <div>
-                <Label>تأكيد كلمة المرور</Label>
+                <Label>{t.auth.confirmPassword}</Label>
                 <Input
                   type={showPw ? "text" : "password"}
                   value={form.confirm}
@@ -312,11 +312,11 @@ export function SignupWizard() {
           {step === 3 && (
             <div className="space-y-3">
               <div>
-                <Label>اسم المتجر</Label>
+                <Label>{t.auth.storeName}</Label>
                 <Input value={form.storeName} onChange={(e) => setForm({ ...form, storeName: e.target.value })} />
               </div>
               <div className="relative">
-                <Label>الولاية</Label>
+                <Label>{t.orders.wilaya}</Label>
                 <Input
                   value={form.wilaya ? form.wilaya : wilayaSearch}
                   onChange={(e) => {
@@ -325,7 +325,7 @@ export function SignupWizard() {
                     setShowWilayaList(true);
                   }}
                   onFocus={() => setShowWilayaList(true)}
-                  placeholder="ابحث عن ولاية..."
+                  placeholder={t.onboarding.searchWilaya}
                 />
                 {showWilayaList && (
                   <div className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-md border border-outline-variant bg-surface-container-lowest shadow-sm">
@@ -351,7 +351,7 @@ export function SignupWizard() {
 
           {step === 4 && (
             <div className="space-y-3">
-              <p className="text-sm text-on-surface-variant">اختر شركات التوصيل (اختياري)</p>
+              <p className="text-sm text-on-surface-variant">{t.auth.selectCarriers}</p>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {CARRIER_OPTIONS.map((c) => {
                   const ext = LOGO_EXT[c.key];
@@ -385,7 +385,7 @@ export function SignupWizard() {
                 })}
               </div>
               <button type="button" onClick={() => setForm({ ...form, carriers: [] })} className="text-xs text-on-surface-variant underline">
-                تخطي الآن
+                {t.auth.skipForNow}
               </button>
             </div>
           )}
@@ -393,16 +393,16 @@ export function SignupWizard() {
           <div className="flex items-center justify-between pt-2">
             <Button variant="outline" onClick={back} disabled={step === 1}>
               <ChevronRight className="w-4 h-4 ms-1" />
-              رجوع
+              {t.common.back}
             </Button>
             {step < 4 ? (
               <Button onClick={next}>
-                التالي
+                {t.common.next}
                 <ChevronLeft className="w-4 h-4 me-1" />
               </Button>
             ) : (
               <Button onClick={submit} disabled={loading}>
-                {loading ? "جارٍ الإنشاء..." : "إنشاء متجرك"}
+                {loading ? t.auth.creating : t.auth.createYourStore}
               </Button>
             )}
           </div>

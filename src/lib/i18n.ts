@@ -27,6 +27,23 @@ export interface TranslationBundle {
     yes: string;
     no: string;
     error: string;
+    eventLogError: string;
+    movementLogError: string;
+    unknownInitial: string;
+    genericError: string;
+    errorOccurred: string;
+    or: string;
+  };
+  search: {
+    placeholder: string;
+    noResults: string;
+    orders: string;
+    products: string;
+    customers: string;
+  };
+  realtime: {
+    newOrder: string;
+    newOrderDescription: string;
   };
   nav: {
     features: string;
@@ -59,6 +76,7 @@ export interface TranslationBundle {
     comingSoonSub: string;
     yourStore: string;
     apps: string;
+    checkout: string;
   };
   hero: {
     eyebrow: string;
@@ -84,6 +102,59 @@ export interface TranslationBundle {
     monthly: string;
     popular: string;
     choosePlan: string;
+    badge: string;
+    heroTitle: string;
+    heroSub: string;
+    ctaStartFree: string;
+    statTracking: string;
+    statProfit: string;
+    statWilayasPriced: string;
+    featuresHeading: string;
+    featureOrdersTitle: string;
+    featureOrdersDesc: string;
+    featureCallCenterTitle: string;
+    featureCallCenterDesc: string;
+    featureFakeOrdersTitle: string;
+    featureFakeOrdersDesc: string;
+    featureDeliveryTitle: string;
+    featureDeliveryDesc: string;
+    featureInventoryDesc: string;
+    featureAnalyticsTitle: string;
+    featureAnalyticsDesc: string;
+    featureStoreIntegrationTitle: string;
+    featureStoreIntegrationDesc: string;
+    featureSmsWhatsappTitle: string;
+    featureSmsWhatsappDesc: string;
+    featureTeamTitle: string;
+    featureTeamDesc: string;
+    stepConnect: string;
+    stepConfirm: string;
+    stepTrack: string;
+    carriersHeading: string;
+    pricingHeading: string;
+    pricePerMonth: string;
+    faqHeading: string;
+    faq1Q: string;
+    faq1A: string;
+    faq2Q: string;
+    faq2A: string;
+    faq3Q: string;
+    faq3A: string;
+    faq4Q: string;
+    faq4A: string;
+    faq5Q: string;
+    faq5A: string;
+    footerRights: string;
+    metaTitle: string;
+    metaDescription: string;
+  };
+  plans: {
+    starterOrderLimit: string;
+    starterFeatures: string[];
+    proOrderLimit: string;
+    proFeatures: string[];
+    businessOrderLimit: string;
+    businessFeatures: string[];
   };
   status: Record<OrderStatus, string>;
   dashboard: {
@@ -105,6 +176,13 @@ export interface TranslationBundle {
     recentOrders: string;
     viewAll: string;
     unitsSold: string;
+    welcomeTasks: string;
+    welcomeHint: string;
+    taskAddProduct: string;
+    taskConnectCarrier: string;
+    taskCreateOrder: string;
+    taskInviteTeam: string;
+    start: string;
   };
   orders: {
     title: string;
@@ -163,6 +241,8 @@ export interface TranslationBundle {
     badgeDuplicate: string;
     badgeBlacklist: string;
     badgePreviousReturns: string;
+    restockNote: string;
+    noRestockNote: string;
   };
   products: {
     title: string;
@@ -219,6 +299,9 @@ export interface TranslationBundle {
     connected: string;
     ready: string;
     noShipments: string;
+    successRate: string;
+    noData: string;
+    shipmentRate: string;
   };
   shipments: {
     title: string;
@@ -247,6 +330,7 @@ export interface TranslationBundle {
     deliver: string;
     return: string;
     chooseOrder: string;
+    created: string;
   };
   expenses: {
     title: string;
@@ -263,6 +347,14 @@ export interface TranslationBundle {
     addCampaign: string;
     platform: string;
     noCampaigns: string;
+    invalidAmount: string;
+    added: string;
+    adsTab: string;
+    categoryGeneral: string;
+    categoryRent: string;
+    categorySalaries: string;
+    categoryShipping: string;
+    categoryOther: string;
   };
   confirmation: {
     title: string;
@@ -275,6 +367,15 @@ export interface TranslationBundle {
     noAnswer: string;
     refuse: string;
     attempt: string;
+    answered: string;
+    postponed: string;
+    refused: string;
+    orderConfirmed: string;
+    postponeRecorded: string;
+    noAnswerRecorded: string;
+    orderRefused: string;
+    ordersCount: string;
+    via: string;
   };
   analytics: {
     title: string;
@@ -353,6 +454,15 @@ export interface TranslationBundle {
     stockKeeper: string;
     active: string;
     pending: string;
+    initialFallback: string;
+    ownerName: string;
+    manager: string;
+    confirmationsCount: string;
+    membersCount: string;
+    activeAgentsCount: string;
+    oneInvite: string;
+    invitesCount: string;
+    today: string;
   };
   settings: {
     title: string;
@@ -374,6 +484,10 @@ export interface TranslationBundle {
     accountMgmt: string;
     accountMgmtSub: string;
     pauseStore: string;
+    subtitleWithStore: string;
+    notifications: string;
+    defaultWilayaValue: string;
+    pauseStoreDescription: string;
   };
   inventory: {
     title: string;
@@ -408,6 +522,11 @@ export interface TranslationBundle {
     invalidQty: string;
     stockAdjusted: string;
     error: string;
+    productsCount: string;
+    lowProductsCount: string;
+    searchAriaLabel: string;
+    pieces: string;
+    signedChange: string;
   };
   integrations: {
     title: string;
@@ -490,6 +609,9 @@ export interface TranslationBundle {
     accepted: string;
     rejected: string;
     duplicate: string;
+    copied: string;
+    keyRevoked: string;
+    createKeyTitle: string;
   };
   onboarding: {
     title: string;
@@ -520,6 +642,15 @@ export interface TranslationBundle {
     preparing: string;
     preparingSub: string;
     steps: string[];
+    businessRetail: string;
+    businessWholesale: string;
+    businessDropshipping: string;
+    businessServices: string;
+    businessOther: string;
+    channelWebsite: string;
+    channelWhatsapp: string;
+    ordersUnder50: string;
+    ordersOver1000: string;
   };
   auth: {
     signInTitle: string;
@@ -544,10 +675,35 @@ export interface TranslationBundle {
     resetSent: string;
     passwordUpdated: string;
     recoveryMissing: string;
+    fillAllFields: string;
+    invalidEmail: string;
+    passwordMinLength: string;
+    passwordsMismatch: string;
+    storeAndWilayaRequired: string;
+    accountCreationFailed: string;
+    emailAlreadyUsed: string;
+    networkError: string;
+    checkEmailTitle: string;
+    confirmationEmailSent: string;
+    createYourStore: string;
+    completeInfoAfterLogin: string;
+    firstName: string;
+    lastName: string;
+    confirmPassword: string;
+    selectCarriers: string;
+    skipForNow: string;
+    creating: string;
+    enterEmailAndPassword: string;
+    invalidCredentials: string;
+    confirmEmailFirst: string;
+    tooManyAttempts: string;
+    signInFailed: string;
+    sessionNotConfirmed: string;
+    signingIn: string;
   };
 }
 
-const ar: TranslationBundle = {
+const arBase = {
   common: {
     loading: "جارٍ التحميل...",
     empty: "لا توجد بيانات",
@@ -574,6 +730,20 @@ const ar: TranslationBundle = {
     yes: "نعم",
     no: "لا",
     error: "خطأ",
+    eventLogError: "خطأ في تسجيل الحدث",
+    movementLogError: "خطأ في تسجيل الحركة",
+    unknownInitial: "؟",
+  },
+  search: {
+    placeholder: "بحث في الطلبات، المنتجات، الزبائن...",
+    noResults: "لا توجد نتائج",
+    orders: "الطلبات",
+    products: "المنتجات",
+    customers: "الزبائن",
+  },
+  realtime: {
+    newOrder: "طلب جديد",
+    newOrderDescription: "تم استلام طلب جديد في متجرك.",
   },
   nav: {
     features: "المميزات",
@@ -606,6 +776,7 @@ const ar: TranslationBundle = {
     comingSoonSub: "هذه الصفحة قيد التطوير. سنضيفها قريبًا.",
     yourStore: "متجرك",
     apps: "التطبيقات",
+    checkout: "نموذج الدفع",
   },
   hero: {
     eyebrow: "مصمم خصيصاً للتجارة الإلكترونية في الجزائر",
@@ -659,6 +830,13 @@ const ar: TranslationBundle = {
     recentOrders: "أحدث الطلبات",
     viewAll: "عرض الكل",
     unitsSold: "طلب",
+    welcomeTasks: "قائمة الترحيب",
+    welcomeHint: "أكمل هذه المهام للبدء ({done}/{total})",
+    taskAddProduct: "أضف منتجك الأول",
+    taskConnectCarrier: "ربط شركة توصيل",
+    taskCreateOrder: "أنشئ طلبك الأول",
+    taskInviteTeam: "دعوة فريقك",
+    start: "ابدأ",
   },
   orders: {
     title: "إدارة الطلبات",
@@ -717,6 +895,8 @@ const ar: TranslationBundle = {
     badgeDuplicate: "مكرر",
     badgeBlacklist: "قائمة سوداء",
     badgePreviousReturns: "مرتجعات سابقة",
+    restockNote: "(إعادة للمخزون)",
+    noRestockNote: "(بدون إعادة)",
   },
   products: {
     title: "المنتجات والمخزون",
@@ -773,6 +953,9 @@ const ar: TranslationBundle = {
     connected: "متصل",
     ready: "جاهز للربط",
     noShipments: "لا توجد شحنات",
+    successRate: "نسبة الطرود المسلمة بنجاح",
+    noData: "لا توجد شحنات بعد. أرسل طلباتك لشركات التوصيل لتظهر الإحصائيات.",
+    shipmentRate: "{count} شحنة • {rate}% تسليم",
   },
   shipments: {
     title: "الشحنات",
@@ -801,6 +984,7 @@ const ar: TranslationBundle = {
     deliver: "تسليم",
     return: "إرجاع",
     chooseOrder: "اختر طلبًا",
+    created: "تم إنشاء الشحنة",
   },
   expenses: {
     title: "المصاريف والحملات",
@@ -829,6 +1013,15 @@ const ar: TranslationBundle = {
     noAnswer: "لا يرد",
     refuse: "إلغاء",
     attempt: "المحاولة",
+    answered: "تم التأكيد",
+    postponed: "مؤجل",
+    refused: "مرفوض",
+    orderConfirmed: "تم تأكيد الطلب",
+    postponeRecorded: "تم التأجيل",
+    noAnswerRecorded: "تم تسجيل: لا يرد",
+    orderRefused: "تم رفض الطلب",
+    ordersCount: "{count} طلبًا",
+    via: "عبر",
   },
   analytics: {
     title: "الإحصائيات",
@@ -1101,7 +1294,7 @@ const ar: TranslationBundle = {
   },
 };
 
-const fr: TranslationBundle = {
+const frBase = {
   common: {
     loading: "Chargement...",
     empty: "Aucune donnée",
@@ -1128,6 +1321,20 @@ const fr: TranslationBundle = {
     yes: "Oui",
     no: "Non",
     error: "Erreur",
+    eventLogError: "Échec de l'enregistrement de l'événement",
+    movementLogError: "Échec de l'enregistrement du mouvement",
+    unknownInitial: "?",
+  },
+  search: {
+    placeholder: "Rechercher commandes, produits, clients...",
+    noResults: "Aucun résultat",
+    orders: "Commandes",
+    products: "Produits",
+    customers: "Clients",
+  },
+  realtime: {
+    newOrder: "Nouvelle commande",
+    newOrderDescription: "Une nouvelle commande a été reçue dans votre boutique.",
   },
   nav: {
     features: "Fonctionnalités",
@@ -1160,6 +1367,7 @@ const fr: TranslationBundle = {
     comingSoonSub: "Cette page est en cours de développement. Elle arrivera bientôt.",
     yourStore: "Votre boutique",
     apps: "Applications",
+    checkout: "Commande",
   },
   hero: {
     eyebrow: "Conçu pour l’e-commerce COD en Algérie",
@@ -1213,6 +1421,13 @@ const fr: TranslationBundle = {
     recentOrders: "Dernières commandes",
     viewAll: "Voir tout",
     unitsSold: "cmd",
+    welcomeTasks: "Liste de démarrage",
+    welcomeHint: "Terminez ces tâches pour commencer ({done}/{total})",
+    taskAddProduct: "Ajoutez votre premier produit",
+    taskConnectCarrier: "Connecter un transporteur",
+    taskCreateOrder: "Créez votre première commande",
+    taskInviteTeam: "Invitez votre équipe",
+    start: "Commencer",
   },
   orders: {
     title: "Commandes",
@@ -1271,6 +1486,8 @@ const fr: TranslationBundle = {
     badgeDuplicate: "Doublon",
     badgeBlacklist: "Liste noire",
     badgePreviousReturns: "Retours précédents",
+    restockNote: "(réapprovisionné)",
+    noRestockNote: "(sans réapprovisionnement)",
   },
   products: {
     title: "Produits & Stock",
@@ -1320,10 +1537,10 @@ const fr: TranslationBundle = {
     csvCost: "Coût",
     csvStock: "Stock",
   },
-  delivery: { title: "Livraison", subtitle: "Performance par transporteur", avg: "Moyenne", connected: "Connecté", ready: "Prêt", noShipments: "Aucune expédition" },
-  shipments: { title: "Expéditions", subtitle: "Suivez vos expéditions", new: "Nouvelle", order: "Commande", carrier: "Transporteur", tracking: "Suivi", cod: "COD", status: "Statut", actions: "Actions", create: "Créer", selectOrder: "Choisir", trackingNumber: "N° de suivi", codAmount: "Montant COD", createBtn: "Créer", cancel: "Annuler", noShipments: "Aucune", pending: "En attente", shipped: "Expédié", inTransit: "En transit", delivered: "Livré", returned: "Retourné", canceled: "Annulé", ship: "Expédier", deliver: "Livrer", return: "Retourner", chooseOrder: "Choisir" },
+  delivery: { title: "Livraison", subtitle: "Performance par transporteur", avg: "Moyenne", connected: "Connecté", ready: "Prêt", noShipments: "Aucune expédition", successRate: "Taux de colis livrés avec succès", noData: "Aucune expédition pour le moment. Envoyez vos commandes aux transporteurs pour voir les statistiques.", shipmentRate: "{count} expéditions • {rate}% livrées" },
+  shipments: { title: "Expéditions", subtitle: "Suivez vos expéditions", new: "Nouvelle", order: "Commande", carrier: "Transporteur", tracking: "Suivi", cod: "COD", status: "Statut", actions: "Actions", create: "Créer", selectOrder: "Choisir", trackingNumber: "N° de suivi", codAmount: "Montant COD", createBtn: "Créer", cancel: "Annuler", noShipments: "Aucune", pending: "En attente", shipped: "Expédié", inTransit: "En transit", delivered: "Livré", returned: "Retourné", canceled: "Annulé", ship: "Expédier", deliver: "Livrer", return: "Retourner", chooseOrder: "Choisir", created: "Expédition créée" },
   expenses: { title: "Dépenses et campagnes", subtitle: "Suivez vos dépenses", totalExpenses: "Total dépenses", totalAds: "Total pubs", addExpense: "Ajouter dépense", amount: "Montant", note: "Note", add: "Ajouter", category: "Catégorie", date: "Date", noExpenses: "Aucune", addCampaign: "Ajouter campagne", platform: "Plateforme", noCampaigns: "Aucune" },
-  confirmation: { title: "Confirmation", pendingCalls: "En attente", confirmedToday: "Confirmées", confirmRate: "Taux", noPending: "Aucune en attente", confirm: "Confirmer", postpone: "Reporter", noAnswer: "Pas de réponse", refuse: "Refuser", attempt: "Tentative" },
+  confirmation: { title: "Confirmation", pendingCalls: "En attente", confirmedToday: "Confirmées", confirmRate: "Taux", noPending: "Aucune en attente", confirm: "Confirmer", postpone: "Reporter", noAnswer: "Pas de réponse", refuse: "Refuser", attempt: "Tentative", answered: "Confirmée", postponed: "Reportée", refused: "Refusée", orderConfirmed: "Commande confirmée", postponeRecorded: "Reporté", noAnswerRecorded: "Enregistré : pas de réponse", orderRefused: "Commande refusée", ordersCount: "{count} commandes", via: "via" },
   analytics: { title: "Statistiques", netRevenue: "Revenus nets", deliveryRate: "Taux livraison", returnRate: "Taux retour", avgOrder: "Panier moyen", netProfit: "Bénéfice net", monthlySales: "Ventes mensuelles", last6Months: "6 mois", topWilayas: "Top wilayas", returns: "Retours", noData: "Aucune donnée", months: ["Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre"], comparedLastMonth: "par rapport au mois dernier", improvement: "d’amélioration", belowAverage: "Sous la moyenne générale", acrossWilayas: "Dans {count} wilayas", revenueLabel: "Revenus", expensesLabel: "Dépenses", monthlySalesSub: "Total des encaissements COD (en milliers de DA)", salesLabel: "Ventes (DA)", topWilayasSub: "Répartition des commandes confirmées et taux de livraison", ordersLabel: "Commandes", returnsCount: "Nombre de retours : {count}", noReturns: "Aucun retour" },
   customers: {
     title: "Clients",
@@ -1390,7 +1607,7 @@ const fr: TranslationBundle = {
   },
 };
 
-const en: TranslationBundle = {
+const enBase = {
   common: {
     loading: "Loading...",
     empty: "No data",
@@ -1417,6 +1634,20 @@ const en: TranslationBundle = {
     yes: "Yes",
     no: "No",
     error: "Error",
+    eventLogError: "Failed to log event",
+    movementLogError: "Failed to log movement",
+    unknownInitial: "?",
+  },
+  search: {
+    placeholder: "Search orders, products, customers...",
+    noResults: "No results",
+    orders: "Orders",
+    products: "Products",
+    customers: "Customers",
+  },
+  realtime: {
+    newOrder: "New order",
+    newOrderDescription: "A new order was received in your store.",
   },
   nav: {
     features: "Features",
@@ -1449,6 +1680,7 @@ const en: TranslationBundle = {
     comingSoonSub: "This page is under development. It will be available soon.",
     yourStore: "Your store",
     apps: "Apps",
+    checkout: "Checkout",
   },
   hero: {
     eyebrow: "Built for Algerian Cash-on-Delivery merchants",
@@ -1502,6 +1734,13 @@ const en: TranslationBundle = {
     recentOrders: "Recent orders",
     viewAll: "View all",
     unitsSold: "orders",
+    welcomeTasks: "Getting started",
+    welcomeHint: "Complete these tasks to get started ({done}/{total})",
+    taskAddProduct: "Add your first product",
+    taskConnectCarrier: "Connect a carrier",
+    taskCreateOrder: "Create your first order",
+    taskInviteTeam: "Invite your team",
+    start: "Start",
   },
   orders: {
     title: "Orders",
@@ -1560,6 +1799,8 @@ const en: TranslationBundle = {
     badgeDuplicate: "Duplicate",
     badgeBlacklist: "Blacklist",
     badgePreviousReturns: "Previous returns",
+    restockNote: "(restocked)",
+    noRestockNote: "(no restock)",
   },
   products: {
     title: "Products & Stock",
@@ -1609,10 +1850,10 @@ const en: TranslationBundle = {
     csvCost: "Cost",
     csvStock: "Stock",
   },
-  delivery: { title: "Delivery", subtitle: "Delivery performance by carrier", avg: "Average", connected: "Connected", ready: "Ready", noShipments: "No shipments" },
-  shipments: { title: "Shipments", subtitle: "Track your shipments and carriers", new: "New shipment", order: "Order", carrier: "Carrier", tracking: "Tracking", cod: "COD", status: "Status", actions: "Actions", create: "Create", selectOrder: "Select order", trackingNumber: "Tracking number", codAmount: "COD amount", createBtn: "Create", cancel: "Cancel", noShipments: "No shipments", pending: "Pending", shipped: "Shipped", inTransit: "In transit", delivered: "Delivered", returned: "Returned", canceled: "Canceled", ship: "Ship", deliver: "Deliver", return: "Return", chooseOrder: "Choose order" },
+  delivery: { title: "Delivery", subtitle: "Delivery performance by carrier", avg: "Average", connected: "Connected", ready: "Ready", noShipments: "No shipments", successRate: "Successful delivery rate", noData: "No shipments yet. Send your orders to carriers to see statistics.", shipmentRate: "{count} shipments • {rate}% delivered" },
+  shipments: { title: "Shipments", subtitle: "Track your shipments and carriers", new: "New shipment", order: "Order", carrier: "Carrier", tracking: "Tracking", cod: "COD", status: "Status", actions: "Actions", create: "Create", selectOrder: "Select order", trackingNumber: "Tracking number", codAmount: "COD amount", createBtn: "Create", cancel: "Cancel", noShipments: "No shipments", pending: "Pending", shipped: "Shipped", inTransit: "In transit", delivered: "Delivered", returned: "Returned", canceled: "Canceled", ship: "Ship", deliver: "Deliver", return: "Return", chooseOrder: "Choose order", created: "Shipment created" },
   expenses: { title: "Expenses & campaigns", subtitle: "Track your expenses and ads", totalExpenses: "Total expenses", totalAds: "Total ads", addExpense: "Add expense", amount: "Amount", note: "Note", add: "Add", category: "Category", date: "Date", noExpenses: "No expenses", addCampaign: "Add campaign", platform: "Platform", noCampaigns: "No campaigns" },
-  confirmation: { title: "Confirmation", pendingCalls: "Pending calls", confirmedToday: "Confirmed today", confirmRate: "Confirmation rate", noPending: "No pending orders", confirm: "Confirm", postpone: "Postpone", noAnswer: "No answer", refuse: "Refuse", attempt: "Attempt" },
+  confirmation: { title: "Confirmation", pendingCalls: "Pending calls", confirmedToday: "Confirmed today", confirmRate: "Confirmation rate", noPending: "No pending orders", confirm: "Confirm", postpone: "Postpone", noAnswer: "No answer", refuse: "Refuse", attempt: "Attempt", answered: "Confirmed", postponed: "Postponed", refused: "Refused", orderConfirmed: "Order confirmed", postponeRecorded: "Postponed", noAnswerRecorded: "Recorded: no answer", orderRefused: "Order refused", ordersCount: "{count} orders", via: "via" },
   analytics: { title: "Analytics", netRevenue: "Net revenue (month)", deliveryRate: "Delivery rate", returnRate: "Return rate", avgOrder: "Avg order value", netProfit: "Net profit", monthlySales: "Monthly sales", last6Months: "Last 6 months", topWilayas: "Top wilayas", returns: "Returns", noData: "No data", months: ["June", "July", "August", "September", "October", "November"], comparedLastMonth: "compared with last month", improvement: "improvement", belowAverage: "Below overall average", acrossWilayas: "Across {count} wilayas", revenueLabel: "Revenue", expensesLabel: "Expenses", monthlySalesSub: "Total COD collected (thousands of DA)", salesLabel: "Sales (DA)", topWilayasSub: "Confirmed orders and delivery success rate", ordersLabel: "Orders", returnsCount: "Returns: {count}", noReturns: "No returns" },
   customers: {
     title: "Customers",
@@ -1679,4 +1920,460 @@ const en: TranslationBundle = {
   },
 };
 
+type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends readonly unknown[] ? T[K] : T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
+
+const arExtras = {
+  common: {
+    genericError: "حدث خطأ، حاول مرة أخرى",
+    errorOccurred: "حدث خطأ",
+    or: "أو",
+  },
+  integrations: {
+    copied: "تم النسخ",
+    keyRevoked: "تم إلغاء المفتاح",
+    createKeyTitle: "إنشاء مفتاح API",
+  },
+  settings: {
+    subtitleWithStore: "تخصيص بيانات {store} وتفضيلات التأكيد والشحن",
+    notifications: "الإشعارات",
+    defaultWilayaValue: "16 - الجزائر",
+    pauseStoreDescription: "سيتم إيقاف استقبال الطلبات.",
+  },
+  inventory: {
+    productsCount: "{count} منتجًا",
+    lowProductsCount: "{count} منتجات",
+    searchAriaLabel: "بحث في المخزون",
+    pieces: "قطعة",
+    signedChange: "التغيير (موجب/سالب)",
+  },
+  expenses: {
+    invalidAmount: "مبلغ غير صالح",
+    added: "تمت الإضافة",
+    adsTab: "الإعلانات",
+    categoryGeneral: "عام",
+    categoryRent: "إيجار",
+    categorySalaries: "رواتب",
+    categoryShipping: "شحن",
+    categoryOther: "أخرى",
+  },
+  team: {
+    initialFallback: "م",
+    ownerName: "المدير",
+    manager: "مدير",
+    confirmationsCount: "{count} تأكيد",
+    membersCount: "{count} أعضاء",
+    activeAgentsCount: "{count} موظفين",
+    oneInvite: "دعوة واحدة",
+    invitesCount: "{count} دعوات",
+    today: "اليوم",
+  },
+  onboarding: {
+    businessRetail: "تجزئة",
+    businessWholesale: "جملة",
+    businessDropshipping: "دروبشيبينغ",
+    businessServices: "خدمات",
+    businessOther: "أخرى",
+    channelWebsite: "موقع إلكتروني",
+    channelWhatsapp: "WhatsApp / هاتف",
+    ordersUnder50: "أقل من 50",
+    ordersOver1000: "أكثر من 1000",
+  },
+  auth: {
+    fillAllFields: "يرجى ملء جميع الحقول",
+    invalidEmail: "بريد إلكتروني غير صالح",
+    passwordMinLength: "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+    passwordsMismatch: "كلمتا المرور غير متطابقتين",
+    storeAndWilayaRequired: "يرجى إدخال اسم المتجر واختيار الولاية",
+    accountCreationFailed: "فشل إنشاء الحساب",
+    emailAlreadyUsed: "هذا البريد الإلكتروني مستخدم بالفعل",
+    networkError: "خطأ في الاتصال بالشبكة",
+    checkEmailTitle: "تحقق من بريدك الإلكتروني",
+    confirmationEmailSent: "لقد أرسلنا رابط تأكيد إلى {email}. يرجى تأكيد حسابك قبل تسجيل الدخول.",
+    createYourStore: "إنشاء متجرك",
+    completeInfoAfterLogin: "ستكمل بقية المعلومات بعد تسجيل الدخول",
+    firstName: "الاسم",
+    lastName: "اللقب",
+    confirmPassword: "تأكيد كلمة المرور",
+    selectCarriers: "اختر شركات التوصيل (اختياري)",
+    skipForNow: "تخطي الآن",
+    creating: "جارٍ الإنشاء...",
+    enterEmailAndPassword: "يرجى إدخال البريد الإلكتروني وكلمة المرور",
+    invalidCredentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    confirmEmailFirst: "يرجى تأكيد بريدك الإلكتروني أولاً",
+    tooManyAttempts: "محاولات كثيرة، حاول لاحقًا",
+    signInFailed: "فشل تسجيل الدخول",
+    sessionNotConfirmed: "لم يتم تأكيد الجلسة. حاول مرة أخرى.",
+    signingIn: "جارٍ تسجيل الدخول...",
+  },
+  landing: {
+    badge: "نظام إدارة الدفع عند الاستلام للتجار الجزائريين",
+    heroTitle: "تحكّم في طلباتك وأرباحك من لوحة واحدة",
+    heroSub: "استقبل الطلبات من متجرك، أكّدها مع فريقك، أرسلها لشركة التوصيل، وتتبّع أرباحك الحقيقية بالدينار الجزائري.",
+    ctaStartFree: "ابدأ مجانًا",
+    statTracking: "تتبع لحظي للطلبات",
+    statProfit: "حساب تلقائي للأرباح",
+    statWilayasPriced: "58 ولاية في التسعيرة",
+    featuresHeading: "كل ما يحتاجه التاجر لإدارة نشاطه",
+    featureOrdersTitle: "إدارة الطلبات",
+    featureOrdersDesc: "تتبع كل طلب من الإنشاء إلى التحصيل.",
+    featureCallCenterTitle: "مركز الاتصال والتأكيد",
+    featureCallCenterDesc: "فريقك يؤكد الطلبات بسرعة.",
+    featureFakeOrdersTitle: "حماية من الطلبات الوهمية",
+    featureFakeOrdersDesc: "فلترة وتقليل المرتجعات.",
+    featureDeliveryTitle: "الربط مع شركات التوصيل",
+    featureDeliveryDesc: "أرسل للناقل بنقرة.",
+    featureInventoryDesc: "تتبع المخزون والتنبيهات.",
+    featureAnalyticsTitle: "الأرباح والإحصائيات",
+    featureAnalyticsDesc: "أرباح حقيقية بالدينار.",
+    featureStoreIntegrationTitle: "الربط مع متجرك",
+    featureStoreIntegrationDesc: "Shopify, WooCommerce, API.",
+    featureSmsWhatsappTitle: "رسائل SMS وواتساب",
+    featureSmsWhatsappDesc: "إشعارات تلقائية للزبائن.",
+    featureTeamTitle: "الفريق والصلاحيات",
+    featureTeamDesc: "أدوار وصلاحيات متعددة.",
+    stepConnect: "اربط متجرك أو أضف الطلبات",
+    stepConfirm: "أكّد وأرسل لشركة التوصيل",
+    stepTrack: "تابع التحصيل والأرباح",
+    carriersHeading: "تعمل مع شركات التوصيل التي تتعامل معها",
+    pricingHeading: "خطط شهرية بالدينار الجزائري",
+    pricePerMonth: "{amount} دج / شهر",
+    faqHeading: "أسئلة شائعة",
+    faq1Q: "هل يمكنني استخدام النظام بدون متجر؟",
+    faq1A: "نعم، يمكنك إضافة الطلبات يدويًا.",
+    faq2Q: "هل يدعم شركات التوصيل الجزائرية؟",
+    faq2A: "نعم، الربط مع أغلب الناقلين.",
+    faq3Q: "هل توجد عمولة على المبيعات؟",
+    faq3A: "لا، فقط اشتراك شهري.",
+    faq4Q: "هل يمكن لإضافة فريق؟",
+    faq4A: "نعم، مع صلاحيات متعددة.",
+    faq5Q: "هل البيانات آمنة؟",
+    faq5A: "نعم، كل تاجر يرى بياناته فقط.",
+    footerRights: "جميع الحقوق محفوظة",
+    metaTitle: "COD YOU | مدير الدفع عند الاستلام للتجار في الجزائر",
+    metaDescription: "COD YOU: منصة جزائرية لإدارة طلبات الدفع عند الاستلام، تأكيد الطلبات، الربط مع شركات التوصيل وحساب الأرباح.",
+  },
+  plans: {
+    starterOrderLimit: "حتى 50 طلب/شهر",
+    starterFeatures: ["تتبع الطلبات", "تأكيد يدوي", "دعم عبر البريد"],
+    proOrderLimit: "حتى 500 طلب/شهر",
+    proFeatures: ["كل ميزات Starter", "ربط شركات التوصيل", "إحصائيات الأرباح", "فريق التأكيد"],
+    businessOrderLimit: "طلبات غير محدودة",
+    businessFeatures: ["كل ميزات Pro", "API وWebhooks", "صلاحيات متقدمة", "دعم أولوية"],
+  },
+} satisfies DeepPartial<TranslationBundle>;
+
+const frExtras = {
+  common: {
+    genericError: "Une erreur s'est produite, veuillez réessayer",
+    errorOccurred: "Une erreur est survenue",
+    or: "ou",
+  },
+  integrations: {
+    copied: "Copié",
+    keyRevoked: "Clé révoquée",
+    createKeyTitle: "Créer une clé API",
+  },
+  settings: {
+    subtitleWithStore: "Personnalisez les données de {store} et les préférences de confirmation et d'expédition",
+    notifications: "Notifications",
+    defaultWilayaValue: "16 - Alger",
+    pauseStoreDescription: "La réception des commandes sera suspendue.",
+  },
+  inventory: {
+    productsCount: "{count} produits",
+    lowProductsCount: "{count} produits",
+    searchAriaLabel: "Rechercher dans le stock",
+    pieces: "pièces",
+    signedChange: "Modification (+/-)",
+  },
+  expenses: {
+    invalidAmount: "Montant invalide",
+    added: "Ajouté",
+    adsTab: "Publicités",
+    categoryGeneral: "Général",
+    categoryRent: "Loyer",
+    categorySalaries: "Salaires",
+    categoryShipping: "Livraison",
+    categoryOther: "Autre",
+  },
+  team: {
+    initialFallback: "M",
+    ownerName: "Propriétaire",
+    manager: "Gestionnaire",
+    confirmationsCount: "{count} confirmations",
+    membersCount: "{count} membres",
+    activeAgentsCount: "{count} agents",
+    oneInvite: "Une invitation",
+    invitesCount: "{count} invitations",
+    today: "aujourd’hui",
+  },
+  onboarding: {
+    businessRetail: "Détail",
+    businessWholesale: "Grossiste",
+    businessDropshipping: "Dropshipping",
+    businessServices: "Services",
+    businessOther: "Autre",
+    channelWebsite: "Site web",
+    channelWhatsapp: "WhatsApp / Téléphone",
+    ordersUnder50: "Moins de 50",
+    ordersOver1000: "Plus de 1000",
+  },
+  auth: {
+    fillAllFields: "Veuillez remplir tous les champs",
+    invalidEmail: "Adresse e-mail invalide",
+    passwordMinLength: "Le mot de passe doit contenir au moins 8 caractères",
+    passwordsMismatch: "Les mots de passe ne correspondent pas",
+    storeAndWilayaRequired: "Veuillez saisir le nom de la boutique et choisir une wilaya",
+    accountCreationFailed: "Échec de la création du compte",
+    emailAlreadyUsed: "Cette adresse e-mail est déjà utilisée",
+    networkError: "Erreur de connexion réseau",
+    checkEmailTitle: "Vérifiez votre e-mail",
+    confirmationEmailSent: "Nous avons envoyé un lien de confirmation à {email}. Veuillez confirmer votre compte avant de vous connecter.",
+    createYourStore: "Créer votre boutique",
+    completeInfoAfterLogin: "Vous compléterez les informations après la connexion",
+    firstName: "Prénom",
+    lastName: "Nom",
+    confirmPassword: "Confirmer le mot de passe",
+    selectCarriers: "Choisir les transporteurs (facultatif)",
+    skipForNow: "Passer pour l'instant",
+    creating: "Création...",
+    enterEmailAndPassword: "Veuillez saisir votre e-mail et votre mot de passe",
+    invalidCredentials: "E-mail ou mot de passe incorrect",
+    confirmEmailFirst: "Veuillez d'abord confirmer votre e-mail",
+    tooManyAttempts: "Trop de tentatives, réessayez plus tard",
+    signInFailed: "Échec de la connexion",
+    sessionNotConfirmed: "La session n'a pas pu être confirmée. Veuillez réessayer.",
+    signingIn: "Connexion en cours...",
+  },
+  landing: {
+    badge: "Système de gestion COD pour marchands algériens",
+    heroTitle: "Contrôlez vos commandes et profits depuis un seul tableau",
+    heroSub: "Recevez les commandes de votre boutique, confirmez-les avec votre équipe, envoyez-les au livreur et suivez vos vrais profits en dinars algériens.",
+    ctaStartFree: "Commencer gratuitement",
+    statTracking: "Suivi en temps réel",
+    statProfit: "Calcul automatique des profits",
+    statWilayasPriced: "58 wilayas tarifées",
+    featuresHeading: "Tout ce dont un marchand a besoin",
+    featureOrdersTitle: "Gestion des commandes",
+    featureOrdersDesc: "Suivi de la création à l'encaissement.",
+    featureCallCenterTitle: "Centre d'appel",
+    featureCallCenterDesc: "Votre équipe confirme rapidement.",
+    featureFakeOrdersTitle: "Protection anti-fraude",
+    featureFakeOrdersDesc: "Filtrage des fausses commandes.",
+    featureDeliveryTitle: "Intégration livreurs",
+    featureDeliveryDesc: "Envoi en un clic.",
+    featureInventoryDesc: "Suivi et alertes.",
+    featureAnalyticsTitle: "Profits et analytics",
+    featureAnalyticsDesc: "Vrais profits en DZD.",
+    featureStoreIntegrationTitle: "Intégration boutique",
+    featureStoreIntegrationDesc: "Shopify, WooCommerce, API.",
+    featureSmsWhatsappTitle: "SMS et WhatsApp",
+    featureSmsWhatsappDesc: "Notifications automatiques.",
+    featureTeamTitle: "Équipe et rôles",
+    featureTeamDesc: "Accès multiples.",
+    stepConnect: "Connectez votre boutique ou ajoutez des commandes",
+    stepConfirm: "Confirmez et envoyez au livreur",
+    stepTrack: "Suivez l'encaissement et les profits",
+    carriersHeading: "Compatible avec vos livreurs",
+    pricingHeading: "Plans mensuels en DZD",
+    pricePerMonth: "{amount} DA / mois",
+    faqHeading: "FAQ",
+    faq1Q: "Puis-je utiliser sans boutique ?",
+    faq1A: "Oui, ajout manuel des commandes.",
+    faq2Q: "Supporte les livreurs algériens ?",
+    faq2A: "Oui, la plupart.",
+    faq3Q: "Commission sur ventes ?",
+    faq3A: "Non, abonnement mensuel.",
+    faq4Q: "Ajouter une équipe ?",
+    faq4A: "Oui, avec rôles.",
+    faq5Q: "Données sécurisées ?",
+    faq5A: "Oui, isolation par marchand.",
+    footerRights: "Tous droits réservés",
+    metaTitle: "COD YOU | Gestionnaire COD pour les marchands algériens",
+    metaDescription: "COD YOU : une plateforme algérienne pour gérer les commandes en contre-remboursement, confirmer les commandes, se connecter aux transporteurs et calculer les profits.",
+  },
+  plans: {
+    starterOrderLimit: "Jusqu'à 50 commandes/mois",
+    starterFeatures: ["Suivi des commandes", "Confirmation manuelle", "Assistance par e-mail"],
+    proOrderLimit: "Jusqu'à 500 commandes/mois",
+    proFeatures: ["Toutes les fonctionnalités Starter", "Intégration des transporteurs", "Statistiques des profits", "Équipe de confirmation"],
+    businessOrderLimit: "Commandes illimitées",
+    businessFeatures: ["Toutes les fonctionnalités Pro", "API et webhooks", "Permissions avancées", "Assistance prioritaire"],
+  },
+} satisfies DeepPartial<TranslationBundle>;
+
+const enExtras = {
+  common: {
+    genericError: "Something went wrong, please try again",
+    errorOccurred: "An error occurred",
+    or: "or",
+  },
+  integrations: {
+    copied: "Copied",
+    keyRevoked: "Key revoked",
+    createKeyTitle: "Create API key",
+  },
+  settings: {
+    subtitleWithStore: "Customize {store}'s data and confirmation & shipping preferences",
+    notifications: "Notifications",
+    defaultWilayaValue: "16 - Alger",
+    pauseStoreDescription: "Order intake will be paused.",
+  },
+  inventory: {
+    productsCount: "{count} products",
+    lowProductsCount: "{count} products",
+    searchAriaLabel: "Search inventory",
+    pieces: "pcs",
+    signedChange: "Change (+/-)",
+  },
+  expenses: {
+    invalidAmount: "Invalid amount",
+    added: "Added",
+    adsTab: "Ads",
+    categoryGeneral: "General",
+    categoryRent: "Rent",
+    categorySalaries: "Salaries",
+    categoryShipping: "Shipping",
+    categoryOther: "Other",
+  },
+  team: {
+    initialFallback: "M",
+    ownerName: "Owner",
+    manager: "Manager",
+    confirmationsCount: "{count} confirmations",
+    membersCount: "{count} members",
+    activeAgentsCount: "{count} agents",
+    oneInvite: "One invite",
+    invitesCount: "{count} invites",
+    today: "today",
+  },
+  onboarding: {
+    businessRetail: "Retail",
+    businessWholesale: "Wholesale",
+    businessDropshipping: "Dropshipping",
+    businessServices: "Services",
+    businessOther: "Other",
+    channelWebsite: "Website",
+    channelWhatsapp: "WhatsApp / Phone",
+    ordersUnder50: "Under 50",
+    ordersOver1000: "Over 1000",
+  },
+  auth: {
+    fillAllFields: "Please fill in all fields",
+    invalidEmail: "Invalid email address",
+    passwordMinLength: "Password must be at least 8 characters",
+    passwordsMismatch: "Passwords do not match",
+    storeAndWilayaRequired: "Please enter a store name and select a wilaya",
+    accountCreationFailed: "Failed to create account",
+    emailAlreadyUsed: "This email is already in use",
+    networkError: "Network connection error",
+    checkEmailTitle: "Check your email",
+    confirmationEmailSent: "We sent a confirmation link to {email}. Please confirm your account before signing in.",
+    createYourStore: "Create your store",
+    completeInfoAfterLogin: "You'll complete the rest after signing in",
+    firstName: "First name",
+    lastName: "Last name",
+    confirmPassword: "Confirm password",
+    selectCarriers: "Select carriers (optional)",
+    skipForNow: "Skip for now",
+    creating: "Creating...",
+    enterEmailAndPassword: "Please enter your email and password",
+    invalidCredentials: "Incorrect email or password",
+    confirmEmailFirst: "Please confirm your email first",
+    tooManyAttempts: "Too many attempts, try again later",
+    signInFailed: "Sign in failed",
+    sessionNotConfirmed: "The session could not be confirmed. Please try again.",
+    signingIn: "Signing in...",
+  },
+  landing: {
+    badge: "COD management system for Algerian merchants",
+    heroTitle: "Control your orders and profits from one dashboard",
+    heroSub: "Receive orders from your store, confirm them with your team, send to a carrier, and track real profits in Algerian dinars.",
+    ctaStartFree: "Start free",
+    statTracking: "Real-time order tracking",
+    statProfit: "Automatic profit calculation",
+    statWilayasPriced: "58 wilayas priced",
+    featuresHeading: "Everything a merchant needs",
+    featureOrdersTitle: "Order management",
+    featureOrdersDesc: "Track from creation to collection.",
+    featureCallCenterTitle: "Call center",
+    featureCallCenterDesc: "Team confirms quickly.",
+    featureFakeOrdersTitle: "Fake order protection",
+    featureFakeOrdersDesc: "Filter and reduce returns.",
+    featureDeliveryTitle: "Carrier integration",
+    featureDeliveryDesc: "Send with one click.",
+    featureInventoryDesc: "Stock and alerts.",
+    featureAnalyticsTitle: "Profits and analytics",
+    featureAnalyticsDesc: "Real profits in DZD.",
+    featureStoreIntegrationTitle: "Store integration",
+    featureStoreIntegrationDesc: "Shopify, WooCommerce, API.",
+    featureSmsWhatsappTitle: "SMS and WhatsApp",
+    featureSmsWhatsappDesc: "Automatic notifications.",
+    featureTeamTitle: "Team and roles",
+    featureTeamDesc: "Multiple permissions.",
+    stepConnect: "Connect your store or add orders",
+    stepConfirm: "Confirm and send to carrier",
+    stepTrack: "Track collection and profits",
+    carriersHeading: "Works with your carriers",
+    pricingHeading: "Monthly plans in DZD",
+    pricePerMonth: "{amount} DA / month",
+    faqHeading: "FAQ",
+    faq1Q: "Can I use without a store?",
+    faq1A: "Yes, add orders manually.",
+    faq2Q: "Supports Algerian carriers?",
+    faq2A: "Yes, most of them.",
+    faq3Q: "Commission on sales?",
+    faq3A: "No, monthly subscription.",
+    faq4Q: "Add a team?",
+    faq4A: "Yes, with roles.",
+    faq5Q: "Data secure?",
+    faq5A: "Yes, per-merchant isolation.",
+    footerRights: "All rights reserved",
+    metaTitle: "COD YOU | Cash on delivery manager for Algerian merchants",
+    metaDescription: "COD YOU: an Algerian platform for managing cash-on-delivery orders, confirming orders, integrating carriers, and calculating profits.",
+  },
+  plans: {
+    starterOrderLimit: "Up to 50 orders/month",
+    starterFeatures: ["Order tracking", "Manual confirmation", "Email support"],
+    proOrderLimit: "Up to 500 orders/month",
+    proFeatures: ["All Starter features", "Carrier integrations", "Profit analytics", "Confirmation team"],
+    businessOrderLimit: "Unlimited orders",
+    businessFeatures: ["All Pro features", "API and webhooks", "Advanced permissions", "Priority support"],
+  },
+} satisfies DeepPartial<TranslationBundle>;
+
+function mergeBundle(base: Record<string, unknown>, extras: DeepPartial<TranslationBundle>): TranslationBundle {
+  const merged: Record<string, unknown> = { ...base };
+  for (const [section, value] of Object.entries(extras)) {
+    const baseSection = base[section];
+    if (baseSection && value && typeof baseSection === "object" && typeof value === "object" && !Array.isArray(value)) {
+      merged[section] = {
+        ...(baseSection as Record<string, unknown>),
+        ...(value as Record<string, unknown>),
+      };
+    } else {
+      merged[section] = value;
+    }
+  }
+  return merged as unknown as TranslationBundle;
+}
+
+const ar = mergeBundle(arBase, arExtras);
+const fr = mergeBundle(frBase, frExtras);
+const en = mergeBundle(enBase, enExtras);
+
 export const TRANSLATIONS: Record<Lang, TranslationBundle> = { ar, fr, en };
+
+export const LANGUAGE_STORAGE_KEY = "coddz_lang";
+
+export function getStoredLang(): Lang {
+  if (typeof window === "undefined") return "ar";
+  const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  return stored === "ar" || stored === "fr" || stored === "en" ? stored : "ar";
+}
+
+export function getStoredT(): TranslationBundle {
+  return TRANSLATIONS[getStoredLang()];
+}

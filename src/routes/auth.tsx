@@ -48,7 +48,7 @@ function AuthPage() {
 
   const handleSignIn = async () => {
     if (!email.trim() || !password) {
-      setError("يرجى إدخال البريد الإلكتروني وكلمة المرور");
+      setError(t.auth.enterEmailAndPassword);
       return;
     }
     setLoading(true);
@@ -57,9 +57,9 @@ function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       if (error) {
         const msg = error.message.toLowerCase();
-        if (msg.includes("invalid")) setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
-        else if (msg.includes("email not confirmed")) setError("يرجى تأكيد بريدك الإلكتروني أولاً");
-        else if (msg.includes("too many")) setError("محاولات كثيرة، حاول لاحقًا");
+        if (msg.includes("invalid")) setError(t.auth.invalidCredentials);
+        else if (msg.includes("email not confirmed")) setError(t.auth.confirmEmailFirst);
+        else if (msg.includes("too many")) setError(t.auth.tooManyAttempts);
         else setError(error.message);
         return;
       }
@@ -79,7 +79,7 @@ function AuthPage() {
       navigate({ to: completed ? "/dashboard" : "/onboarding", replace: true });
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "";
-      setError(msg || "حدث خطأ، حاول مرة أخرى");
+      setError(msg || t.common.genericError);
     } finally {
       setLoading(false);
     }
@@ -131,7 +131,7 @@ function AuthPage() {
           </form>
           <div className="relative flex items-center gap-2">
             <span className="h-px flex-1 bg-outline-variant" />
-            <span className="font-body text-label-sm text-on-surface-variant">أو</span>
+            <span className="font-body text-label-sm text-on-surface-variant">{t.common.or}</span>
             <span className="h-px flex-1 bg-outline-variant" />
           </div>
           <Button

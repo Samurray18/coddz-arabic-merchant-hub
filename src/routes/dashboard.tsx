@@ -106,6 +106,7 @@ function PendingOrderCard({ order }: { order: Order }) {
 
 function WelcomeChecklist() {
   const { storeId } = useAuth();
+  const { t } = useLanguage();
   const { data: productsData } = useProducts();
   const products = productsData?.pages.flat() ?? [];
   const { data: ordersData } = useOrders();
@@ -144,10 +145,10 @@ function WelcomeChecklist() {
   });
 
   const tasks = [
-    { key: "product", label: "أضف منتجك الأول", done: products.length > 0, to: "/products" },
-    { key: "carrier", label: "ربط شركة توصيل", done: carriers.length > 0, to: "/integrations" },
-    { key: "order", label: "أنشئ طلبك الأول", done: orders.length > 0, to: "/orders" },
-    { key: "team", label: "دعوة فريقك", done: (roles as any[]).length > 1, to: "/team" },
+    { key: "product", label: t.dashboard.taskAddProduct, done: products.length > 0, to: "/products" },
+    { key: "carrier", label: t.dashboard.taskConnectCarrier, done: carriers.length > 0, to: "/integrations" },
+    { key: "order", label: t.dashboard.taskCreateOrder, done: orders.length > 0, to: "/orders" },
+    { key: "team", label: t.dashboard.taskInviteTeam, done: (roles as any[]).length > 1, to: "/team" },
   ];
   const doneCount = tasks.filter((t) => t.done).length;
   const allDone = doneCount === tasks.length;
@@ -158,9 +159,9 @@ function WelcomeChecklist() {
     <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
       <div className="flex items-center justify-between gap-gutter-md">
         <div>
-          <h2 className="font-headline text-title-lg text-on-surface">قائمة الترحيب</h2>
+          <h2 className="font-headline text-title-lg text-on-surface">{t.dashboard.welcomeTasks}</h2>
           <p className="font-body text-body-md text-on-surface-variant">
-            أكمل هذه المهام للبدء ({doneCount}/{tasks.length})
+            {t.dashboard.welcomeHint.replace("{done}", String(doneCount)).replace("{total}", String(tasks.length))}
           </p>
         </div>
         <button
@@ -172,7 +173,7 @@ function WelcomeChecklist() {
             } catch {}
           }}
           className="text-on-surface-variant hover:text-on-surface"
-          aria-label="إغلاق"
+          aria-label={t.common.close}
         >
           <span className="material-symbols-outlined text-[20px]">close</span>
         </button>
@@ -203,7 +204,7 @@ function WelcomeChecklist() {
                 to={task.to}
                 className="rounded-md bg-primary px-3 py-1.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success"
               >
-                ابدأ
+                {t.dashboard.start}
               </Link>
             )}
           </li>

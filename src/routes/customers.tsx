@@ -178,7 +178,7 @@ function CustomersPage() {
                   <div className="flex items-center justify-between gap-gutter-md">
                     <div className="flex min-w-0 items-center gap-gutter-md">
                       <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-headline text-title-md ${segmentToneClass(seg)}`}>
-                        {initials(c.name)}
+                        {initials(c.name, lang)}
                       </span>
                       <div className="min-w-0 flex flex-col gap-1">
                         <div className="flex min-w-0 items-center gap-2">

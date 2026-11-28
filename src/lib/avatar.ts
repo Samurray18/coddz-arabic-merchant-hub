@@ -3,9 +3,9 @@ import { TRANSLATIONS } from "@/lib/i18n";
 
 export type CustomerSegment = "blacklisted" | "risk" | "repeat" | "new";
 
-export function initials(name: string): string {
+export function initials(name: string, lang: Lang = "ar"): string {
   const trimmed = (name ?? "").trim();
-  if (!trimmed) return "؟";
+  if (!trimmed) return TRANSLATIONS[lang].common.unknownInitial;
   return trimmed.charAt(0).toUpperCase();
 }
 

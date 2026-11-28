@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { isOwnOrder } from "@/hooks/use-data";
+import { getStoredT } from "@/lib/i18n";
 
 export type RealtimeStatus = "offline" | "connecting" | "live" | "reconnecting";
 
@@ -65,7 +66,8 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
         const row = payload.new as Record<string, unknown>;
         const id = typeof row["id"] === "string" ? row["id"] : "";
         if (!isOwnOrder(id)) {
-          toast("طلب جديد", { description: "تم استلام طلب جديد في متجرك." });
+          const t = getStoredT();
+          toast(t.realtime.newOrder, { description: t.realtime.newOrderDescription });
         }
       },
     );

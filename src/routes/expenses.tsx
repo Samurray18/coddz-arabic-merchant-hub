@@ -37,22 +37,22 @@ function ExpensesPage() {
 
   const handleAddExpense = async () => {
     const a = Number(amount);
-    if (!a || a <= 0) { toast.error("مبلغ غير صالح"); return; }
+    if (!a || a <= 0) { toast.error(t.expenses.invalidAmount); return; }
     try {
       await addExpense.mutateAsync({ amount: a, category, note });
-      toast.success("تمت الإضافة");
+      toast.success(t.expenses.added);
       setAmount(""); setNote("");
-    } catch (e: any) { toast.error(e?.message ?? "خطأ"); }
+    } catch (e: any) { toast.error(e?.message ?? t.common.error); }
   };
 
   const handleAddAd = async () => {
     const a = Number(amount);
-    if (!a || a <= 0) { toast.error("مبلغ غير صالح"); return; }
+    if (!a || a <= 0) { toast.error(t.expenses.invalidAmount); return; }
     try {
       await addAdSpend.mutateAsync({ amount: a, platform });
-      toast.success("تمت الإضافة");
+      toast.success(t.expenses.added);
       setAmount("");
-    } catch (e: any) { toast.error(e?.message ?? "خطأ"); }
+    } catch (e: any) { toast.error(e?.message ?? t.common.error); }
   };
 
   return (
@@ -66,7 +66,7 @@ function ExpensesPage() {
         <div className="grid grid-cols-1 gap-gutter-lg sm:grid-cols-2">
           <article className="flex items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">إجمالي المصاريف</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.expenses.totalExpenses}</span>
               <span className="font-headline text-headline-md tabular-nums text-error"><Money value={totalExpenses} /></span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-error-container text-on-error-container">
@@ -75,7 +75,7 @@ function ExpensesPage() {
           </article>
           <article className="flex items-center justify-between rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
             <div className="flex flex-col gap-1">
-              <span className="font-body text-label-md text-on-surface-variant">إجمالي الإعلانات</span>
+              <span className="font-body text-label-md text-on-surface-variant">{t.expenses.totalAds}</span>
               <span className="font-headline text-headline-md tabular-nums text-warning"><Money value={totalAds} /></span>
             </div>
             <span className="flex h-10 w-10 items-center justify-center rounded-md bg-warning-container text-on-warning-container">
@@ -85,35 +85,35 @@ function ExpensesPage() {
         </div>
 
         <div className="flex gap-gutter-sm border-b border-outline-variant">
-          <button type="button" onClick={() => setTab("expenses")} className={`rounded-t-md px-4 py-2 font-headline text-label-md transition-colors ${tab === "expenses" ? "bg-accent-container text-on-accent-container" : "text-on-surface-variant hover:bg-surface-container-low"}`}>المصاريف</button>
-          <button type="button" onClick={() => setTab("ads")} className={`rounded-t-md px-4 py-2 font-headline text-label-md transition-colors ${tab === "ads" ? "bg-accent-container text-on-accent-container" : "text-on-surface-variant hover:bg-surface-container-low"}`}>الإعلانات</button>
+          <button type="button" onClick={() => setTab("expenses")} className={`rounded-t-md px-4 py-2 font-headline text-label-md transition-colors ${tab === "expenses" ? "bg-accent-container text-on-accent-container" : "text-on-surface-variant hover:bg-surface-container-low"}`}>{t.nav.expenses}</button>
+          <button type="button" onClick={() => setTab("ads")} className={`rounded-t-md px-4 py-2 font-headline text-label-md transition-colors ${tab === "ads" ? "bg-accent-container text-on-accent-container" : "text-on-surface-variant hover:bg-surface-container-low"}`}>{t.expenses.adsTab}</button>
         </div>
 
         {tab === "expenses" && (
           <div className="flex flex-col gap-gutter-xl">
             <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
-              <h2 className="font-headline text-title-lg text-on-surface">إضافة مصروف</h2>
+              <h2 className="font-headline text-title-lg text-on-surface">{t.expenses.addExpense}</h2>
               <div className="mt-4 grid grid-cols-1 gap-gutter-md sm:grid-cols-3">
-                <input type="number" placeholder="المبلغ" value={amount} onChange={(e) => setAmount(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none" />
+                <input type="number" placeholder={t.expenses.amount} value={amount} onChange={(e) => setAmount(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none" />
                 <select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none">
-                  <option value="general">عام</option>
-                  <option value="rent">إيجار</option>
-                  <option value="salaries">رواتب</option>
-                  <option value="shipping">شحن</option>
-                  <option value="other">أخرى</option>
+                  <option value="general">{t.expenses.categoryGeneral}</option>
+                  <option value="rent">{t.expenses.categoryRent}</option>
+                  <option value="salaries">{t.expenses.categorySalaries}</option>
+                  <option value="shipping">{t.expenses.categoryShipping}</option>
+                  <option value="other">{t.expenses.categoryOther}</option>
                 </select>
-                <input placeholder="ملاحظة" value={note} onChange={(e) => setNote(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none" />
+                <input placeholder={t.expenses.note} value={note} onChange={(e) => setNote(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none" />
               </div>
               <button type="button" onClick={handleAddExpense} disabled={addExpense.isPending} className="mt-3 rounded-md bg-primary px-4 py-2 font-headline text-label-md text-on-primary disabled:opacity-60">
-                {addExpense.isPending ? "..." : "إضافة"}
+                {addExpense.isPending ? "..." : t.expenses.add}
               </button>
             </section>
             <section className="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
-              {expLoading ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">جارٍ التحميل...</p> : expenses.length === 0 ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">لا توجد مصاريف</p> : (
+              {expLoading ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">{t.common.loading}</p> : expenses.length === 0 ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">{t.expenses.noExpenses}</p> : (
                 <table className="w-full border-collapse text-right">
                   <thead className="border-b border-outline-variant bg-surface-container-low">
                     <tr>
-                      {["المبلغ", "التصنيف", "ملاحظة", "التاريخ"].map((h) => <th key={h} className="px-4 py-3.5 font-body text-label-md text-on-surface-variant">{h}</th>)}
+                      {[t.expenses.amount, t.expenses.category, t.expenses.note, t.expenses.date].map((h) => <th key={h} className="px-4 py-3.5 font-body text-label-md text-on-surface-variant">{h}</th>)}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-outline-variant">
@@ -135,9 +135,9 @@ function ExpensesPage() {
         {tab === "ads" && (
           <div className="flex flex-col gap-gutter-xl">
             <section className="rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
-              <h2 className="font-headline text-title-lg text-on-surface">إضافة حملة إعلانية</h2>
+              <h2 className="font-headline text-title-lg text-on-surface">{t.expenses.addCampaign}</h2>
               <div className="mt-4 grid grid-cols-1 gap-gutter-md sm:grid-cols-3">
-                <input type="number" placeholder="المبلغ" value={amount} onChange={(e) => setAmount(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none" />
+                <input type="number" placeholder={t.expenses.amount} value={amount} onChange={(e) => setAmount(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none" />
                 <select value={platform} onChange={(e) => setPlatform(e.target.value)} className="rounded-md border border-outline-variant bg-surface px-3.5 py-2.5 font-body text-body-md text-on-surface focus:border-primary focus:outline-none">
                   <option value="Facebook">Facebook</option>
                   <option value="TikTok">TikTok</option>
@@ -145,16 +145,16 @@ function ExpensesPage() {
                   <option value="Instagram">Instagram</option>
                 </select>
                 <button type="button" onClick={handleAddAd} disabled={addAdSpend.isPending} className="rounded-md bg-primary px-4 py-2 font-headline text-label-md text-on-primary disabled:opacity-60">
-                  {addAdSpend.isPending ? "..." : "إضافة"}
+                  {addAdSpend.isPending ? "..." : t.expenses.add}
                 </button>
               </div>
             </section>
             <section className="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm">
-              {adLoading ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">جارٍ التحميل...</p> : adspend.length === 0 ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">لا توجد حملات</p> : (
+              {adLoading ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">{t.common.loading}</p> : adspend.length === 0 ? <p className="p-6 text-center font-body text-body-md text-on-surface-variant">{t.expenses.noCampaigns}</p> : (
                 <table className="w-full border-collapse text-right">
                   <thead className="border-b border-outline-variant bg-surface-container-low">
                     <tr>
-                      {["المبلغ", "المنصة", "التاريخ"].map((h) => <th key={h} className="px-4 py-3.5 font-body text-label-md text-on-surface-variant">{h}</th>)}
+                      {[t.expenses.amount, t.expenses.platform, t.expenses.date].map((h) => <th key={h} className="px-4 py-3.5 font-body text-label-md text-on-surface-variant">{h}</th>)}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-outline-variant">

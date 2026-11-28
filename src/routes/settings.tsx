@@ -57,7 +57,7 @@ function SettingsPage() {
     ? WILAYAS.find((item) => item.latin === wilaya || item.ar === wilaya)?.code
       ? `${WILAYAS.find((item) => item.latin === wilaya || item.ar === wilaya)?.code} - ${lang === "ar" ? WILAYAS.find((item) => item.latin === wilaya || item.ar === wilaya)?.ar : wilaya}`
       : wilaya
-    : "16 - الجزائر";
+    : t.settings.defaultWilayaValue;
 
   const handleSave = async () => {
     if (!storeId) return;
@@ -84,12 +84,12 @@ function SettingsPage() {
           <div>
             <h1 className="font-headline text-headline-lg text-on-surface">{t.settings.title}</h1>
             <p className="font-body text-body-md text-on-surface-variant">
-              تخصيص بيانات {displayName} وتفضيلات التأكيد والشحن
+              {t.settings.subtitleWithStore.replace("{store}", displayName)}
             </p>
           </div>
           <button
             type="button"
-            aria-label="الإشعارات"
+            aria-label={t.settings.notifications}
             className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container-low"
           >
             <span className="material-symbols-outlined text-[20px]">notifications</span>
@@ -106,7 +106,7 @@ function SettingsPage() {
               <div className="flex items-center gap-2">
                 <h2 className="font-headline text-headline-md text-on-surface">{displayName}</h2>
                 <span className="rounded-full bg-accent-container px-2.5 py-0.5 font-body text-label-sm text-on-accent-container">
-                  حساب موثق
+                  {t.settings.verified}
                 </span>
               </div>
               <p className="font-body text-body-md text-on-surface-variant">
@@ -120,16 +120,16 @@ function SettingsPage() {
             disabled={saving}
             className="inline-flex items-center gap-1.5 rounded-md bg-primary px-5 py-2.5 font-headline text-label-md text-on-primary transition-colors hover:bg-success disabled:opacity-60"
           >
-            حفظ التغييرات
+            {t.settings.saveChanges}
           </button>
         </section>
 
         <section className="grid grid-cols-1 gap-gutter-lg items-stretch lg:grid-cols-2">
           <article className="flex h-full flex-col gap-gutter-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
-            <h3 className="font-headline text-title-lg text-on-surface">البيانات الأساسية</h3>
+            <h3 className="font-headline text-title-lg text-on-surface">{t.settings.basicData}</h3>
 
             <label className="flex flex-col gap-1.5">
-              <span className="font-headline text-label-md text-on-surface">اسم المتجر</span>
+              <span className="font-headline text-label-md text-on-surface">{t.settings.storeName}</span>
               <input
                 type="text"
                 value={name}
@@ -139,9 +139,9 @@ function SettingsPage() {
             </label>
 
             <label className="flex flex-col gap-1.5">
-              <span className="font-headline text-label-md text-on-surface">ولاية الانطلاق الافتراضية</span>
+              <span className="font-headline text-label-md text-on-surface">{t.settings.defaultWilaya}</span>
               <select value={wilaya} onChange={(event) => setWilaya(event.target.value)} className={fieldClass}>
-                <option value="">16 - الجزائر</option>
+                <option value="">{t.settings.defaultWilayaValue}</option>
                 {WILAYAS.map((item) => (
                   <option key={item.code} value={item.latin}>
                     {item.code} - {lang === "ar" ? item.ar : item.latin}
@@ -151,7 +151,7 @@ function SettingsPage() {
             </label>
 
             <label className="flex flex-col gap-1.5">
-              <span className="font-headline text-label-md text-on-surface">رقم هاتف الدعم</span>
+              <span className="font-headline text-label-md text-on-surface">{t.settings.supportPhone}</span>
               <input
                 type="tel"
                 dir="ltr"
@@ -164,40 +164,40 @@ function SettingsPage() {
           </article>
 
           <article className="flex h-full flex-col gap-gutter-md rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm">
-            <h3 className="font-headline text-title-lg text-on-surface">تفضيلات التأكيد والتوصيل</h3>
+            <h3 className="font-headline text-title-lg text-on-surface">{t.settings.preferences}</h3>
 
             <Toggle
               checked={autoConfirm}
               onChange={setAutoConfirm}
-              label="تأكيد تلقائي للعملاء الموثوقين"
-              hint="تجاوز الاتصال الهاتفي للعملاء بنسبة استلام 100%"
+              label={t.settings.autoConfirm}
+              hint={t.settings.autoConfirmHint}
             />
             <Toggle
               checked={smsOnDelivery}
               onChange={setSmsOnDelivery}
-              label="إشعار SMS عند تسليم الطرد للناقل"
-              hint="إرسال رقم التتبع تلقائيًا عبر الرسائل القصيرة"
+              label={t.settings.smsOnDelivery}
+              hint={t.settings.smsOnDeliveryHint}
             />
             <Toggle
               checked={lowStockAlert}
               onChange={setLowStockAlert}
-              label="تنبيه انخفاض المخزون"
-              hint="إرسال إشعار عند وصول الكمية إلى أقل من 10 قطع"
+              label={t.settings.lowStockAlert}
+              hint={t.settings.lowStockAlertHint}
             />
           </article>
         </section>
 
         <section className="flex items-center justify-between gap-gutter-md rounded-xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
           <div className="flex flex-col gap-0.5">
-            <h3 className="font-headline text-title-md text-error">إدارة الحساب والبيانات</h3>
-            <p className="font-body text-body-md text-on-surface-variant">تعطيل استقبال الطلبات مؤقتًا أو إغلاق المتجر</p>
+            <h3 className="font-headline text-title-md text-error">{t.settings.accountMgmt}</h3>
+            <p className="font-body text-body-md text-on-surface-variant">{t.settings.accountMgmtSub}</p>
           </div>
           <button
             type="button"
-            onClick={() => toast("إيقاف المتجر مؤقتًا", { description: "سيتم إيقاف استقبال الطلبات." })}
+            onClick={() => toast(t.settings.pauseStore, { description: t.settings.pauseStoreDescription })}
             className="rounded-md bg-error-container px-4 py-2 font-headline text-label-md text-on-error-container transition-colors duration-state-change hover:bg-error hover:text-on-error"
           >
-            إيقاف المتجر مؤقتًا
+            {t.settings.pauseStore}
           </button>
         </section>
       </div>
