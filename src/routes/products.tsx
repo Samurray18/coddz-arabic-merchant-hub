@@ -7,6 +7,7 @@ import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
 import { getProductImage, PRODUCT_IMAGES } from "@/lib/coddz";
+import { downloadCsv } from "@/lib/csv";
 import { Money } from "@/components/money";
 import type { Product } from "@/lib/domain";
 
@@ -69,16 +70,7 @@ function ProductsPage() {
         String(p.stock),
       ]),
     ];
-    const csv = rows
-      .map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "products.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadCsv("products.csv", rows);
   };
 
   const categories = Array.from(

@@ -36,14 +36,9 @@ Deno.serve(async (req) => {
   // ping handling: WooCommerce sends a test ping with no signature? Handle missing topic -> 200
   const topic = req.headers.get("x-wc-webhook-topic");
 
-  const limited = await rateLimit(admin, storeId);
-  if (limited) {
-    return jsonError("Rate limit exceeded", 429, cors);
-  }
-
   const { data: integration } = await admin
     .from("integrations")
-    .select("id, status")
+    .select("id, store_id, status")
     .eq("store_id", storeId)
     .eq("type", "woocommerce")
     .maybeSingle();
@@ -52,7 +47,6 @@ Deno.serve(async (req) => {
     if (!topic) {
       return jsonOk({ ok: true }, 200, cors);
     }
-    await logIntake(admin, storeId, "woocommerce", "rejected", "Integration inactive", null, null);
     return jsonError("Integration inactive", 403, cors);
   }
 
@@ -72,25 +66,30 @@ Deno.serve(async (req) => {
   }
 
   if (!secret) {
-    await logIntake(admin, storeId, "woocommerce", "rejected", "Missing secret", null, null);
     return jsonError("Missing secret", 403, cors);
   }
 
   const signature = req.headers.get("x-wc-webhook-signature");
   if (!signature) {
-    await logIntake(admin, storeId, "woocommerce", "rejected", "Missing signature", null, null);
     return jsonError("Missing signature", 401, cors);
   }
   const ok = await verifyHmacBase64(secret, rawBody, signature);
   if (!ok) {
-    await logIntake(admin, storeId, "woocommerce", "rejected", "Invalid signature", null, null);
     return jsonError("Invalid signature", 401, cors);
+  }
+
+  const verifiedStoreId: string = integration.store_id;
+
+  // rate limit only after HMAC signature verification succeeds
+  const limited = await rateLimit(admin, verifiedStoreId);
+  if (limited) {
+    return jsonError("Rate limit exceeded", 429, cors);
   }
 
   if (topic !== "order.created") {
     let payload: any = null;
     try { payload = JSON.parse(rawBody); } catch {}
-    await logIntake(admin, storeId, "woocommerce", "accepted", null, payload, null);
+    await logIntake(admin, verifiedStoreId, "woocommerce", "accepted", null, payload, null);
     return jsonOk({ ok: true, ignored: topic }, 200, cors);
   }
 
@@ -98,7 +97,7 @@ Deno.serve(async (req) => {
   try {
     payload = JSON.parse(rawBody);
   } catch {
-    await logIntake(admin, storeId, "woocommerce", "rejected", "Invalid JSON", null, null);
+    await logIntake(admin, verifiedStoreId, "woocommerce", "rejected", "Invalid JSON", null, null);
     return jsonError("Invalid JSON", 400, cors);
   }
 
@@ -110,13 +109,13 @@ Deno.serve(async (req) => {
   const phoneRaw = billing.phone ?? shipping.phone;
   const phone = normalizePhone(String(phoneRaw ?? ""));
   if (!phone) {
-    await logIntake(admin, storeId, "woocommerce", "rejected", "Invalid phone", payload, null);
+    await logIntake(admin, verifiedStoreId, "woocommerce", "rejected", "Invalid phone", payload, null);
     return jsonError("Invalid phone", 400, cors);
   }
   const state = shipping.state ?? billing.state;
   const wilaya = matchWilaya(state);
   if (!wilaya) {
-    await logIntake(admin, storeId, "woocommerce", "rejected", "Invalid wilaya", payload, null);
+    await logIntake(admin, verifiedStoreId, "woocommerce", "rejected", "Invalid wilaya", payload, null);
     return jsonError("Invalid wilaya", 400, cors);
   }
   const commune = shipping.city ?? billing.city;
@@ -146,18 +145,18 @@ Deno.serve(async (req) => {
 
   const validation = validateOrderBody(body);
   if (!validation.ok) {
-    await logIntake(admin, storeId, "woocommerce", "rejected", validation.message, payload, null);
+    await logIntake(admin, verifiedStoreId, "woocommerce", "rejected", validation.message, payload, null);
     return jsonError(validation.message, 400, cors);
   }
 
   try {
-    const result = await createOrder(admin, storeId, validation.order, "woocommerce", validation.externalId, payload);
+    const result = await createOrder(admin, verifiedStoreId, validation.order, "woocommerce", validation.externalId, payload);
     const status = result.duplicate ? "duplicate" : "accepted";
-    await logIntake(admin, storeId, "woocommerce", status, null, payload, result.order_id);
+    await logIntake(admin, verifiedStoreId, "woocommerce", status, null, payload, result.order_id);
     return jsonOk({ ok: true, order_id: result.order_id, order_number: result.order_number }, 200, cors);
   } catch (e: any) {
     const msg = e?.message ?? "Internal error";
-    await logIntake(admin, storeId, "woocommerce", "rejected", msg, payload, null);
+    await logIntake(admin, verifiedStoreId, "woocommerce", "rejected", msg, payload, null);
     return jsonError("Failed to create order", 500, cors);
   }
 });

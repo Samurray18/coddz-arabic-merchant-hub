@@ -24,6 +24,7 @@ import {
   wilayaLabel,
   type OrderStatus,
 } from "@/lib/coddz";
+import { downloadCsv } from "@/lib/csv";
 
 export const Route = createFileRoute("/orders")({
   component: () => (
@@ -95,16 +96,7 @@ function OrdersPage() {
         o.date,
       ]),
     ];
-    const csv = rows
-      .map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "orders.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadCsv("orders.csv", rows);
   };
   const [notesDraft, setNotesDraft] = useState("");
   const [blacklistReason, setBlacklistReason] = useState("");
@@ -245,16 +237,7 @@ function OrdersPage() {
         o.date,
       ]),
     ];
-    const csv = rows
-      .map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `orders-${selectedOrders.length}-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadCsv(`orders-${selectedOrders.length}-${new Date().toISOString().slice(0, 10)}.csv`, rows);
   };
 
   const handleCreate = async () => {

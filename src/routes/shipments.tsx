@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useOrders, useShipments, useCreateShipment, useUpdateShipment } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { downloadCsv } from "@/lib/csv";
 import { Money } from "@/components/money";
 
 export const Route = createFileRoute("/shipments")({
@@ -63,14 +64,7 @@ function ShipmentsPage() {
       ["الطلب", "الناقل", "رقم التتبع", "COD", "الحالة"],
       ...shipments.map((s: any) => [s.order_id, s.carrier, s.tracking_number ?? "", String(s.cod_amount), s.status]),
     ];
-    const csv = rows.map((r) => r.map((c: any) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "shipments.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadCsv("shipments.csv", rows);
   };
   const shippableOrders = orders.filter((o) => o.status === "confirmed" || o.status === "new");
 

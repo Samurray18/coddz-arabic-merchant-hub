@@ -14,6 +14,7 @@ import { LocalDate } from "@/components/local-date";
 import { wilayaLabel } from "@/lib/coddz";
 import { buildWhatsAppLink } from "@/lib/coddz";
 import { initials, customerSegment, segmentToneClass, segmentLabel } from "@/lib/avatar";
+import { downloadCsv } from "@/lib/csv";
 
 export const Route = createFileRoute("/customers")({
   component: () => (
@@ -130,14 +131,7 @@ function CustomersPage() {
                 [t.customers.csvName, t.customers.csvPhone, t.customers.csvWilaya, t.customers.csvOrders, t.customers.csvSales, t.customers.csvDelivered, t.customers.csvReturns, t.customers.csvLastOrder],
                 ...customers.map((c) => [c.name, c.phone, c.wilaya, String(c.orders), String(c.total), String(c.delivered), String(c.returned), c.lastDate]),
               ];
-              const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
-              const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement("a");
-              a.href = url;
-              a.download = "customers.csv";
-              a.click();
-              URL.revokeObjectURL(url);
+              downloadCsv("customers.csv", rows);
             }}
             className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 font-headline text-label-md text-on-surface transition-colors hover:bg-surface-container-low"
           >
