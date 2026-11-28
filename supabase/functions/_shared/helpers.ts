@@ -414,6 +414,47 @@ export async function rateLimit(client: any, storeId: string): Promise<boolean> 
   return n > 60;
 }
 
+export const AUTH_FAILURE_MESSAGE = "Invalid signature: check the signing secret";
+const AUTH_FAILURE_WINDOW_MS = 10 * 60 * 1000;
+const pendingAuthFailureLogs = new Set<string>();
+
+/**
+ * Records a webhook authentication failure, but never more than once per
+ * store/source in a 10-minute window. Callers must pass a store id and an
+ * existing integration id so unknown stores cannot be used to flood the logs.
+ */
+export async function logAuthFailureThrottled(
+  client: any,
+  storeId: string | null | undefined,
+  source: string,
+  integrationId: string | null | undefined,
+  now: number = Date.now(),
+): Promise<void> {
+  if (!storeId || !integrationId) return;
+
+  const key = `${storeId}:${source}`;
+  if (pendingAuthFailureLogs.has(key)) return;
+  pendingAuthFailureLogs.add(key);
+
+  try {
+    const since = new Date(now - AUTH_FAILURE_WINDOW_MS).toISOString();
+    const { data, count } = await client
+      .from("intake_logs")
+      .select("id", { count: "exact", head: true })
+      .eq("store_id", storeId)
+      .eq("source", source)
+      .eq("status", "rejected")
+      .eq("error", AUTH_FAILURE_MESSAGE)
+      .gte("created_at", since);
+    const recent = typeof count === "number" ? count : Array.isArray(data) ? data.length : 0;
+    if (recent > 0) return;
+
+    await logIntake(client, storeId, source, "rejected", AUTH_FAILURE_MESSAGE, {}, null);
+  } finally {
+    pendingAuthFailureLogs.delete(key);
+  }
+}
+
 export function validateOrderBody(body: any): { ok: true; order: NormalizedOrder; externalId: string | null } | { ok: false; message: string } {
   if (!body || typeof body !== "object") return { ok: false, message: "Invalid JSON body" };
   const customer_name = String(body.customer_name ?? "").trim();
