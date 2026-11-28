@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +29,7 @@ type FilterKey = "all" | "repeat" | "new" | "risk" | "blacklisted";
 function CustomersPage() {
   const { t, lang } = useLanguage();
   const { storeId } = useAuth();
+  const queryClient = useQueryClient();
   const { data: customers = [], isLoading } = useCustomers();
   const [filter, setFilter] = useState<FilterKey>("all");
   const [search, setSearch] = useState("");
@@ -78,6 +80,7 @@ function CustomersPage() {
         reason: blacklistReason || null,
       });
       if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ["customers", storeId] });
       toast.success(t.customers.blacklistAdded);
       setShowBlacklist(false);
       setBlacklistReason("");

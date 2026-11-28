@@ -31,6 +31,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
 
     let disposed = false;
     let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    let customerInvalidationTimer: ReturnType<typeof setTimeout> | undefined;
     setStatus(attempt === 0 ? "connecting" : "reconnecting");
 
     const invalidate = () => {
@@ -39,13 +40,28 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       queryClient.invalidateQueries({ queryKey: ["shipments", storeId] });
     };
 
+    // Order storms can produce many events in a row; refresh customers at most
+    // once every 2 seconds while still reacting immediately to the first event.
+    const invalidateCustomers = () => {
+      if (customerInvalidationTimer) return;
+      queryClient.invalidateQueries({ queryKey: ["customers", storeId] });
+      customerInvalidationTimer = setTimeout(() => {
+        customerInvalidationTimer = undefined;
+      }, 2000);
+    };
+
+    const invalidateOrderChanges = () => {
+      invalidate();
+      invalidateCustomers();
+    };
+
     const channel = supabase.channel(`store-${storeId}`);
 
     channel.on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "orders", filter: `store_id=eq.${storeId}` },
       (payload) => {
-        invalidate();
+        invalidateOrderChanges();
         const row = payload.new as Record<string, unknown>;
         const id = typeof row["id"] === "string" ? row["id"] : "";
         if (!isOwnOrder(id)) {
@@ -58,14 +74,14 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       channel.on(
         "postgres_changes",
         { event, schema: "public", table: "orders", filter: `store_id=eq.${storeId}` },
-        invalidate,
+        invalidateOrderChanges,
       );
     }
 
     channel.on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "order_events", filter: `store_id=eq.${storeId}` },
-      invalidate,
+      invalidateOrderChanges,
     );
 
     for (const event of ["INSERT", "UPDATE", "DELETE"] as const) {
@@ -107,6 +123,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     return () => {
       disposed = true;
       if (retryTimer) clearTimeout(retryTimer);
+      if (customerInvalidationTimer) clearTimeout(customerInvalidationTimer);
       void supabase.removeChannel(channel);
     };
   }, [storeId, queryClient, attempt]);
