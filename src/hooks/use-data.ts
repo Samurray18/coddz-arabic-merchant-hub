@@ -66,6 +66,25 @@ export function useOrders() {
   });
 }
 
+export function useCustomerOrders(phone: string | null) {
+  const { storeId } = useAuth();
+  return useQuery({
+    queryKey: ["customer_orders", storeId, phone],
+    enabled: !!storeId && !!phone,
+    queryFn: async (): Promise<Order[]> => {
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*, order_items(name, quantity, price)")
+        .eq("store_id", storeId!)
+        .eq("phone", phone!)
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return (data ?? []).map((row) => rowToOrder(row as any));
+    },
+  });
+}
+
 export function useSaveProduct() {
   const { storeId } = useAuth();
   const queryClient = useQueryClient();

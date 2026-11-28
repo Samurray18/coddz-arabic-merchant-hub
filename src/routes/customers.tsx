@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
-import { useCustomers, useOrders } from "@/hooks/use-data";
+import { useCustomers, useCustomerOrders } from "@/hooks/use-data";
 import { RequireAuth } from "@/components/require-auth";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
@@ -29,9 +29,6 @@ function CustomersPage() {
   const { t, lang } = useLanguage();
   const { storeId } = useAuth();
   const { data: customers = [], isLoading } = useCustomers();
-  const { data: ordersData } = useOrders();
-  const allOrders = ordersData?.pages.flat() ?? [];
-
   const [filter, setFilter] = useState<FilterKey>("all");
   const [search, setSearch] = useState("");
 
@@ -45,6 +42,11 @@ function CustomersPage() {
   const [selectedPhone, setSelectedPhone] = useState<string | null>(null);
   const [blacklistReason, setBlacklistReason] = useState("");
   const [showBlacklist, setShowBlacklist] = useState(false);
+  const {
+    data: customerOrders = [],
+    isLoading: ordersLoading,
+    isError: ordersError,
+  } = useCustomerOrders(selectedPhone);
 
   const filtered = customers.filter((c) => {
     const seg = customerSegment(c);
@@ -66,7 +68,6 @@ function CustomersPage() {
   const newCustomers = customers.filter((c) => customerSegment(c) === "new").length;
 
   const selectedCustomer = customers.find((c) => c.phone === selectedPhone) ?? null;
-  const customerOrders = allOrders.filter((o) => o.phone === selectedPhone);
 
   const handleBlacklist = async () => {
     if (!selectedCustomer) return;
@@ -280,20 +281,25 @@ function CustomersPage() {
               <section className="mt-4">
                 <h3 className="font-headline text-title-md text-on-surface">{t.customers.orders}</h3>
                 <ul className="mt-2 flex flex-col gap-gutter-sm">
-                  {customerOrders.map((o) => (
-                    <li key={o.id} className="rounded-md border border-outline-variant bg-surface p-3">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-mono-md tabular-nums text-on-surface">#{o.number}</span>
-                        <Money value={o.amount} className="font-headline text-label-md text-primary" />
-                      </div>
-                      <div className="mt-1 flex items-center justify-between font-body text-label-sm text-on-surface-variant">
-                        <span>{o.status}</span>
-                        <LocalDate value={o.date} />
-                      </div>
-                    </li>
-                  ))}
-                  {customerOrders.length === 0 && (
-                    <p className="font-body text-body-md text-on-surface-variant">{t.customers.noOrders}</p>
+                  {ordersLoading ? (
+                    <li className="font-body text-body-md text-on-surface-variant">{t.common.loading}</li>
+                  ) : ordersError ? (
+                    <li className="font-body text-body-md text-error">{t.common.error}</li>
+                  ) : customerOrders.length === 0 ? (
+                    <li className="font-body text-body-md text-on-surface-variant">{t.customers.noOrders}</li>
+                  ) : (
+                    customerOrders.map((o) => (
+                      <li key={o.id} className="rounded-md border border-outline-variant bg-surface p-3">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-mono-md tabular-nums text-on-surface">#{o.number}</span>
+                          <Money value={o.amount} className="font-headline text-label-md text-primary" />
+                        </div>
+                        <div className="mt-1 flex items-center justify-between font-body text-label-sm text-on-surface-variant">
+                          <span>{o.status}</span>
+                          <LocalDate value={o.date} />
+                        </div>
+                      </li>
+                    ))
                   )}
                 </ul>
               </section>
